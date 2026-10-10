@@ -1,24 +1,148 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowDown, ArrowUpRight, ArrowRight, Plus } from "lucide-react";
+import { useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { images, pageHead } from "@/lib/noir-data";
+import { Services } from "@/components/noir/services";
+import { Comparison } from "@/components/noir/comparison";
+import { NextChapter } from "@/components/noir/site-shell";
 export const Route = createFileRoute("/")({
+  head: () =>
+    pageHead(
+      "Beauty without limits",
+      "A cinematic world of self-expression. Discover the NOIR PINK beauty concept: nail art, hair, makeup and skincare.",
+    ),
   component: Index,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const art = useRef<HTMLImageElement>(null);
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <section
+        className="hero"
+        onPointerMove={(e) => {
+          if (
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+            e.pointerType !== "mouse" ||
+            !art.current
+          )
+            return;
+          const r = e.currentTarget.getBoundingClientRect();
+          art.current.style.translate = `${(e.clientX - r.left - r.width / 2) * 0.008}px ${(e.clientY - r.top - r.height / 2) * 0.006}px`;
+        }}
+        onPointerLeave={() => {
+          if (art.current) art.current.style.translate = "0 0";
+        }}
+      >
+        <img
+          ref={art}
+          className="hero-art"
+          src={images.campaign}
+          width="1600"
+          height="1104"
+          alt="NOIR PINK campaign — sculptural pink nails and dramatic beauty"
+          fetchPriority="high"
+        />
+        <div className="hero-content">
+          <div className="eyebrow">
+            <span /> A NEW DIMENSION OF BEAUTY
+          </div>
+          <h1>
+            BEAUTY
+            <br />
+            WITHOUT
+            <br />
+            <em>LIMITS.</em>
+          </h1>
+          <p className="hero-copy">
+            A new dimension of beauty.
+            <br />
+            Bold creativity. Exceptional detail. Unforgettable style.
+          </p>
+          <div className="hero-actions">
+            <Button asChild>
+              <Link to="/booking">
+                BOOK YOUR EXPERIENCE <ArrowUpRight />
+              </Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link to="/experience">
+                EXPLORE THE WORLD <ArrowRight />
+              </Link>
+            </Button>
+          </div>
+        </div>
+        <div className="hero-index">
+          <span>01 / THE NEW BEAUTY</span>
+          <br />
+          NOT FOR EVERYONE.
+          <br />
+          ENTIRELY FOR YOU.
+        </div>
+        <div className="hero-bottom">
+          <Link to="/services" className="scroll-cue">
+            <ArrowDown size={15} /> SCROLL TO DISCOVER
+          </Link>
+          <div className="hero-note">
+            <span>INDIVIDUALITY IS EVERYTHING.</span>
+            <span>
+              NOIR PINK / CONCEPT <Plus size={10} className="inline ml-2" />
+            </span>
+          </div>
+        </div>
+      </section>
+      <div className="ticker" aria-hidden="true">
+        <span>NAIL ART</span>
+        <span>✦</span>
+        <span>HAIR STYLING</span>
+        <span>✦</span>
+        <span>MAKEUP</span>
+        <span>✦</span>
+        <span>SKINCARE</span>
+        <span>✦</span>
+        <span>SELF EXPRESSION</span>
+      </div>
+      <section className="editorial-section">
+        <div className="section-top" data-reveal>
+          <div>
+            <div className="eyebrow">
+              <span /> PRECISION MEETS PERSONALITY
+            </div>
+            <h2>
+              THE ART OF
+              <br />
+              TRANSFORMATION.
+            </h2>
+          </div>
+          <Button asChild variant="link">
+            <Link to="/services">
+              ALL SERVICES <ArrowUpRight />
+            </Link>
+          </Button>
+        </div>
+        <Services preview />
+      </section>
+      <section className="editorial-section bg-secondary">
+        <div className="section-top" data-reveal>
+          <div>
+            <div className="eyebrow">
+              <span /> A DIFFERENT PERSPECTIVE
+            </div>
+            <h2>
+              THE BEAUTY OF
+              <br />
+              POSSIBILITY.
+            </h2>
+          </div>
+          <Button asChild variant="link">
+            <Link to="/experience">
+              THE EXPERIENCE <ArrowUpRight />
+            </Link>
+          </Button>
+        </div>
+        <Comparison />
+      </section>
+      <NextChapter />
+    </>
   );
 }

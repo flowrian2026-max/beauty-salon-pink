@@ -1,0 +1,197 @@
+import { useState } from "react";
+import { ArrowRight, Check, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { bookingSchema, type Booking } from "@/lib/noir-data";
+import { useDemo } from "./demo-provider";
+export function BookingForm({ initialService }: { initialService?: string | undefined }) {
+  const { data, update, storageError } = useDemo();
+  const [form, setForm] = useState({
+    service: initialService || "",
+    name: "",
+    email: "",
+    phone: "",
+    date: "",
+    time: "",
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [step, setStep] = useState<"edit" | "review" | "done">("edit");
+  const [saved, setSaved] = useState(false);
+  const service = data.services.find((s) => s.id === form.service);
+  function change(key: keyof typeof form, value: string) {
+    setForm({ ...form, [key]: value });
+    setErrors({ ...errors, [key]: "" });
+  }
+  function review(e: React.FormEvent) {
+    e.preventDefault();
+    const result = bookingSchema.safeParse(form);
+    if (!result.success) {
+      setErrors(Object.fromEntries(result.error.issues.map((i) => [i.path[0], i.message])));
+      return;
+    }
+    if (!service) {
+      setErrors({ service: "Choose an available service" });
+      return;
+    }
+    setForm(result.data);
+    setStep("review");
+  }
+  function submit() {
+    const result = bookingSchema.safeParse(form);
+    if (!result.success || !service) {
+      setStep("edit");
+      return;
+    }
+    const booking: Booking = { ...result.data, id: crypto.randomUUID() };
+    setSaved(update({ ...data, bookings: [...data.bookings, booking] }));
+    setStep("done");
+  }
+  if (step === "done")
+    return (
+      <div className="status" role="status">
+        <Check className="text-primary mb-4" />
+        <h2>
+          {saved ? "YOUR DEMO REQUEST IS SAVED." : "YOUR DEMO REQUEST IS RECORDED FOR THIS VISIT."}
+        </h2>
+        <p>
+          {service?.title} · {form.date} · {form.time}
+        </p>
+        <p>
+          No appointment is confirmed. Nothing has been sent to a salon.{" "}
+          {saved ? "You can view this request in the demo admin on this device." : storageError}
+        </p>
+        <Button
+          variant="outline"
+          className="mt-5"
+          onClick={() => {
+            setStep("edit");
+            setForm({ ...form, date: "", time: "" });
+          }}
+        >
+          ANOTHER EXPERIENCE <ArrowRight />
+        </Button>
+      </div>
+    );
+  if (step === "review")
+    return (
+      <div className="review">
+        <span className="eyebrow">02 / REVIEW YOUR EXPERIENCE</span>
+        <h2>THE DETAILS.</h2>
+        <dl>
+          {[
+            ["Service", service?.title],
+            ["Sample price", service?.price],
+            ["Name", form.name],
+            ["Email", form.email],
+            ["Phone", form.phone || "Not provided"],
+            ["Preferred date", form.date],
+            ["Preferred time", form.time],
+          ].map(([label, value]) => (
+            <div key={label} className="contents">
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="sample-note">
+          Demo request only. Availability is not checked and no appointment is confirmed.
+        </p>
+        <Button onClick={submit}>
+          SUBMIT DEMO REQUEST <ArrowRight />
+        </Button>
+        <Button variant="ghost" onClick={() => setStep("edit")}>
+          <ArrowLeft /> EDIT DETAILS
+        </Button>
+      </div>
+    );
+  return (
+    <form className="noir-form" onSubmit={review} noValidate>
+      <span className="eyebrow">01 / YOUR EXPERIENCE</span>
+      <label className="field">
+        SERVICE
+        <select
+          value={form.service}
+          onChange={(e) => change("service", e.target.value)}
+          required
+          aria-invalid={Boolean(errors["service"])}
+        >
+          <option value="">Choose your experience</option>
+          {data.services.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.title} · {s.duration}
+            </option>
+          ))}
+        </select>
+        {errors["service"] && <span className="error-text">{errors["service"]}</span>}
+      </label>
+      <label className="field">
+        YOUR NAME
+        <input
+          value={form.name}
+          onChange={(e) => change("name", e.target.value)}
+          autoComplete="name"
+          maxLength={100}
+          required
+          aria-invalid={Boolean(errors["name"])}
+        />
+        {errors["name"] && <span className="error-text">{errors["name"]}</span>}
+      </label>
+      <div className="form-row">
+        <label className="field">
+          EMAIL
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => change("email", e.target.value)}
+            autoComplete="email"
+            maxLength={255}
+            required
+            aria-invalid={Boolean(errors["email"])}
+          />
+          {errors["email"] && <span className="error-text">{errors["email"]}</span>}
+        </label>
+        <label className="field">
+          PHONE · OPTIONAL
+          <input
+            type="tel"
+            value={form.phone}
+            onChange={(e) => change("phone", e.target.value)}
+            autoComplete="tel"
+            maxLength={30}
+          />
+        </label>
+      </div>
+      <div className="form-row">
+        <label className="field">
+          PREFERRED DATE
+          <input
+            type="date"
+            value={form.date}
+            onChange={(e) => change("date", e.target.value)}
+            required
+            aria-invalid={Boolean(errors["date"])}
+          />
+          {errors["date"] && <span className="error-text">{errors["date"]}</span>}
+        </label>
+        <label className="field">
+          PREFERRED TIME
+          <input
+            type="time"
+            value={form.time}
+            onChange={(e) => change("time", e.target.value)}
+            required
+            aria-invalid={Boolean(errors["time"])}
+          />
+          {errors["time"] && <span className="error-text">{errors["time"]}</span>}
+        </label>
+      </div>
+      <p className="sample-note">
+        Local demo only. Your request stays on this device and is not sent to a real salon. All
+        prices and durations are placeholders.
+      </p>
+      <Button type="submit">
+        REVIEW YOUR EXPERIENCE <ArrowRight />
+      </Button>
+      {storageError && <p className="error-text">{storageError}</p>}
+    </form>
+  );
+}
