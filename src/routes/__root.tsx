@@ -81,13 +81,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "NOIR PINK — Beauty without limits" },
-      { name: "description", content: "A cinematic beauty experience. Bold creativity and exceptional detail at NOIR PINK." },
-      
+      {
+        name: "description",
+        content:
+          "A cinematic beauty experience. Bold creativity and exceptional detail at NOIR PINK.",
+      },
+
       { property: "og:title", content: "NOIR PINK — Beauty without limits" },
-      { property: "og:description", content: "A cinematic beauty experience. Bold creativity and exceptional detail at NOIR PINK." },
+      {
+        property: "og:description",
+        content:
+          "A cinematic beauty experience. Bold creativity and exceptional detail at NOIR PINK.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      
     ],
     links: [
       {
@@ -95,7 +102,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -123,7 +133,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <DemoProvider><SiteHeader /><main><Outlet /></main><SiteFooter /><RevealObserver /></DemoProvider>
+      <DemoProvider>
+        <SiteHeader />
+        <main>
+          <Outlet />
+        </main>
+        <SiteFooter />
+        <RevealObserver />
+      </DemoProvider>
     </QueryClientProvider>
   );
 }

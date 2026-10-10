@@ -1,25 +1,461 @@
-import { useState } from 'react';
-import { Pencil, Trash2, Plus, Upload, Check, ArrowUpRight } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
-import { Button } from '@/components/ui/button';
-import { Dialog,DialogContent,DialogTitle,DialogDescription } from '@/components/ui/dialog';
-import { useDemo } from './demo-provider';
-import { images,serviceSchema,gallerySchema,type Service,type GalleryItem } from '@/lib/noir-data';
-const tabs=['Overview','Services','Pricing','Gallery','Before / after','Booking requests','Contact information','Brand appearance'];
-export function Admin(){const {data,update,storageError}=useDemo();const [tab,setTab]=useState('Overview');const [service,setService]=useState<Service|null>(null);const [gallery,setGallery]=useState<GalleryItem|null>(null);const [notice,setNotice]=useState('');
- function save(next:typeof data){setNotice(update(next)?'Changes saved on this device.':'Changes updated for this visit. '+storageError)}
- async function upload(file:File|undefined,apply:(url:string)=>void){if(!file)return;if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>1500000){setNotice('Choose a JPG, PNG or WebP image smaller than 1.5 MB.');return}const reader=new FileReader();reader.onload=()=>{if(typeof reader.result==='string')apply(reader.result)};reader.onerror=()=>setNotice('This image could not be read. Try another file.');reader.readAsDataURL(file)}
- const uploadControl=(apply:(url:string)=>void)=><label className="upload-label"><Upload size={15}/> REPLACE IMAGE<input className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>void upload(e.target.files?.[0],apply)}/></label>;
- return <div className="admin"><div className="flex items-center justify-between gap-4"><h1>THE CONTROL ROOM.</h1><Button variant="outline" asChild><Link to="/">PREVIEW <ArrowUpRight/></Link></Button></div><p className="admin-disclaimer">FRONTEND DEMO · This page is public and not secure. Changes and requests are local to this device. Do not enter sensitive information. A production admin requires authentication, authorization and shared storage.</p><div className="admin-layout"><nav className="admin-nav" aria-label="Admin sections">{tabs.map(t=><Button key={t} variant={tab===t?'default':'ghost'} onClick={()=>{setTab(t);setNotice('')}}>{t}</Button>)}</nav><section className="admin-panel"><h2>{tab.toUpperCase()}</h2>{notice&&<p className="status mb-5" role="status">{notice}</p>}{storageError&&<p className="error-text mb-5">{storageError}</p>}
- {tab==='Overview'&&<><div className="admin-stats"><div><strong>{data.services.length}</strong><span>SERVICES</span></div><div><strong>{data.gallery.length}</strong><span>GALLERY IMAGES</span></div><div><strong>{data.bookings.length}</strong><span>DEMO REQUESTS</span></div></div><p className="sample-note">All content is a replaceable concept. This overview reflects this device only.</p></>}
- {(tab==='Services'||tab==='Pricing')&&<><Button onClick={()=>setService({id:crypto.randomUUID(),title:'',description:'',price:'From 00',duration:'60 min',image:images.nails})}><Plus/> ADD SERVICE</Button>{data.services.map(s=><div className="admin-entry" key={s.id}><img src={s.image} alt={s.title}/><div><h3>{s.title}</h3><p>{s.price} · SAMPLE · {s.duration}</p></div><div className="admin-tools"><Button variant="outline" size="icon" aria-label={`Edit ${s.title}`} onClick={()=>setService({...s})}><Pencil/></Button><Button variant="ghost" size="icon" aria-label={`Remove ${s.title}`} onClick={()=>{if(window.confirm(`Remove ${s.title}? Existing demo requests will remain.`))save({...data,services:data.services.filter(x=>x.id!==s.id)})}}><Trash2/></Button></div></div>)}</>}
- {tab==='Gallery'&&<><Button onClick={()=>setGallery({id:crypto.randomUUID(),title:'',category:'NAILS',image:images.nails})}><Plus/> ADD IMAGE</Button>{data.gallery.map(g=><div className="admin-entry" key={g.id}><img src={g.image} alt={g.title}/><div><h3>{g.title}</h3><p>{g.category}</p></div><div className="admin-tools"><Button variant="outline" size="icon" aria-label={`Edit ${g.title}`} onClick={()=>setGallery({...g})}><Pencil/></Button><Button variant="ghost" size="icon" aria-label={`Remove ${g.title}`} onClick={()=>{if(window.confirm(`Remove ${g.title}?`))save({...data,gallery:data.gallery.filter(x=>x.id!==g.id)})}}><Trash2/></Button></div></div>)}</>}
- {tab==='Before / after'&&<div className="form-row">{(['before','after'] as const).map(key=><div key={key}><h3>{key.toUpperCase()}</h3><img className="image-preview my-5" src={data[key]} alt={`${key} concept preview`}/>{uploadControl(url=>save({...data,[key]:url}))}<p className="sample-note">Replaceable concept image · max 1.5 MB</p></div>)}</div>}
- {tab==='Booking requests'&&<>{!data.bookings.length&&<p className="sample-note">No demo requests on this device yet.</p>}{data.bookings.map(b=><div className="admin-entry" key={b.id}><Check className="text-primary"/><div><h3>{b.name} · {data.services.find(s=>s.id===b.service)?.title||'Removed service'}</h3><p>{b.date} · {b.time}<br/>{b.email} {b.phone}<br/>DEMO REQUEST · NOT A CONFIRMED APPOINTMENT</p></div><Button variant="ghost" size="icon" aria-label={`Delete request from ${b.name}`} onClick={()=>{if(window.confirm('Delete this local demo request?'))save({...data,bookings:data.bookings.filter(x=>x.id!==b.id)})}}><Trash2/></Button></div>)}</>}
- {tab==='Contact information'&&<form className="noir-form" onSubmit={e=>{e.preventDefault();const values=Object.fromEntries(new FormData(e.currentTarget));const next={...data.contact};for(const key of Object.keys(next) as (keyof typeof next)[])next[key]=String(values[key]||'');for(const key of ['instagram','tiktok'] as const){if(next[key]){try{if(new URL(next[key]).protocol!=='https:')throw new Error()}catch{setNotice('Social links must be valid HTTPS addresses.');return}}}save({...data,contact:next})}}>{(Object.keys(data.contact) as (keyof typeof data.contact)[]).map(key=><label className="field" key={key}>{key.toUpperCase()}<input name={key} key={data.contact[key]} defaultValue={data.contact[key]} maxLength={key==='instagram'||key==='tiktok'?500:255}/></label>)}<Button type="submit">SAVE CONTACT DETAILS <Check/></Button></form>}
- {tab==='Brand appearance'&&<div className="noir-form"><label className="field">ACCENT COLOR<div className="accent-swatches"><input aria-label="Accent color" type="color" value={data.accent} onChange={e=>save({...data,accent:e.target.value})}/><span className="sample-note">{data.accent}</span></div></label><form className="noir-form" onSubmit={e=>{e.preventDefault();save({...data,story:String(new FormData(e.currentTarget).get('story')||'')})}}><label className="field">BRAND STORY<textarea name="story" defaultValue={data.story} maxLength={2000}/></label><Button type="submit">SAVE BRAND STORY <Check/></Button></form><p className="sample-note">Accent updates preview immediately across this device. Photography is generated concept imagery; uploaded replacements remain local.</p></div>}
- </section></div>
- <Dialog open={Boolean(service)} onOpenChange={v=>{if(!v)setService(null)}}><DialogContent><DialogTitle>{data.services.some(s=>s.id===service?.id)?'EDIT SERVICE':'ADD SERVICE'}</DialogTitle><DialogDescription>Replaceable demo content and sample pricing.</DialogDescription>{service&&<form className="noir-form max-h-[70svh] overflow-y-auto" onSubmit={e=>{e.preventDefault();const parsed=serviceSchema.safeParse(service);if(!parsed.success){setNotice('Please complete title, sample price and duration.');return}save({...data,services:data.services.some(s=>s.id===service.id)?data.services.map(s=>s.id===service.id?parsed.data:s):[...data.services,parsed.data]});setService(null)}}>{(['title','description','price','duration'] as const).map(key=><label key={key} className="field">{key.toUpperCase()}{key==='price'?' · SAMPLE':''}<input value={service[key]} maxLength={key==='description'?300:70} required={key!=='description'} onChange={e=>setService({...service,[key]:e.target.value})}/></label>)}<img className="image-preview" src={service.image} alt="Service image preview"/>{uploadControl(url=>setService({...service,image:url}))}<Button type="submit">SAVE SERVICE <Check/></Button></form>}</DialogContent></Dialog>
- <Dialog open={Boolean(gallery)} onOpenChange={v=>{if(!v)setGallery(null)}}><DialogContent><DialogTitle>GALLERY IMAGE</DialogTitle><DialogDescription>Preview and save a local demo image.</DialogDescription>{gallery&&<form className="noir-form" onSubmit={e=>{e.preventDefault();const parsed=gallerySchema.safeParse(gallery);if(!parsed.success){setNotice('Enter an image title.');return}save({...data,gallery:data.gallery.some(g=>g.id===gallery.id)?data.gallery.map(g=>g.id===gallery.id?parsed.data:g):[...data.gallery,parsed.data]});setGallery(null)}}><label className="field">TITLE<input value={gallery.title} required maxLength={100} onChange={e=>setGallery({...gallery,title:e.target.value})}/></label><label className="field">CATEGORY<select value={gallery.category} onChange={e=>{const parsed=gallerySchema.shape.category.safeParse(e.target.value);if(parsed.success)setGallery({...gallery,category:parsed.data})}}>{['NAILS','HAIR','MAKEUP','SKINCARE'].map(c=><option key={c}>{c}</option>)}</select></label><img className="image-preview" src={gallery.image} alt="Gallery image preview"/>{uploadControl(url=>setGallery({...gallery,image:url}))}<Button type="submit">SAVE IMAGE <Check/></Button></form>}</DialogContent></Dialog>
- </div>
+import { useState } from "react";
+import { Pencil, Trash2, Plus, Upload, Check, ArrowUpRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { useDemo } from "./demo-provider";
+import {
+  images,
+  serviceSchema,
+  gallerySchema,
+  type Service,
+  type GalleryItem,
+} from "@/lib/noir-data";
+const tabs = [
+  "Overview",
+  "Services",
+  "Pricing",
+  "Gallery",
+  "Before / after",
+  "Booking requests",
+  "Contact information",
+  "Brand appearance",
+];
+export function Admin() {
+  const { data, update, storageError } = useDemo();
+  const [tab, setTab] = useState("Overview");
+  const [service, setService] = useState<Service | null>(null);
+  const [gallery, setGallery] = useState<GalleryItem | null>(null);
+  const [notice, setNotice] = useState("");
+  function save(next: typeof data) {
+    setNotice(
+      update(next)
+        ? "Changes saved on this device."
+        : "Changes updated for this visit. " + storageError,
+    );
+  }
+  async function upload(file: File | undefined, apply: (url: string) => void) {
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 1500000) {
+      setNotice("Choose a JPG, PNG or WebP image smaller than 1.5 MB.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") apply(reader.result);
+    };
+    reader.onerror = () => setNotice("This image could not be read. Try another file.");
+    reader.readAsDataURL(file);
+  }
+  const uploadControl = (apply: (url: string) => void) => (
+    <label className="upload-label">
+      <Upload size={15} /> REPLACE IMAGE
+      <input
+        className="sr-only"
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        onChange={(e) => void upload(e.target.files?.[0], apply)}
+      />
+    </label>
+  );
+  return (
+    <div className="admin">
+      <div className="flex items-center justify-between gap-4">
+        <h1>THE CONTROL ROOM.</h1>
+        <Button variant="outline" asChild>
+          <Link to="/">
+            PREVIEW <ArrowUpRight />
+          </Link>
+        </Button>
+      </div>
+      <p className="admin-disclaimer">
+        FRONTEND DEMO · This page is public and not secure. Changes and requests are local to this
+        device. Do not enter sensitive information. A production admin requires authentication,
+        authorization and shared storage.
+      </p>
+      <div className="admin-layout">
+        <nav className="admin-nav" aria-label="Admin sections">
+          {tabs.map((t) => (
+            <Button
+              key={t}
+              variant={tab === t ? "default" : "ghost"}
+              onClick={() => {
+                setTab(t);
+                setNotice("");
+              }}
+            >
+              {t}
+            </Button>
+          ))}
+        </nav>
+        <section className="admin-panel">
+          <h2>{tab.toUpperCase()}</h2>
+          {notice && (
+            <p className="status mb-5" role="status">
+              {notice}
+            </p>
+          )}
+          {storageError && <p className="error-text mb-5">{storageError}</p>}
+          {tab === "Overview" && (
+            <>
+              <div className="admin-stats">
+                <div>
+                  <strong>{data.services.length}</strong>
+                  <span>SERVICES</span>
+                </div>
+                <div>
+                  <strong>{data.gallery.length}</strong>
+                  <span>GALLERY IMAGES</span>
+                </div>
+                <div>
+                  <strong>{data.bookings.length}</strong>
+                  <span>DEMO REQUESTS</span>
+                </div>
+              </div>
+              <p className="sample-note">
+                All content is a replaceable concept. This overview reflects this device only.
+              </p>
+            </>
+          )}
+          {(tab === "Services" || tab === "Pricing") && (
+            <>
+              <Button
+                onClick={() =>
+                  setService({
+                    id: crypto.randomUUID(),
+                    title: "",
+                    description: "",
+                    price: "From 00",
+                    duration: "60 min",
+                    image: images.nails,
+                  })
+                }
+              >
+                <Plus /> ADD SERVICE
+              </Button>
+              {data.services.map((s) => (
+                <div className="admin-entry" key={s.id}>
+                  <img src={s.image} alt={s.title} />
+                  <div>
+                    <h3>{s.title}</h3>
+                    <p>
+                      {s.price} · SAMPLE · {s.duration}
+                    </p>
+                  </div>
+                  <div className="admin-tools">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label={`Edit ${s.title}`}
+                      onClick={() => setService({ ...s })}
+                    >
+                      <Pencil />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={`Remove ${s.title}`}
+                      onClick={() => {
+                        if (
+                          window.confirm(`Remove ${s.title}? Existing demo requests will remain.`)
+                        )
+                          save({ ...data, services: data.services.filter((x) => x.id !== s.id) });
+                      }}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+          {tab === "Gallery" && (
+            <>
+              <Button
+                onClick={() =>
+                  setGallery({
+                    id: crypto.randomUUID(),
+                    title: "",
+                    category: "NAILS",
+                    image: images.nails,
+                  })
+                }
+              >
+                <Plus /> ADD IMAGE
+              </Button>
+              {data.gallery.map((g) => (
+                <div className="admin-entry" key={g.id}>
+                  <img src={g.image} alt={g.title} />
+                  <div>
+                    <h3>{g.title}</h3>
+                    <p>{g.category}</p>
+                  </div>
+                  <div className="admin-tools">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label={`Edit ${g.title}`}
+                      onClick={() => setGallery({ ...g })}
+                    >
+                      <Pencil />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={`Remove ${g.title}`}
+                      onClick={() => {
+                        if (window.confirm(`Remove ${g.title}?`))
+                          save({ ...data, gallery: data.gallery.filter((x) => x.id !== g.id) });
+                      }}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+          {tab === "Before / after" && (
+            <div className="form-row">
+              {(["before", "after"] as const).map((key) => (
+                <div key={key}>
+                  <h3>{key.toUpperCase()}</h3>
+                  <img
+                    className="image-preview my-5"
+                    src={data[key]}
+                    alt={`${key} concept preview`}
+                  />
+                  {uploadControl((url) => save({ ...data, [key]: url }))}
+                  <p className="sample-note">Replaceable concept image · max 1.5 MB</p>
+                </div>
+              ))}
+            </div>
+          )}
+          {tab === "Booking requests" && (
+            <>
+              {!data.bookings.length && (
+                <p className="sample-note">No demo requests on this device yet.</p>
+              )}
+              {data.bookings.map((b) => (
+                <div className="admin-entry" key={b.id}>
+                  <Check className="text-primary" />
+                  <div>
+                    <h3>
+                      {b.name} ·{" "}
+                      {data.services.find((s) => s.id === b.service)?.title || "Removed service"}
+                    </h3>
+                    <p>
+                      {b.date} · {b.time}
+                      <br />
+                      {b.email} {b.phone}
+                      <br />
+                      DEMO REQUEST · NOT A CONFIRMED APPOINTMENT
+                    </p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`Delete request from ${b.name}`}
+                    onClick={() => {
+                      if (window.confirm("Delete this local demo request?"))
+                        save({ ...data, bookings: data.bookings.filter((x) => x.id !== b.id) });
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              ))}
+            </>
+          )}
+          {tab === "Contact information" && (
+            <form
+              className="noir-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const values = Object.fromEntries(new FormData(e.currentTarget));
+                const next = { ...data.contact };
+                for (const key of Object.keys(next) as (keyof typeof next)[])
+                  next[key] = String(values[key] || "");
+                for (const key of ["instagram", "tiktok"] as const) {
+                  if (next[key]) {
+                    try {
+                      if (new URL(next[key]).protocol !== "https:") throw new Error();
+                    } catch {
+                      setNotice("Social links must be valid HTTPS addresses.");
+                      return;
+                    }
+                  }
+                }
+                save({ ...data, contact: next });
+              }}
+            >
+              {(Object.keys(data.contact) as (keyof typeof data.contact)[]).map((key) => (
+                <label className="field" key={key}>
+                  {key.toUpperCase()}
+                  <input
+                    name={key}
+                    key={data.contact[key]}
+                    defaultValue={data.contact[key]}
+                    maxLength={key === "instagram" || key === "tiktok" ? 500 : 255}
+                  />
+                </label>
+              ))}
+              <Button type="submit">
+                SAVE CONTACT DETAILS <Check />
+              </Button>
+            </form>
+          )}
+          {tab === "Brand appearance" && (
+            <div className="noir-form">
+              <label className="field">
+                ACCENT COLOR
+                <div className="accent-swatches">
+                  <input
+                    aria-label="Accent color"
+                    type="color"
+                    value={data.accent}
+                    onChange={(e) => save({ ...data, accent: e.target.value })}
+                  />
+                  <span className="sample-note">{data.accent}</span>
+                </div>
+              </label>
+              <form
+                className="noir-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  save({
+                    ...data,
+                    story: String(new FormData(e.currentTarget).get("story") || ""),
+                  });
+                }}
+              >
+                <label className="field">
+                  BRAND STORY
+                  <textarea name="story" defaultValue={data.story} maxLength={2000} />
+                </label>
+                <Button type="submit">
+                  SAVE BRAND STORY <Check />
+                </Button>
+              </form>
+              <p className="sample-note">
+                Accent updates preview immediately across this device. Photography is generated
+                concept imagery; uploaded replacements remain local.
+              </p>
+            </div>
+          )}
+        </section>
+      </div>
+      <Dialog
+        open={Boolean(service)}
+        onOpenChange={(v) => {
+          if (!v) setService(null);
+        }}
+      >
+        <DialogContent>
+          <DialogTitle>
+            {data.services.some((s) => s.id === service?.id) ? "EDIT SERVICE" : "ADD SERVICE"}
+          </DialogTitle>
+          <DialogDescription>Replaceable demo content and sample pricing.</DialogDescription>
+          {service && (
+            <form
+              className="noir-form max-h-[70svh] overflow-y-auto"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const parsed = serviceSchema.safeParse(service);
+                if (!parsed.success) {
+                  setNotice("Please complete title, sample price and duration.");
+                  return;
+                }
+                save({
+                  ...data,
+                  services: data.services.some((s) => s.id === service.id)
+                    ? data.services.map((s) => (s.id === service.id ? parsed.data : s))
+                    : [...data.services, parsed.data],
+                });
+                setService(null);
+              }}
+            >
+              {(["title", "description", "price", "duration"] as const).map((key) => (
+                <label key={key} className="field">
+                  {key.toUpperCase()}
+                  {key === "price" ? " · SAMPLE" : ""}
+                  <input
+                    value={service[key]}
+                    maxLength={key === "description" ? 300 : 70}
+                    required={key !== "description"}
+                    onChange={(e) => setService({ ...service, [key]: e.target.value })}
+                  />
+                </label>
+              ))}
+              <img className="image-preview" src={service.image} alt="Service image preview" />
+              {uploadControl((url) => setService({ ...service, image: url }))}
+              <Button type="submit">
+                SAVE SERVICE <Check />
+              </Button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={Boolean(gallery)}
+        onOpenChange={(v) => {
+          if (!v) setGallery(null);
+        }}
+      >
+        <DialogContent>
+          <DialogTitle>GALLERY IMAGE</DialogTitle>
+          <DialogDescription>Preview and save a local demo image.</DialogDescription>
+          {gallery && (
+            <form
+              className="noir-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const parsed = gallerySchema.safeParse(gallery);
+                if (!parsed.success) {
+                  setNotice("Enter an image title.");
+                  return;
+                }
+                save({
+                  ...data,
+                  gallery: data.gallery.some((g) => g.id === gallery.id)
+                    ? data.gallery.map((g) => (g.id === gallery.id ? parsed.data : g))
+                    : [...data.gallery, parsed.data],
+                });
+                setGallery(null);
+              }}
+            >
+              <label className="field">
+                TITLE
+                <input
+                  value={gallery.title}
+                  required
+                  maxLength={100}
+                  onChange={(e) => setGallery({ ...gallery, title: e.target.value })}
+                />
+              </label>
+              <label className="field">
+                CATEGORY
+                <select
+                  value={gallery.category}
+                  onChange={(e) => {
+                    const parsed = gallerySchema.shape.category.safeParse(e.target.value);
+                    if (parsed.success) setGallery({ ...gallery, category: parsed.data });
+                  }}
+                >
+                  {["NAILS", "HAIR", "MAKEUP", "SKINCARE"].map((c) => (
+                    <option key={c}>{c}</option>
+                  ))}
+                </select>
+              </label>
+              <img className="image-preview" src={gallery.image} alt="Gallery image preview" />
+              {uploadControl((url) => setGallery({ ...gallery, image: url }))}
+              <Button type="submit">
+                SAVE IMAGE <Check />
+              </Button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
 }

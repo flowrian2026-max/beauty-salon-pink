@@ -1,13 +1,143 @@
-import { Link, useRouterState } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
-import { ArrowUpRight, Menu, X, Instagram, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-const navigation=[['Services','/services'],['Experience','/experience'],['Gallery','/gallery'],['About','/about'],['Contact','/contact']] as const;
-export function SiteHeader(){const [open,setOpen]=useState(false);const [scrolled,setScrolled]=useState(false);const path=useRouterState({select:s=>s.location.pathname});useEffect(()=>{setOpen(false)},[path]);useEffect(()=>{const fn=()=>setScrolled(window.scrollY>30);fn();window.addEventListener('scroll',fn,{passive:true});return()=>window.removeEventListener('scroll',fn)},[]);
- return <header className={`site-header ${scrolled?'scrolled':''}`}><Link to="/" className="wordmark" aria-label="NOIR PINK home">NOIR<span>PINK</span><i>®</i></Link><nav className="desktop-nav" aria-label="Main navigation">{navigation.map(([name,to])=><Link key={to} to={to} activeProps={{className:'active'}}>{name}</Link>)}</nav><Button asChild variant="outline" className="header-book"><Link to="/booking">LET’S MAKE IT YOU <ArrowUpRight/></Link></Button><Button variant="ghost" size="icon" className="mobile-toggle" aria-label={open?'Close menu':'Open menu'} aria-expanded={open} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</Button>{open&&<nav className="mobile-nav" aria-label="Mobile navigation">{navigation.map(([name,to])=><Link key={to} to={to}>{name}<ArrowUpRight size={20}/></Link>)}<Button asChild><Link to="/booking">BOOK YOUR EXPERIENCE <ArrowUpRight/></Link></Button></nav>}</header>
+import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ArrowUpRight, Menu, X, Instagram, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+const navigation = [
+  ["Services", "/services"],
+  ["Experience", "/experience"],
+  ["Gallery", "/gallery"],
+  ["About", "/about"],
+  ["Contact", "/contact"],
+] as const;
+export function SiteHeader() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    setOpen(false);
+  }, [path]);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 30);
+    fn();
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+  return (
+    <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
+      <Link to="/" className="wordmark" aria-label="NOIR PINK home">
+        NOIR<span>PINK</span>
+        <i>®</i>
+      </Link>
+      <nav className="desktop-nav" aria-label="Main navigation">
+        {navigation.map(([name, to]) => (
+          <Link key={to} to={to} activeProps={{ className: "active" }}>
+            {name}
+          </Link>
+        ))}
+      </nav>
+      <Button asChild variant="outline" className="header-book">
+        <Link to="/booking">
+          LET’S MAKE IT YOU <ArrowUpRight />
+        </Link>
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="mobile-toggle"
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+      >
+        {open ? <X /> : <Menu />}
+      </Button>
+      {open && (
+        <nav className="mobile-nav" aria-label="Mobile navigation">
+          {navigation.map(([name, to]) => (
+            <Link key={to} to={to}>
+              {name}
+              <ArrowUpRight size={20} />
+            </Link>
+          ))}
+          <Button asChild>
+            <Link to="/booking">
+              BOOK YOUR EXPERIENCE <ArrowUpRight />
+            </Link>
+          </Button>
+        </nav>
+      )}
+    </header>
+  );
 }
-export function SiteFooter(){return <footer className="site-footer"><Link to="/" className="wordmark">NOIR<span>PINK</span><i>®</i></Link><p>BEAUTY. ON YOUR OWN TERMS.</p><div><Link to="/contact" aria-label="Connect with NOIR PINK"><Instagram size={18}/></Link><Link to="/admin">DEMO ADMIN <ArrowUpRight size={13}/></Link></div><small>© {new Date().getFullYear()} NOIR PINK · CONCEPT EXPERIENCE</small></footer>}
-export function BookLink({service}:{service?:string}){return <Button asChild variant="outline"><Link to="/booking" search={service?{service}:{}}>BOOK EXPERIENCE <ArrowUpRight/></Link></Button>}
-export function Intro({eyebrow,title,copy}:{eyebrow:string;title:string;copy?:string}){return <div className="page-intro"><div className="eyebrow"><span/> {eyebrow}</div><h1>{title}</h1>{copy&&<p>{copy}</p>}</div>}
-export function RevealObserver(){const path=useRouterState({select:s=>s.location.pathname});useEffect(()=>{const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');observer.unobserve(e.target)}}),{threshold:0.08});document.querySelectorAll('[data-reveal]').forEach(el=>observer.observe(el));return()=>observer.disconnect()},[path]);return null}
-export function NextChapter(){return <section className="next-chapter"><span className="eyebrow">YOUR NEXT CHAPTER</span><h2>MAKE IT <em>YOU.</em></h2><Button asChild><Link to="/booking">BOOK YOUR EXPERIENCE <ArrowRight/></Link></Button></section>}
+export function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <Link to="/" className="wordmark">
+        NOIR<span>PINK</span>
+        <i>®</i>
+      </Link>
+      <p>BEAUTY. ON YOUR OWN TERMS.</p>
+      <div>
+        <Link to="/contact" aria-label="Connect with NOIR PINK">
+          <Instagram size={18} />
+        </Link>
+        <Link to="/admin">
+          DEMO ADMIN <ArrowUpRight size={13} />
+        </Link>
+      </div>
+      <small>© {new Date().getFullYear()} NOIR PINK · CONCEPT EXPERIENCE</small>
+    </footer>
+  );
+}
+export function BookLink({ service }: { service?: string }) {
+  return (
+    <Button asChild variant="outline">
+      <Link to="/booking" search={service ? { service } : {}}>
+        BOOK EXPERIENCE <ArrowUpRight />
+      </Link>
+    </Button>
+  );
+}
+export function Intro({ eyebrow, title, copy }: { eyebrow: string; title: string; copy?: string }) {
+  return (
+    <div className="page-intro">
+      <div className="eyebrow">
+        <span /> {eyebrow}
+      </div>
+      <h1>{title}</h1>
+      {copy && <p>{copy}</p>}
+    </div>
+  );
+}
+export function RevealObserver() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("revealed");
+            observer.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.08 },
+    );
+    document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [path]);
+  return null;
+}
+export function NextChapter() {
+  return (
+    <section className="next-chapter">
+      <span className="eyebrow">YOUR NEXT CHAPTER</span>
+      <h2>
+        MAKE IT <em>YOU.</em>
+      </h2>
+      <Button asChild>
+        <Link to="/booking">
+          BOOK YOUR EXPERIENCE <ArrowRight />
+        </Link>
+      </Button>
+    </section>
+  );
+}
