@@ -59,14 +59,14 @@ export function Gallery() {
           >
             <img src={g.image} alt={g.title} width="864" height="1104" loading="lazy" />
             <span>
-              {g.title} <span className="sr-only">{g.category}</span>
+              <small>{g.category} / 0{i + 1}</small>{g.title}
             </span>
           </Button>
         ))}
       </div>
       {items.length === 0 && <p className="sample-note">No images in this collection yet.</p>}
       <p className="sample-note">
-        AI-generated concept gallery · Replaceable sample imagery, not salon work.
+        AI-generated editorial concepts · Replaceable imagery, not customer results or salon work.
       </p>
       <Dialog
         open={Boolean(selected)}
