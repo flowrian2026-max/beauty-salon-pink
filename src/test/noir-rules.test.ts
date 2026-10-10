@@ -6,8 +6,29 @@ import {
   defaults,
   stateSchema,
   safeSocial,
+  images,
+  migrateComparison,
+  comparisonSplit,
 } from "@/lib/noir-data";
 describe("NOIR PINK demo rules", () => {
+  it("uses a matched manicure concept instead of unrelated skincare and portrait defaults", () => {
+    expect(defaults.before).toBe(images.manicureBefore);
+    expect(defaults.after).toBe(images.manicureAfter);
+    expect(defaults.before).not.toBe(defaults.after);
+  });
+  it("upgrades the legacy mismatched pair without removing local bookings", () => {
+    const old = { ...defaults, before: images.skin, after: images.campaign };
+    expect(migrateComparison(old)).toEqual({ ...old, before: images.manicureBefore, after: images.manicureAfter });
+  });
+  it("preserves user-replaced comparison images", () => {
+    const edited = { ...defaults, before: "custom-before", after: "custom-after" };
+    expect(migrateComparison(edited)).toBe(edited);
+  });
+  it("reveals the correct position and clamps dragging to either edge", () => {
+    expect(comparisonSplit(350, 100, 1000)).toBe(25);
+    expect(comparisonSplit(50, 100, 1000)).toBe(0);
+    expect(comparisonSplit(1200, 100, 1000)).toBe(100);
+  });
   const booking = {
     service: "nails",
     name: "Demo Visitor",
