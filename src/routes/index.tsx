@@ -1,73 +1,44 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight, ArrowRight, Plus } from "lucide-react";
-import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { images, pageHead } from "@/lib/noir-data";
 import { Services } from "@/components/noir/services";
 import { Comparison } from "@/components/noir/comparison";
 import { NextChapter } from "@/components/noir/site-shell";
+import { DepthVisual } from "@/components/noir/depth-visual";
 export const Route = createFileRoute("/")({
   head: () =>
     pageHead(
-      "Beauty without limits",
+      "Beauty, redefined",
       "A cinematic world of self-expression. Discover the NOIR PINK beauty concept: nail art, hair, makeup and skincare.",
     ),
   component: Index,
 });
 function Index() {
-  const art = useRef<HTMLImageElement>(null);
   return (
     <>
-      <section
-        className="hero"
-        onPointerMove={(e) => {
-          if (
-            window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-            e.pointerType !== "mouse" ||
-            !art.current
-          )
-            return;
-          const r = e.currentTarget.getBoundingClientRect();
-          art.current.style.translate = `${(e.clientX - r.left - r.width / 2) * 0.008}px ${(e.clientY - r.top - r.height / 2) * 0.006}px`;
-        }}
-        onPointerLeave={() => {
-          if (art.current) art.current.style.translate = "0 0";
-        }}
-      >
-        <img
-          ref={art}
-          className="hero-art"
-          src={images.campaign}
-          width="1600"
-          height="1104"
-          alt="NOIR PINK campaign — sculptural pink nails and dramatic beauty"
-          fetchPriority="high"
-        />
+      <DepthVisual className="hero" image={images.campaign} alt="NOIR PINK editorial beauty concept with dramatic pink rim lighting" priority>
         <div className="hero-content">
           <div className="eyebrow">
-            <span /> A NEW DIMENSION OF BEAUTY
+            <span /> NOIR PINK / BEAUTY ON YOUR OWN TERMS
           </div>
           <h1>
-            BEAUTY
+            BEAUTY,
             <br />
-            WITHOUT
-            <br />
-            <em>LIMITS.</em>
+            <em>REDEFINED.</em>
           </h1>
           <p className="hero-copy">
-            A new dimension of beauty.
-            <br />
-            Bold creativity. Exceptional detail. Unforgettable style.
+            Precision, creativity, and confidence in every detail.
           </p>
           <div className="hero-actions">
             <Button asChild>
-              <Link to="/booking">
-                BOOK YOUR EXPERIENCE <ArrowUpRight />
+              <Link to="/experience">
+                EXPLORE THE EXPERIENCE <ArrowUpRight />
               </Link>
             </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/experience">
-                EXPLORE THE WORLD <ArrowRight />
+            <Button variant="outline" asChild>
+              <Link to="/booking">
+                BOOK YOUR VISIT <ArrowRight />
               </Link>
             </Button>
           </div>
@@ -90,7 +61,7 @@ function Index() {
             </span>
           </div>
         </div>
-      </section>
+      </DepthVisual>
       <div className="ticker" aria-hidden="true">
         <span>NAIL ART</span>
         <span>✦</span>
@@ -122,16 +93,16 @@ function Index() {
         </div>
         <Services preview />
       </section>
-      <section className="editorial-section bg-secondary">
+      <section className="editorial-section transformation-section">
         <div className="section-top" data-reveal>
           <div>
             <div className="eyebrow">
               <span /> A DIFFERENT PERSPECTIVE
             </div>
             <h2>
-              THE BEAUTY OF
+              SAME HAND.
               <br />
-              POSSIBILITY.
+              NEW EXPRESSION.
             </h2>
           </div>
           <Button asChild variant="link">

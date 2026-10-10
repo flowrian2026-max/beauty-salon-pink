@@ -14,3 +14,5 @@
 - Public content sections use separate TanStack leaf routes and shared site chrome; each section needs independently shareable metadata.
 - Keep brand styles in global semantic tokens and reuse design-system controls; editable appearance must propagate consistently.
 - Use generated editorial photos and lightweight CSS/pointer depth rather than a 3D renderer; campaign realism and mobile performance take priority without a supplied model.
+- Use a nail-only masked image edit for default comparison imagery and migrate only the legacy default pair; this keeps the scene aligned without overwriting user replacements.
+- Use pointer capture for comparison dragging and retain a native range for keyboard input; mouse, touch and assistive controls share one split value.

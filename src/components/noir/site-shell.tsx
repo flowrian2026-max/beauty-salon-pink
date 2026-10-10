@@ -37,7 +37,7 @@ export function SiteHeader() {
       </nav>
       <Button asChild variant="outline" className="header-book">
         <Link to="/booking">
-          LET’S MAKE IT YOU <ArrowUpRight />
+          BOOK YOUR VISIT <ArrowUpRight />
         </Link>
       </Button>
       <Button
