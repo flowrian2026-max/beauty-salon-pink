@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { defaults, stateSchema, migrateComparison, type DemoState } from "@/lib/noir-data";
+import { defaults, stateSchema, migrateDemo, type DemoState } from "@/lib/noir-data";
 const Context = createContext<{
   data: DemoState;
   update: (next: DemoState) => boolean;
@@ -14,7 +14,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem("noir-pink-demo");
       if (saved) {
         const result = stateSchema.safeParse(JSON.parse(saved));
-        if (result.success) setData(migrateComparison(result.data));
+        if (result.success) setData(migrateDemo(result.data));
       }
     } catch {
       setError("Local storage is unavailable. Changes will last only for this visit.");

@@ -18,8 +18,8 @@ export const serviceSchema = z.object({
   id: z.string(),
   title: z.string().trim().min(1).max(70),
   description: z.string().trim().max(300),
-  price: z.string().trim().min(1).max(40),
-  duration: z.string().trim().min(1).max(40),
+  price: z.string().trim().max(40),
+  duration: z.string().trim().max(40),
   image: z.string().max(3000000),
 });
 export type Service = z.infer<typeof serviceSchema>;
@@ -35,8 +35,9 @@ export const bookingSchema = z.object({
   name: z.string().trim().min(2, "Enter your name").max(100),
   email: z.string().trim().email("Enter a valid email").max(255),
   phone: z.string().trim().max(30),
-  date: z.string().min(1, "Choose a date"),
-  time: z.string().min(1, "Choose a time"),
+  date: z.string().regex(/^(\d{4}-\d{2}-\d{2})?$/, "Enter a valid date"),
+  time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$|^$/, "Enter a valid time"),
+  message: z.string().trim().max(1000, "Keep your message under 1,000 characters").default(""),
 });
 export const contactSchema = z.object({
   name: z.string().trim().min(2, "Enter your name").max(100),
@@ -51,48 +52,48 @@ export const defaults = {
       title: "NAIL ART",
       description:
         "Small details. A bold statement. Sculptural designs made for your individuality.",
-      price: "From 65",
-      duration: "60–90 min",
+      price: "",
+      duration: "",
       image: nails,
     },
     {
       id: "hair",
       title: "HAIR STYLING",
       description: "Effortless movement, striking silhouettes. Your next signature look.",
-      price: "From 85",
-      duration: "60–120 min",
+      price: "",
+      duration: "",
       image: hair,
     },
     {
       id: "makeup",
       title: "MAKEUP",
       description: "From understated radiance to unapologetic expression.",
-      price: "From 75",
-      duration: "60 min",
+      price: "",
+      duration: "",
       image: campaign,
     },
     {
       id: "skin",
       title: "SKINCARE",
       description: "A moment to reset. A ritual dedicated to your skin.",
-      price: "From 90",
-      duration: "75 min",
+      price: "",
+      duration: "",
       image: skin,
     },
     {
       id: "manicure",
       title: "MANICURE",
       description: "Beautifully considered care, finished with precision.",
-      price: "From 40",
-      duration: "45 min",
+      price: "",
+      duration: "",
       image: nails,
     },
     {
       id: "pedicure",
       title: "PEDICURE",
       description: "A restorative ritual with an impeccably polished finish.",
-      price: "From 50",
-      duration: "60 min",
+      price: "",
+      duration: "",
       image: skin,
     },
   ],
@@ -111,7 +112,7 @@ export const defaults = {
     instagram: "",
     tiktok: "",
   },
-  accent: "#FF2D95",
+  accent: "#D694AE",
   before: manicureBefore,
   after: manicureAfter,
   story:
@@ -135,6 +136,25 @@ export const stateSchema = z.object({
   story: z.string().max(2000),
 });
 export type DemoState = z.infer<typeof stateSchema>;
+export function migrateDemo(data: DemoState): DemoState {
+  const legacy = ["From 65", "From 85", "From 75", "From 90", "From 40", "From 50"];
+  const durations = ["60–90 min", "60–120 min", "60 min", "75 min", "45 min", "60 min"];
+  const ids = ["nails", "hair", "makeup", "skin", "manicure", "pedicure"];
+  return migrateComparison({ ...data, accent: data.accent === "#FF2D95" ? defaults.accent : data.accent,
+    services: data.services.map(s => {
+      const i = ids.indexOf(s.id);
+      return i >= 0 ? { ...s, price: s.price === legacy[i] ? "" : s.price, duration: s.duration === durations[i] ? "" : s.duration } : s;
+    }) });
+}
+export function businessEmail(value: string) {
+  const parsed = z.string().trim().email().max(255).safeParse(value);
+  return parsed.success ? parsed.data : undefined;
+}
+export function inquiryEmail(recipient: string, subject: string, body: string) {
+  const email = businessEmail(recipient);
+  if (!email || subject.length > 200 || body.length > 4000) return undefined;
+  return `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
 export function filterGallery(items: GalleryItem[], category: string) {
   return category === "ALL" ? items : items.filter((item) => item.category === category);
 }

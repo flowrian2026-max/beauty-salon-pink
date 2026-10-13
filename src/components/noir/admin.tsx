@@ -125,8 +125,8 @@ export function Admin() {
                     id: crypto.randomUUID(),
                     title: "",
                     description: "",
-                    price: "From 00",
-                    duration: "60 min",
+                    price: "",
+                    duration: "",
                     image: images.nails,
                   })
                 }
@@ -139,7 +139,7 @@ export function Admin() {
                   <div>
                     <h3>{s.title}</h3>
                     <p>
-                      {s.price} · SAMPLE · {s.duration}
+                      {s.price || "Pricing on inquiry"} {s.duration && `· ${s.duration}`}
                     </p>
                   </div>
                   <div className="admin-tools">
@@ -363,7 +363,7 @@ export function Admin() {
                 e.preventDefault();
                 const parsed = serviceSchema.safeParse(service);
                 if (!parsed.success) {
-                  setNotice("Please complete title, sample price and duration.");
+                  setNotice("Enter a service title and valid details.");
                   return;
                 }
                 save({
@@ -382,7 +382,7 @@ export function Admin() {
                   <input
                     value={service[key]}
                     maxLength={key === "description" ? 300 : 70}
-                    required={key !== "description"}
+                    required={key === "title"}
                     onChange={(e) => setService({ ...service, [key]: e.target.value })}
                   />
                 </label>
