@@ -32,14 +32,14 @@ function Index() {
           </p>
           <div className="hero-actions">
             <Button asChild>
-              <Link to="/experience">
-                EXPLORE THE EXPERIENCE <ArrowUpRight />
+              <Link to="/booking">
+                BOOK YOUR VISIT <ArrowUpRight />
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link to="/booking">
-                BOOK YOUR VISIT <ArrowRight />
-              </Link>
+              <a href="#services">
+                EXPLORE THE EXPERIENCE <ArrowRight />
+              </a>
             </Button>
           </div>
         </div>
@@ -51,9 +51,9 @@ function Index() {
           ENTIRELY FOR YOU.
         </div>
         <div className="hero-bottom">
-          <Link to="/services" className="scroll-cue">
+          <a href="#services" className="scroll-cue">
             <ArrowDown size={15} /> SCROLL TO DISCOVER
-          </Link>
+          </a>
           <div className="hero-note">
             <span>INDIVIDUALITY IS EVERYTHING.</span>
             <span>
@@ -73,7 +73,7 @@ function Index() {
         <span>✦</span>
         <span>SELF EXPRESSION</span>
       </div>
-      <section className="editorial-section">
+      <section className="editorial-section" id="services">
         <div className="section-top" data-reveal>
           <div>
             <div className="eyebrow">

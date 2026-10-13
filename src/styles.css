@@ -63,32 +63,32 @@
 
 :root {
   --radius: 0.25rem;
-  --background: oklch(0.135976 0.006844 285.4541);
-  --foreground: oklch(0.979277 0.00506 325.6154);
-  --card: oklch(0.205243 0.02042 302.908);
+  --background: oklch(0.137 0.002 285);
+  --foreground: oklch(0.966 0.009 65);
+  --card: oklch(0.205 0.004 285);
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.665453 0.249155 357.3412);
-  --primary-foreground: var(--foreground);
-  --secondary: oklch(0.175 0.032 305);
+  --primary: oklch(0.735 0.084 350);
+  --primary-foreground: var(--background);
+  --secondary: oklch(0.178 0.003 285);
   --secondary-foreground: var(--foreground);
   --muted: var(--secondary);
   --muted-foreground: oklch(0.727445 0.018347 308.1808);
   --accent: var(--card);
   --accent-foreground: var(--foreground);
-  --soft-pink: oklch(0.808641 0.106286 350.0776);
+  --soft-pink: oklch(0.819 0.052 350);
   --deep-rose: oklch(0.560866 0.19711 357.6127);
   --destructive: oklch(0.65 0.21 25);
   --destructive-foreground: var(--foreground);
-  --border: oklch(0.279744 0.028956 323.8052);
+  --border: oklch(0.285 0.009 350);
   --input: var(--border);
   --ring: var(--primary);
   --hero-shade: linear-gradient(90deg, var(--background) 0%, transparent 70%);
   --shadow-editorial: 0 25px 80px color-mix(in oklab, var(--background) 60%, transparent);
   --shadow-light: 0 0 24px color-mix(in oklab, var(--primary) 28%, transparent);
   --cinematic-shade: linear-gradient(90deg, color-mix(in oklab, var(--background) 85%, transparent), transparent 74%), linear-gradient(0deg, var(--background), transparent 38%);
-  --lighting-line: linear-gradient(90deg, transparent, var(--primary), var(--soft-pink), transparent);
+  --lighting-line: linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 40%, var(--border)), transparent);
   --font-display: "Barlow Condensed", sans-serif;
   --font-body: "Manrope", sans-serif;
 }
@@ -1437,4 +1437,112 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .depth-photo { translate: none !important; transform: none !important; }
+}
+
+/* Premium refinement: quieter surfaces, intentional composition and inquiry-first controls. */
+a:focus-visible, button:focus-visible, .upload-label:focus-within {
+  outline: 2px solid var(--primary); outline-offset: 5px;
+}
+main { min-width: 0; }
+#services { scroll-margin-top: 90px; }
+.desktop-nav a { font-size: 11px; }
+.hero { height: min(900px, 91svh); min-height: 640px; }
+.hero-content { padding-top: 210px; }
+.hero h1 { font-size: 136px; font-weight: 500; line-height: .94; }
+.hero h1 em { text-shadow: none; }
+.hero-copy { font-size: 15px; max-width: 345px; line-height: 1.8; }
+.hero-actions a { font-size: 11px; height: 50px; }
+.hero-index { color: var(--foreground); }
+.ticker { background: var(--background); font-size: 21px; color: var(--muted-foreground); }
+.service-grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 24px; }
+.service-item:nth-child(3n + 2) { margin-top: 0; }
+.service-item:nth-child(even) { margin-top: 65px; }
+.service-caption h3 { font-size: 31px; }
+.service-item p { font-size: 13px; }
+.service-item a { width: 100%; font-size: 10px; padding-inline: 10px; height: 44px; }
+.service-meta { min-height: 18px; font-size: 10px; flex-wrap: wrap; gap: 6px; color: var(--muted-foreground); }
+.service-item:nth-child(3n) .service-image, .service-image { aspect-ratio: 3/4; }
+.compare-divider { background: var(--foreground); box-shadow: none; }
+.compare-divider span { border: 1px solid var(--primary); box-shadow: var(--shadow-editorial); }
+.compare-label { background: color-mix(in oklab, var(--background) 90%, transparent); }
+.sample-note { font-size: 11px; line-height: 1.8; }
+.section-top h2 { font-size: 76px; }
+.gallery-item img { display: block; height: auto; }
+.gallery-item:nth-child(4) img { aspect-ratio: 4/5; }
+.lightbox-photo { animation: entrance .25s ease both; }
+.site-footer { grid-template-columns: minmax(0,1fr) minmax(0,2fr); gap: 26px 40px; padding-block: 55px 28px; }
+.site-footer > p { grid-column: 1; }
+.footer-nav { grid-column: 2; grid-row: 1 / span 2; display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 20px 28px; }
+.footer-nav a { font-size: 12px; color: var(--muted-foreground); display: flex; align-items: center; gap: 6px; }
+.footer-nav a:hover { color: var(--foreground); }
+.footer-socials { grid-column: 2; justify-content: flex-end; }
+.footer-socials:empty { display: none; }
+.review { padding: 0; background: transparent; border-top: 1px solid var(--border); padding-top: 25px; }
+.review dl { grid-template-columns: 115px minmax(0,1fr); line-height: 1.7; }
+.noir-form, .review, .form-layout > *, .story > * { min-width: 0; }
+.field { font-size: 11px; }
+.field input, .field select, .field textarea { font-size: 16px; background: var(--background); }
+.field input:focus-visible, .field textarea:focus-visible, .field select:focus-visible { outline: 1px solid var(--primary); outline-offset: 2px; }
+.status h2 { font-family: var(--font-display); font-size: 36px; line-height: 1.1; margin-bottom: 16px; overflow-wrap: anywhere; }
+.admin > div:first-child { display: grid; grid-template-columns: minmax(0,1fr) auto; }
+@media (min-width: 1500px) {
+  .hero-content { padding-top: 210px; }
+  .hero h1 { font-size: 160px; }
+  .editorial-section, .experience-editorial, .page-content { padding-inline: max(5%, calc((100% - 1600px) / 2)); }
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  .hero h1 { font-size: 108px; }
+  .hero-content { padding-top: 200px; }
+  .service-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 45px 28px; }
+  .section-top h2 { font-size: 64px; }
+}
+@media (max-width: 700px) {
+  .hero { height: auto; min-height: 660px; max-height: none; }
+  .hero .depth-photo { height: 85%; object-position: 70% center; }
+  .hero-content { padding: 320px 6% 100px; }
+  .hero h1 { font-size: 72px; line-height: .96; margin: 22px 0; }
+  .hero-copy { font-size: 13px; max-width: 320px; }
+  .hero-index { display: none; }
+  .hero-actions { grid-template-columns: 1fr; max-width: 330px; gap: 10px; }
+  .hero-actions a { font-size: 11px; height: 46px; justify-content: space-between; padding-inline: 18px; }
+  .hero-bottom { bottom: 24px; }
+  .hero-bottom:before { top: -15px; }
+  .hero:after { background: linear-gradient(0deg, var(--background) 6%, color-mix(in oklab, var(--background) 80%, transparent) 36%, transparent 76%); }
+  .ticker { font-size: 18px; gap: 16px; }
+  .ticker span:nth-child(n + 6) { display: none; }
+  .section-top { grid-template-columns: minmax(0,1fr); align-items: start; gap: 20px; }
+  .section-top h2 { font-size: 48px; }
+  .section-top a { justify-self: start; font-size: 10px; }
+  .service-grid { grid-template-columns: minmax(0,1fr); gap: 38px; }
+  .service-item:nth-child(even) { margin-top: 0; }
+  .service-image, .service-item:nth-child(3n) .service-image { aspect-ratio: 4/5; }
+  .service-caption h3 { font-size: 32px; }
+  .service-item p { font-size: 13px; max-width: none; }
+  .service-item a { width: auto; padding-inline: 18px; font-size: 11px; }
+  .service-meta { font-size: 11px; }
+  .page-intro h1 { font-size: 56px; overflow-wrap: anywhere; }
+  .page-intro:after { display: none; }
+  .experience-opening { height: auto; min-height: 630px; }
+  .experience-opening-copy { padding: 320px 6% 80px; }
+  .experience-opening h1 { font-size: 58px; }
+  .experience-opening-copy p { max-width: 260px; }
+  .gallery-item > span { font-size: 24px; }
+  .filters button { min-height: 44px; font-size: 10px; }
+  .site-footer { grid-template-columns: minmax(0,1fr); gap: 22px; }
+  .site-footer p, .footer-nav, .footer-socials { grid-column: 1; grid-row: auto; }
+  .footer-nav { justify-content: flex-start; gap: 20px 26px; }
+  .footer-socials { justify-content: flex-start; }
+  .form-row { grid-template-columns: minmax(0,1fr); gap: 20px; }
+  .story h2 { font-size: 60px; }
+  .next-chapter h2 { font-size: 70px; }
+  .admin h1 { font-size: 38px; }
+}
+@media (max-width: 370px) {
+  .hero h1 { font-size: 62px; }
+  .hero-content { padding-top: 280px; }
+  .hero-actions { max-width: none; }
+  .page-intro h1 { font-size: 48px; }
+  .experience-opening h1 { font-size: 51px; }
+  .section-top h2 { font-size: 44px; }
+  .gallery-item > span { font-size: 21px; }
 }

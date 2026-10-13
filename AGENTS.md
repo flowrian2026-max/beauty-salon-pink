@@ -16,3 +16,5 @@
 - Use generated editorial photos and lightweight CSS/pointer depth rather than a 3D renderer; campaign realism and mobile performance take priority without a supplied model.
 - Use a nail-only masked image edit for default comparison imagery and migrate only the legacy default pair; this keeps the scene aligned without overwriting user replacements.
 - Use pointer capture for comparison dragging and retain a native range for keyboard input; mouse, touch and assistive controls share one split value.
+- Use a validated central contact configuration for email-draft inquiry handoffs; opening a draft must never be reported as external delivery, and missing configuration keeps the explicitly local demo available.
+- Migrate only known legacy sample prices and durations to inquiry-based empty values; preserve business-supplied local edits.

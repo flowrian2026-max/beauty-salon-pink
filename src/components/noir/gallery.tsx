@@ -57,7 +57,7 @@ export function Gallery() {
             onClick={() => setCurrent(i)}
             aria-label={`View ${g.title}`}
           >
-            <img src={g.image} alt={g.title} width="864" height="1104" loading="lazy" />
+            <img src={g.image} alt={g.title} width="864" height="1104" loading="lazy" decoding="async" />
             <span>
               <small>{g.category} / 0{i + 1}</small>{g.title}
             </span>
@@ -79,7 +79,7 @@ export function Gallery() {
           <DialogDescription>
             NOIR PINK · {selected?.category} · Concept photography
           </DialogDescription>
-          {selected && <img src={selected.image} alt={selected.title} />}
+          {selected && <img key={selected.id} className="lightbox-photo" src={selected.image} alt={selected.title} width="864" height="1104" decoding="async" />}
           <div className="lightbox-controls">
             <Button
               variant="outline"

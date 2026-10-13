@@ -6,7 +6,7 @@ export function Services({ preview = false }: { preview?: boolean }) {
   return (
     <>
       <div className="service-grid">
-        {data.services.slice(0, preview ? 3 : undefined).map((s, i) => (
+        {data.services.slice(0, preview ? 4 : undefined).map((s, i) => (
           <article className="service-item" key={s.id} data-reveal>
             <div className="service-image">
               <img
@@ -23,11 +23,11 @@ export function Services({ preview = false }: { preview?: boolean }) {
               <ArrowUpRight size={23} className="text-primary" />
             </div>
             <p>{s.description}</p>
-            {!preview && (
+            {(
               <>
                 <div className="service-meta">
-                  <span>{s.price} · SAMPLE PRICE</span>
-                  <span>{s.duration}</span>
+                  <span>{s.price || "PRICING ON INQUIRY"}</span>
+                  {s.duration && <span>{s.duration}</span>}
                 </div>
                 <BookLink service={s.id} />
               </>
@@ -37,9 +37,7 @@ export function Services({ preview = false }: { preview?: boolean }) {
       </div>
       <p className="sample-note">
         AI-generated concept photography.{" "}
-        {preview
-          ? ""
-          : "Prices and durations are replaceable samples; currency and final pricing to be confirmed."}
+        Service details and availability are confirmed on inquiry.
       </p>
     </>
   );

@@ -2,11 +2,13 @@ import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDemo } from "./demo-provider";
-import { contactSchema, safeSocial } from "@/lib/noir-data";
+import { contactSchema, safeSocial, businessEmail, inquiryEmail } from "@/lib/noir-data";
 export function ContactContent() {
   const { data } = useDemo();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [done, setDone] = useState(false);
+  const [draft, setDraft] = useState("");
+  const recipient = businessEmail(data.contact.email);
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const raw = new FormData(e.currentTarget);
@@ -16,6 +18,7 @@ export function ContactContent() {
       return;
     }
     setErrors({});
+    setDraft(inquiryEmail(data.contact.email, "NOIR PINK contact inquiry", `Name: ${result.data.name}\nEmail: ${result.data.email}\n\n${result.data.message}`) || "");
     setDone(true);
   }
   return (
@@ -32,7 +35,7 @@ export function ContactContent() {
           ].map(([k, v]) => (
             <div key={k}>
               <dt>{k}</dt>
-              <dd>{v}</dd>
+              <dd>{k === "EMAIL" && recipient ? <a href={`mailto:${encodeURIComponent(recipient)}`}>{recipient}</a> : v}</dd>
             </div>
           ))}
         </dl>
@@ -45,22 +48,18 @@ export function ContactContent() {
                   {key.toUpperCase()} <ArrowUpRight />
                 </a>
               </Button>
-            ) : (
-              <span key={key} className="sample-note">
-                {key.toUpperCase()} · LINK TO BE ADDED
-              </span>
-            );
+            ) : null;
           })}
         </div>
-        <p className="sample-note">Contact details are editable placeholders.</p>
+        {!recipient && <p className="sample-note">Business contact details have not yet been supplied. Online delivery is unavailable.</p>}
       </aside>
       {done ? (
         <div className="status" role="status">
-          <h2>DEMO MESSAGE VALIDATED.</h2>
+          <h2>{draft ? "YOUR EMAIL DRAFT IS READY." : "LOCAL MESSAGE PREVIEW."}</h2>
           <p>
-            Your message was not sent or stored. This frontend demo does not send messages
-            externally.
+            {draft ? "Open your email app and press Send to deliver your inquiry. Nothing is sent automatically." : "Your message was validated but not sent or stored. A business email is needed for delivery."}
           </p>
+          {draft && <Button asChild className="mt-5"><a href={draft}>OPEN EMAIL INQUIRY <ArrowUpRight /></a></Button>}
           <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>
             WRITE ANOTHER MESSAGE <ArrowUpRight />
           </Button>
@@ -100,9 +99,9 @@ export function ContactContent() {
             />
             {errors["message"] && <span className="error-text">{errors["message"]}</span>}
           </label>
-          <p className="sample-note">Frontend demo only. Messages cannot be sent externally.</p>
+          <p className="sample-note">{recipient ? "Review your email draft before sending from your email app." : "Local preview only. No business email is configured; messages cannot be delivered."}</p>
           <Button type="submit">
-            SUBMIT DEMO MESSAGE <ArrowUpRight />
+            REVIEW YOUR MESSAGE <ArrowUpRight />
           </Button>
         </form>
       )}
