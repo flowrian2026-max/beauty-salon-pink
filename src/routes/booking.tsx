@@ -8,7 +8,7 @@ export const Route = createFileRoute("/booking")({
   head: () =>
     pageHead(
       "Book your experience",
-      "Choose a NOIR PINK service and submit a local demo booking request. No real appointment is confirmed.",
+       "Review your NOIR PINK booking inquiry. Email handoff when contact details are configured; no appointment is automatically confirmed.",
     ),
   component: BookingPage,
 });
@@ -24,10 +24,11 @@ function BookingPage() {
             A considered moment. A fresh perspective. Choose the experience that feels like you.
           </p>
           <p className="sample-note">
-            PROTOTYPE BOOKING
+            BY INQUIRY
             <br />
-            Requests are saved locally on this device only. No availability is checked, no real
-            salon is contacted, and no payment is required.
+            Tell us what you have in mind. Preferred dates are requests, not reserved appointments.
+            Where a business email is supplied, you can send your inquiry from your email app.
+            Until then, this is a clearly labeled local preview.
           </p>
         </aside>
         <BookingForm initialService={service} />
