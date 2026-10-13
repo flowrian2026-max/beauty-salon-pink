@@ -1,9 +1,7 @@
-# NOIR PINK
-- [ ] Replace mismatched comparison with an honestly labeled matched manicure concept and touch drag
-- [ ] Redesign hero, experience, gallery and shared editorial compositions
-- [ ] Verify slider, gallery, navigation and phone/tablet/desktop layouts
-- [x] Cinematic design system, campaign imagery, home and shared navigation
-- [x] Editorial service, experience, gallery, about and contact pages
-- [x] Accessible comparison, gallery lightbox and validated local booking
-- [x] Local demo admin for content, images, pricing, contact and accent
-- [x] Interaction tests, mobile checks and page metadata
+# NOIR PINK premium refinement
+- [ ] Audit existing routes, interactions, styles and responsive layouts
+- [ ] Refine hero, editorial presentation, services, gallery and footer
+- [ ] Add reviewed inquiry with optional message and truthful contact handoff
+- [ ] Keep local image editing explicitly development-only, without public footer link
+- [ ] Verify navigation, gallery, comparison, forms and all viewport sizes
+- [ ] Report configuration needed for real delivery and secured shared administration
