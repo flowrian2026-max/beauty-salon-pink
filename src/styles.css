@@ -1499,7 +1499,7 @@ main { min-width: 0; }
 @media (max-width: 700px) {
   .hero { height: auto; min-height: 660px; max-height: none; }
   .hero .depth-photo { height: 85%; object-position: 70% center; }
-  .hero-content { padding: 320px 6% 100px; }
+  .hero-content { padding: 280px 6% 85px; }
   .hero h1 { font-size: 72px; line-height: .96; margin: 22px 0; }
   .hero-copy { font-size: 13px; max-width: 320px; }
   .hero-index { display: none; }
@@ -1539,7 +1539,8 @@ main { min-width: 0; }
 }
 @media (max-width: 370px) {
   .hero h1 { font-size: 62px; }
-  .hero-content { padding-top: 280px; }
+  .hero { min-height: 660px; }
+  .hero-content { padding-top: 260px; }
   .hero-actions { max-width: none; }
   .page-intro h1 { font-size: 48px; }
   .experience-opening h1 { font-size: 51px; }
