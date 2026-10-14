@@ -3,9 +3,9 @@ import { ArrowRight, Check, ArrowLeft, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bookingSchema, businessEmail, inquiryEmail, type Booking } from "@/lib/noir-data";
 import { useDemo } from "./demo-provider";
-export function BookingForm({ initialService }: { initialService?: string | undefined }) {
+export function BookingForm({ initialService, initialMessage }: { initialService?: string | undefined; initialMessage?: string | undefined }) {
   const { data, update, storageError } = useDemo();
-  const [form, setForm] = useState({ service: initialService || "", name: "", email: "", phone: "", date: "", time: "", message: "" });
+  const [form, setForm] = useState({ service: initialService || "", name: "", email: "", phone: "", date: "", time: "", message: initialMessage || "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [step, setStep] = useState<"edit" | "review" | "done">("edit");
   const [saved, setSaved] = useState(false);
