@@ -10,7 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Application architecture
-- Keep the NOIR PINK prototype frontend-only with a shared validated local demo provider; the requested prototype must not imply shared storage, security or external delivery.
+- Keep the NOIR PINK prototype frontend-only with a shared validated local demo provider, except the AI advisor server function (keeps the AI key server-side); the requested prototype must not imply shared storage, security or external delivery.
 - Public content sections use separate TanStack leaf routes and shared site chrome; each section needs independently shareable metadata.
 - Keep brand styles in global semantic tokens and reuse design-system controls; editable appearance must propagate consistently.
 - Use generated editorial photos and lightweight CSS/pointer depth rather than a 3D renderer; campaign realism and mobile performance take priority without a supplied model.
