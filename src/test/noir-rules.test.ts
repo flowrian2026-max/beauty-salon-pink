@@ -60,7 +60,10 @@ describe("NOIR PINK demo rules", () => {
     expect(defaults.services.every(s => s.price === "" && s.duration === "")).toBe(true);
   });
   it("removes legacy sample pricing while preserving edited pricing", () => {
-    const state = { ...defaults, services: [{ ...defaults.services[0], id: "nails", price: "From 65", duration: "60–90 min" }, { ...defaults.services[1], id: "hair", price: "120 SEK", duration: "80 min" }] };
+    const nails = defaults.services.find(s => s.id === "nails");
+    const hair = defaults.services.find(s => s.id === "hair");
+    if (!nails || !hair) throw new Error("Required services missing");
+    const state = { ...defaults, services: [{ ...nails, price: "From 65", duration: "60–90 min" }, { ...hair, price: "120 SEK", duration: "80 min" }] };
     const next = migrateDemo(state);
     expect(next.services[0]?.price).toBe("");
     expect(next.services[0]?.duration).toBe("");
