@@ -9,7 +9,7 @@ export const advisorInput = z.object({
 });
 
 export const getRecommendation = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => advisorInput.parse(d))
+  .validator((d: unknown) => advisorInput.parse(d))
   .handler(async ({ data }) => {
     const { recommendService } = await import("./advisor.server");
     try {
