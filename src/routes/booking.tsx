@@ -3,6 +3,8 @@ import { z } from "zod";
 import { pageHead } from "@/lib/noir-data";
 import { Intro } from "@/components/noir/site-shell";
 import { BookingForm } from "@/components/noir/booking";
+import { BeautyAdvisor, type Suggestion } from "@/components/noir/advisor";
+import { useState } from "react";
 export const Route = createFileRoute("/booking")({
   validateSearch: z.object({ service: z.string().max(100).optional() }),
   head: () =>
@@ -14,6 +16,7 @@ export const Route = createFileRoute("/booking")({
 });
 function BookingPage() {
   const { service } = Route.useSearch();
+  const [suggestion, setSuggestion] = useState<Suggestion & { n: number }>();
   return (
     <>
       <Intro eyebrow="SOMETHING EXTRAORDINARY STARTS HERE" title="MAKE SPACE FOR YOU." />
@@ -31,7 +34,12 @@ function BookingPage() {
             Until then, this is a clearly labeled local preview.
           </p>
         </aside>
-        <BookingForm initialService={service} />
+        <div className="grid gap-10">
+          <BeautyAdvisor onApply={(s) => { setSuggestion((p) => ({ ...s, n: (p?.n ?? 0) + 1 })); requestAnimationFrame(() => document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth" })); }} />
+          <div id="inquiry-form">
+            <BookingForm key={suggestion?.n ?? 0} initialService={suggestion?.serviceId ?? service} initialMessage={suggestion?.message} />
+          </div>
+        </div>
       </div>
     </>
   );
