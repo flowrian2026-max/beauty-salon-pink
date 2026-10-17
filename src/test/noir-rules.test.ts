@@ -15,13 +15,15 @@ import {
 } from "@/lib/noir-data";
 describe("NOIR PINK demo rules", () => {
   it("uses a matched manicure concept instead of unrelated skincare and portrait defaults", () => {
-    expect(defaults.before).toBe(images.manicureBefore);
-    expect(defaults.after).toBe(images.manicureAfter);
+    expect(defaults.before).toBe(images.makeupBefore);
+    expect(defaults.after).toBe(images.makeupAfter);
     expect(defaults.before).not.toBe(defaults.after);
   });
   it("upgrades the legacy mismatched pair without removing local bookings", () => {
     const old = { ...defaults, before: images.skin, after: images.campaign };
-    expect(migrateComparison(old)).toEqual({ ...old, before: images.manicureBefore, after: images.manicureAfter });
+    expect(migrateComparison(old)).toEqual({ ...old, before: images.makeupBefore, after: images.makeupAfter });
+    const nails = { ...defaults, before: images.manicureBefore, after: images.manicureAfter };
+    expect(migrateComparison(nails).before).toBe(images.makeupBefore);
   });
   it("preserves user-replaced comparison images", () => {
     const edited = { ...defaults, before: "custom-before", after: "custom-after" };

@@ -5,13 +5,16 @@ import hair from "@/assets/hair.jpg";
 import skin from "@/assets/skincare.jpg";
 import manicureBefore from "@/assets/manicure-before.jpg";
 import manicureAfter from "@/assets/manicure-after.png";
-export const images = { campaign, nails, hair, skin, manicureBefore, manicureAfter };
+import makeupBefore from "@/assets/makeup-before.jpg";
+import makeupAfter from "@/assets/makeup-after.jpg";
+export const images = { campaign, nails, hair, skin, manicureBefore, manicureAfter, makeupBefore, makeupAfter };
 export function comparisonSplit(clientX: number, left: number, width: number) {
   return width <= 0 ? 50 : Math.min(100, Math.max(0, ((clientX - left) / width) * 100));
 }
 export function migrateComparison(data: DemoState): DemoState {
-  return data.before === skin && data.after === campaign
-    ? { ...data, before: manicureBefore, after: manicureAfter }
+  const legacy = (data.before === skin && data.after === campaign) || (data.before === manicureBefore && data.after === manicureAfter);
+  return legacy
+    ? { ...data, before: makeupBefore, after: makeupAfter }
     : data;
 }
 export const serviceSchema = z.object({
@@ -113,8 +116,8 @@ export const defaults = {
     tiktok: "",
   },
   accent: "#D694AE",
-  before: manicureBefore,
-  after: manicureAfter,
+  before: makeupBefore,
+  after: makeupAfter,
   story:
     "A space for self-expression. A different perspective on beauty. At NOIR PINK, creativity and considered detail come together to make every look distinctly yours.",
 };
