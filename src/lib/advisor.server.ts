@@ -14,7 +14,7 @@ export async function recommendService(input: {
   occasion: string;
   services: { id: string; title: string; description: string }[];
 }) {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env['LOVABLE_API_KEY'];
   if (!apiKey) throw new Error("AI advisor is not configured.");
   const provider = createOpenAI({
     baseURL: "https://ai.gateway.lovable.dev/v1",
