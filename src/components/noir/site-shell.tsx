@@ -4,14 +4,25 @@ import { ArrowUpRight, Menu, X, Instagram, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDemo } from "./demo-provider";
 import { safeSocial } from "@/lib/noir-data";
+import { useT } from "@/lib/i18n";
 const navigation = [
-  ["Services", "/services"],
-  ["Experience", "/experience"],
-  ["Gallery", "/gallery"],
-  ["About", "/about"],
-  ["Contact", "/contact"],
+  ["Services", "خدمات", "/services"],
+  ["Experience", "تجربه", "/experience"],
+  ["Gallery", "گالری", "/gallery"],
+  ["About", "درباره ما", "/about"],
+  ["Contact", "تماس", "/contact"],
 ] as const;
+export function LangSwitch() {
+  const { lang, setLang } = useT();
+  return (
+    <div className="lang-switch" role="group" aria-label="Language / زبان">
+      <button type="button" aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>
+      <button type="button" aria-pressed={lang === "fa"} onClick={() => setLang("fa")}>فا</button>
+    </div>
+  );
+}
 export function SiteHeader() {
+  const { t } = useT();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menu = useRef<HTMLElement>(null);
@@ -27,7 +38,7 @@ export function SiteHeader() {
     function key(e: KeyboardEvent) {
       if (e.key === "Escape") { setOpen(false); toggle.current?.focus(); }
       if (e.key !== "Tab") return;
-      const links = menu.current?.querySelectorAll<HTMLAnchorElement>("a");
+      const links = menu.current?.querySelectorAll<HTMLElement>("a, button");
       if (!links?.length) return;
       const last = links[links.length - 1];
       if (e.shiftKey && document.activeElement === links[0]) { e.preventDefault(); last?.focus(); }
@@ -44,44 +55,48 @@ export function SiteHeader() {
   }, []);
   return (
     <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
-      <Link to="/" className="wordmark" aria-label="NOIR PINK home">
+      <Link to="/" className="wordmark" aria-label={t("NOIR PINK home", "صفحه‌ی اصلی نوآر پینک")} dir="ltr">
         NOIR<span>PINK</span>
         <i>®</i>
       </Link>
-      <nav className="desktop-nav" aria-label="Main navigation">
-        {navigation.map(([name, to]) => (
+      <nav className="desktop-nav" aria-label={t("Main navigation", "منوی اصلی")}>
+        {navigation.map(([en, fa, to]) => (
           <Link key={to} to={to} activeProps={{ className: "active" }}>
-            {name}
+            {t(en, fa)}
           </Link>
         ))}
       </nav>
-      <Button asChild variant="outline" className="header-book">
-        <Link to="/booking">
-          BOOK YOUR VISIT <ArrowUpRight />
-        </Link>
-      </Button>
+      <div className="header-actions">
+        <LangSwitch />
+        <Button asChild variant="outline" className="header-book">
+          <Link to="/booking">
+            {t("BOOK YOUR VISIT", "رزرو وقت")} <ArrowUpRight />
+          </Link>
+        </Button>
+      </div>
       <Button
         variant="ghost"
         size="icon"
         className="mobile-toggle"
         ref={toggle}
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? t("Close menu", "بستن منو") : t("Open menu", "باز کردن منو")}
         aria-expanded={open}
         onClick={() => setOpen(!open)}
       >
         {open ? <X /> : <Menu />}
       </Button>
       {open && (
-        <nav ref={menu} className="mobile-nav" aria-label="Mobile navigation">
-          {navigation.map(([name, to]) => (
+        <nav ref={menu} className="mobile-nav" aria-label={t("Mobile navigation", "منوی موبایل")}>
+          {navigation.map(([en, fa, to]) => (
             <Link key={to} to={to}>
-              {name}
+              {t(en, fa)}
               <ArrowUpRight size={20} />
             </Link>
           ))}
+          <LangSwitch />
           <Button asChild>
             <Link to="/booking">
-              BOOK YOUR EXPERIENCE <ArrowUpRight />
+              {t("BOOK YOUR EXPERIENCE", "رزرو تجربه‌ی شما")} <ArrowUpRight />
             </Link>
           </Button>
         </nav>
@@ -91,16 +106,17 @@ export function SiteHeader() {
 }
 export function SiteFooter() {
   const { data } = useDemo();
+  const { t } = useT();
   return (
     <footer className="site-footer">
-      <Link to="/" className="wordmark">
+      <Link to="/" className="wordmark" dir="ltr">
         NOIR<span>PINK</span>
         <i>®</i>
       </Link>
-      <p>BEAUTY. ON YOUR OWN TERMS.</p>
-      <nav className="footer-nav" aria-label="Footer navigation">
-        {navigation.filter(([name]) => name !== "Experience").map(([name,to]) => <Link key={to} to={to}>{name}</Link>)}
-        <Link to="/booking">Booking <ArrowUpRight size={13} /></Link>
+      <p>{t("BEAUTY. ON YOUR OWN TERMS.", "زیبایی، به سبک خودتان.")}</p>
+      <nav className="footer-nav" aria-label={t("Footer navigation", "منوی پایین صفحه")}>
+        {navigation.filter(([name]) => name !== "Experience").map(([en, fa, to]) => <Link key={to} to={to}>{t(en, fa)}</Link>)}
+        <Link to="/booking">{t("Booking", "رزرو")} <ArrowUpRight size={13} /></Link>
       </nav>
       <div className="footer-socials">
         {(["instagram", "tiktok"] as const).map(key => {
@@ -110,15 +126,16 @@ export function SiteFooter() {
           </a> : null;
         })}
       </div>
-      <small>© {new Date().getFullYear()} NOIR PINK · CONCEPT EXPERIENCE</small>
+      <small>© {new Date().getFullYear()} NOIR PINK · {t("CONCEPT EXPERIENCE", "تجربه‌ی مفهومی")}</small>
     </footer>
   );
 }
 export function BookLink({ service }: { service?: string }) {
+  const { t } = useT();
   return (
     <Button asChild variant="outline">
       <Link to="/booking" search={service ? { service } : {}}>
-        BOOK EXPERIENCE <ArrowUpRight />
+        {t("BOOK EXPERIENCE", "رزرو این خدمت")} <ArrowUpRight />
       </Link>
     </Button>
   );
@@ -153,15 +170,16 @@ export function RevealObserver() {
   return null;
 }
 export function NextChapter() {
+  const { t } = useT();
   return (
     <section className="next-chapter">
-      <span className="eyebrow">YOUR NEXT CHAPTER</span>
+      <span className="eyebrow">{t("YOUR NEXT CHAPTER", "فصل بعدی شما")}</span>
       <h2>
-        MAKE IT <em>YOU.</em>
+        {t("MAKE IT ", "این بار، ")}<em>{t("YOU.", "خودِ شما.")}</em>
       </h2>
       <Button asChild>
         <Link to="/booking">
-          BOOK YOUR EXPERIENCE <ArrowRight />
+          {t("BOOK YOUR EXPERIENCE", "رزرو تجربه‌ی شما")} <ArrowRight />
         </Link>
       </Button>
     </section>
