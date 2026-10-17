@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageHead } from "@/lib/noir-data";
 import { Intro, NextChapter } from "@/components/noir/site-shell";
 import { Gallery } from "@/components/noir/gallery";
+import { useT } from "@/lib/i18n";
 export const Route = createFileRoute("/gallery")({
   head: () =>
     pageHead(
@@ -11,12 +12,13 @@ export const Route = createFileRoute("/gallery")({
   component: GalleryPage,
 });
 function GalleryPage() {
+  const { t } = useT();
   return (
     <>
       <Intro
-        eyebrow="THE NOIR PINK EDIT"
-        title="EXPRESSION. UNFILTERED."
-        copy="A visual world where individuality takes the spotlight."
+        eyebrow={t("THE NOIR PINK EDIT", "گزیده‌ی نوآر پینک")}
+        title={t("EXPRESSION. UNFILTERED.", "بیان، بی‌فیلتر.")}
+        copy={t("A visual world where individuality takes the spotlight.", "دنیایی تصویری که فردیت در مرکز آن است.")}
       />
       <div className="page-content">
         <Gallery />
