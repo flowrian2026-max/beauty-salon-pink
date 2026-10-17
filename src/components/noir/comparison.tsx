@@ -16,17 +16,17 @@ export function Comparison() {
         <img
           className="comparison-before"
           src={data.before}
-          alt="Before manicure — natural nails, replaceable concept image"
-          width="1600"
-          height="1024"
+          alt="Before makeup — bare natural face, replaceable concept image"
+          width="1530"
+          height="1011"
           loading="lazy"
         />
         <img
           className="comparison-after"
           src={data.after}
-          alt="After manicure — the same hand with pink polish, replaceable concept image"
-          width="1600"
-          height="1024"
+          alt="After makeup — the same face with editorial pink makeup, replaceable concept image"
+          width="1530"
+          height="1011"
           loading="lazy"
         />
         <div className="compare-divider">
@@ -65,7 +65,7 @@ export function Comparison() {
         />
       </div>
       <p className="sample-note">
-        AI MANICURE CONCEPT · Same scene, nail-only edit. Not a real customer result. Both images are replaceable in Demo Admin.
+        AI MAKEUP CONCEPT · Same face and scene, makeup-only edit. Not a real customer result. Both images are replaceable in Demo Admin.
       </p>
     </>
   );
