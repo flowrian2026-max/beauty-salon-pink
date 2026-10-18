@@ -1,9 +1,11 @@
+import { useT } from "@/lib/i18n";
 import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDemo } from "./demo-provider";
 import { contactSchema, safeSocial, businessEmail, inquiryEmail } from "@/lib/noir-data";
 export function ContactContent() {
+  const { m, c, t } = useT();
   const { data } = useDemo();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [done, setDone] = useState(false);
@@ -18,14 +20,14 @@ export function ContactContent() {
       return;
     }
     setErrors({});
-    setDraft(inquiryEmail(data.contact.email, "NOIR PINK contact inquiry", `Name: ${result.data.name}\nEmail: ${result.data.email}\n\n${result.data.message}`) || "");
+    setDraft(inquiryEmail(data.contact.email, t("NOIR PINK contact inquiry", "پیام به NOIR PINK"), `${m("Name")}: ${result.data.name}\n${m("Email")}: ${result.data.email}\n\n${result.data.message}`) || "");
     setDone(true);
   }
   return (
     <div className="form-layout">
       <aside>
-        <h2>LET’S CONNECT.</h2>
-        <p>Your next expression starts with a conversation.</p>
+        <h2>{m("LET’S CONNECT.")}</h2>
+        <p>{m("Your next expression starts with a conversation.")}</p>
         <dl className="contact-details">
           {[
             ["ADDRESS", data.contact.address],
@@ -34,8 +36,8 @@ export function ContactContent() {
             ["OPENING HOURS", data.contact.hours],
           ].map(([k, v]) => (
             <div key={k}>
-              <dt>{k}</dt>
-              <dd>{k === "EMAIL" && recipient ? <a href={`mailto:${encodeURIComponent(recipient)}`}>{recipient}</a> : v}</dd>
+              <dt>{m(k)}</dt>
+              <dd>{k === "EMAIL" && recipient ? <a href={`mailto:${encodeURIComponent(recipient)}`}>{recipient}</a> : c(v)}</dd>
             </div>
           ))}
         </dl>
@@ -45,41 +47,36 @@ export function ContactContent() {
             return url ? (
               <Button asChild key={key} variant="outline">
                 <a href={url} target="_blank" rel="noopener noreferrer">
-                  {key.toUpperCase()} <ArrowUpRight />
+                  {m(key.toUpperCase())} <ArrowUpRight />
                 </a>
               </Button>
             ) : null;
           })}
         </div>
-        {!recipient && <p className="sample-note">Business contact details have not yet been supplied. Online delivery is unavailable.</p>}
+        {!recipient && <p className="sample-note">{m("Business contact details have not yet been supplied. Online delivery is unavailable.")}</p>}
       </aside>
       {done ? (
         <div className="status" role="status">
-          <h2>{draft ? "YOUR EMAIL DRAFT IS READY." : "LOCAL MESSAGE PREVIEW."}</h2>
+          <h2>{m(draft ? "YOUR EMAIL DRAFT IS READY." : "LOCAL MESSAGE PREVIEW.")}</h2>
           <p>
-            {draft ? "Open your email app and press Send to deliver your inquiry. Nothing is sent automatically." : "Your message was validated but not sent or stored. A business email is needed for delivery."}
+            {m(draft ? "Open your email app and press Send to deliver your inquiry. Nothing is sent automatically." : "Your message was validated but not sent or stored. A business email is needed for delivery.")}
           </p>
-          {draft && <Button asChild className="mt-5"><a href={draft}>OPEN EMAIL INQUIRY <ArrowUpRight /></a></Button>}
-          <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>
-            WRITE ANOTHER MESSAGE <ArrowUpRight />
+          {draft && <Button asChild className="mt-5"><a href={draft}>{m("OPEN EMAIL INQUIRY")}<ArrowUpRight /></a></Button>}
+          <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>{m("WRITE ANOTHER MESSAGE")}<ArrowUpRight />
           </Button>
         </div>
       ) : (
         <form className="noir-form" noValidate onSubmit={submit}>
-          <label className="field">
-            YOUR NAME
-            <input
+          <label className="field">{m("YOUR NAME")}<input
               name="name"
               required
               maxLength={100}
               autoComplete="name"
               aria-invalid={Boolean(errors["name"])}
             />
-            {errors["name"] && <span className="error-text">{errors["name"]}</span>}
+            {errors["name"] && <span className="error-text">{m(errors["name"])}</span>}
           </label>
-          <label className="field">
-            EMAIL
-            <input
+          <label className="field">{m("EMAIL")}<input
               name="email"
               type="email"
               required
@@ -87,21 +84,18 @@ export function ContactContent() {
               autoComplete="email"
               aria-invalid={Boolean(errors["email"])}
             />
-            {errors["email"] && <span className="error-text">{errors["email"]}</span>}
+            {errors["email"] && <span className="error-text">{m(errors["email"])}</span>}
           </label>
-          <label className="field">
-            YOUR MESSAGE
-            <textarea
+          <label className="field">{m("YOUR MESSAGE")}<textarea
               name="message"
               required
               maxLength={1000}
               aria-invalid={Boolean(errors["message"])}
             />
-            {errors["message"] && <span className="error-text">{errors["message"]}</span>}
+            {errors["message"] && <span className="error-text">{m(errors["message"])}</span>}
           </label>
-          <p className="sample-note">{recipient ? "Review your email draft before sending from your email app." : "Local preview only. No business email is configured; messages cannot be delivered."}</p>
-          <Button type="submit">
-            REVIEW YOUR MESSAGE <ArrowUpRight />
+          <p className="sample-note">{m(recipient ? "Review your email draft before sending from your email app." : "Local preview only. No business email is configured; messages cannot be delivered.")}</p>
+          <Button type="submit">{m("REVIEW YOUR MESSAGE")}<ArrowUpRight />
           </Button>
         </form>
       )}

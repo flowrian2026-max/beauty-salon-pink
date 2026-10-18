@@ -16,8 +16,8 @@ export function LangSwitch() {
   const { lang, setLang } = useT();
   return (
     <div className="lang-switch" role="group" aria-label="Language / زبان">
-      <button type="button" aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>
-      <button type="button" aria-pressed={lang === "fa"} onClick={() => setLang("fa")}>فا</button>
+      <Button variant="ghost" size="sm" type="button" aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</Button>
+      <Button variant="ghost" size="sm" type="button" aria-pressed={lang === "fa"} onClick={() => setLang("fa")}>فا</Button>
     </div>
   );
 }

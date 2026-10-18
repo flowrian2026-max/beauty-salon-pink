@@ -1,3 +1,4 @@
+import { useT } from "@/lib/i18n";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight, ArrowRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,79 +16,61 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 function Index() {
+  const { m, t } = useT();
   return (
     <>
-      <DepthVisual className="hero" image={images.campaign} alt="NOIR PINK editorial beauty concept with dramatic pink rim lighting" priority>
+      <DepthVisual className="hero" image={images.campaign} alt={t("NOIR PINK editorial beauty concept with dramatic pink rim lighting", "تصویر مفهومی زیبایی نوآر پینک با نور صورتی")} priority>
         <div className="hero-content">
           <div className="eyebrow">
-            <span /> NOIR PINK / BEAUTY ON YOUR OWN TERMS
-          </div>
-          <h1>
-            BEAUTY,
-            <br />
-            <em>REDEFINED.</em>
+            <span />{m("NOIR PINK / BEAUTY ON YOUR OWN TERMS")}</div>
+          <h1>{m("BEAUTY,")}<br />
+            <em>{m("REDEFINED.")}</em>
           </h1>
-          <p className="hero-copy">
-            Precision, creativity, and confidence in every detail.
-          </p>
+          <p className="hero-copy">{m("Precision, creativity, and confidence in every detail.")}</p>
           <div className="hero-actions">
             <Button asChild>
-              <Link to="/booking">
-                BOOK YOUR VISIT <ArrowUpRight />
+              <Link to="/booking">{m("BOOK YOUR VISIT")}<ArrowUpRight />
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <a href="#services">
-                EXPLORE THE EXPERIENCE <ArrowRight />
+              <a href="#services">{m("EXPLORE THE EXPERIENCE")}<ArrowRight />
               </a>
             </Button>
           </div>
         </div>
         <div className="hero-index">
-          <span>01 / THE NEW BEAUTY</span>
-          <br />
-          NOT FOR EVERYONE.
-          <br />
-          ENTIRELY FOR YOU.
-        </div>
+          <span>{m("01 / THE NEW BEAUTY")}</span>
+          <br />{m("NOT FOR EVERYONE.")}<br />{m("ENTIRELY FOR YOU.")}</div>
         <div className="hero-bottom">
           <a href="#services" className="scroll-cue">
-            <ArrowDown size={15} /> SCROLL TO DISCOVER
-          </a>
+            <ArrowDown size={15} />{m("SCROLL TO DISCOVER")}</a>
           <div className="hero-note">
-            <span>INDIVIDUALITY IS EVERYTHING.</span>
-            <span>
-              NOIR PINK / CONCEPT <Plus size={10} className="inline ml-2" />
+            <span>{m("INDIVIDUALITY IS EVERYTHING.")}</span>
+            <span>{m("NOIR PINK / CONCEPT")}<Plus size={10} className="inline ml-2" />
             </span>
           </div>
         </div>
       </DepthVisual>
       <div className="ticker" aria-hidden="true">
-        <span>NAIL ART</span>
+        <span>{m("NAIL ART")}</span>
         <span>✦</span>
-        <span>HAIR STYLING</span>
+        <span>{m("HAIR STYLING")}</span>
         <span>✦</span>
-        <span>MAKEUP</span>
+        <span>{m("MAKEUP")}</span>
         <span>✦</span>
-        <span>SKINCARE</span>
+        <span>{m("SKINCARE")}</span>
         <span>✦</span>
-        <span>SELF EXPRESSION</span>
+        <span>{m("SELF EXPRESSION")}</span>
       </div>
       <section className="editorial-section" id="services">
         <div className="section-top" data-reveal>
           <div>
             <div className="eyebrow">
-              <span /> PRECISION MEETS PERSONALITY
-            </div>
-            <h2>
-              THE ART OF
-              <br />
-              TRANSFORMATION.
-            </h2>
+              <span />{m("PRECISION MEETS PERSONALITY")}</div>
+            <h2>{m("THE ART OF")}<br />{m("TRANSFORMATION.")}</h2>
           </div>
           <Button asChild variant="link">
-            <Link to="/services">
-              ALL SERVICES <ArrowUpRight />
+            <Link to="/services">{m("ALL SERVICES")}<ArrowUpRight />
             </Link>
           </Button>
         </div>
@@ -97,17 +80,11 @@ function Index() {
         <div className="section-top" data-reveal>
           <div>
             <div className="eyebrow">
-              <span /> A DIFFERENT PERSPECTIVE
-            </div>
-            <h2>
-              SAME HAND.
-              <br />
-              NEW EXPRESSION.
-            </h2>
+              <span />{m("A DIFFERENT PERSPECTIVE")}</div>
+            <h2>{t("SAME FACE.", "همان چهره.")}<br />{m("NEW EXPRESSION.")}</h2>
           </div>
           <Button asChild variant="link">
-            <Link to="/experience">
-              THE EXPERIENCE <ArrowUpRight />
+            <Link to="/experience">{m("THE EXPERIENCE")}<ArrowUpRight />
             </Link>
           </Button>
         </div>

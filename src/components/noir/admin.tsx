@@ -1,3 +1,4 @@
+import { useT } from "@/lib/i18n";
 import { useState } from "react";
 import { Pencil, Trash2, Plus, Upload, Check, ArrowUpRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -22,6 +23,7 @@ const tabs = [
   "Brand appearance",
 ];
 export function Admin() {
+  const { m, c, t, lang } = useT();
   const { data, update, storageError } = useDemo();
   const [tab, setTab] = useState("Overview");
   const [service, setService] = useState<Service | null>(null);
@@ -49,8 +51,7 @@ export function Admin() {
   }
   const uploadControl = (apply: (url: string) => void) => (
     <label className="upload-label">
-      <Upload size={15} /> REPLACE IMAGE
-      <input
+      <Upload size={15} />{m("REPLACE IMAGE")}<input
         className="sr-only"
         type="file"
         accept="image/jpeg,image/png,image/webp"
@@ -61,20 +62,15 @@ export function Admin() {
   return (
     <div className="admin">
       <div className="flex items-center justify-between gap-4">
-        <h1>THE CONTROL ROOM.</h1>
+        <h1>{m("THE CONTROL ROOM.")}</h1>
         <Button variant="outline" asChild>
-          <Link to="/">
-            PREVIEW <ArrowUpRight />
+          <Link to="/">{m("PREVIEW")}<ArrowUpRight />
           </Link>
         </Button>
       </div>
-      <p className="admin-disclaimer">
-        FRONTEND DEMO · This page is public and not secure. Changes and requests are local to this
-        device. Do not enter sensitive information. A production admin requires authentication,
-        authorization and shared storage.
-      </p>
+      <p className="admin-disclaimer">{m("FRONTEND DEMO · This page is public and not secure. Changes and requests are local to this device. Do not enter sensitive information. A production admin requires authentication, authorization and shared storage.")}</p>
       <div className="admin-layout">
-        <nav className="admin-nav" aria-label="Admin sections">
+        <nav className="admin-nav" aria-label={m("Admin sections")}>
           {tabs.map((t) => (
             <Button
               key={t}
@@ -101,20 +97,18 @@ export function Admin() {
               <div className="admin-stats">
                 <div>
                   <strong>{data.services.length}</strong>
-                  <span>SERVICES</span>
+                  <span>{m("SERVICES")}</span>
                 </div>
                 <div>
                   <strong>{data.gallery.length}</strong>
-                  <span>GALLERY IMAGES</span>
+                  <span>{m("GALLERY IMAGES")}</span>
                 </div>
                 <div>
                   <strong>{data.bookings.length}</strong>
-                  <span>DEMO REQUESTS</span>
+                  <span>{m("DEMO REQUESTS")}</span>
                 </div>
               </div>
-              <p className="sample-note">
-                All content is a replaceable concept. This overview reflects this device only.
-              </p>
+              <p className="sample-note">{m("All content is a replaceable concept. This overview reflects this device only.")}</p>
             </>
           )}
           {(tab === "Services" || tab === "Pricing") && (
@@ -131,8 +125,7 @@ export function Admin() {
                   })
                 }
               >
-                <Plus /> ADD SERVICE
-              </Button>
+                <Plus />{m("ADD SERVICE")}</Button>
               {data.services.map((s) => (
                 <div className="admin-entry" key={s.id}>
                   <img src={s.image} alt={s.title} />
@@ -181,8 +174,7 @@ export function Admin() {
                   })
                 }
               >
-                <Plus /> ADD IMAGE
-              </Button>
+                <Plus />{m("ADD IMAGE")}</Button>
               {data.gallery.map((g) => (
                 <div className="admin-entry" key={g.id}>
                   <img src={g.image} alt={g.title} />
@@ -226,7 +218,7 @@ export function Admin() {
                     alt={`${key} concept preview`}
                   />
                   {uploadControl((url) => save({ ...data, [key]: url }))}
-                  <p className="sample-note">Replaceable concept image · max 1.5 MB</p>
+                  <p className="sample-note">{m("Replaceable concept image · max 1.5 MB")}</p>
                 </div>
               ))}
             </div>
@@ -234,7 +226,7 @@ export function Admin() {
           {tab === "Booking requests" && (
             <>
               {!data.bookings.length && (
-                <p className="sample-note">No demo requests on this device yet.</p>
+                <p className="sample-note">{m("No demo requests on this device yet.")}</p>
               )}
               {data.bookings.map((b) => (
                 <div className="admin-entry" key={b.id}>
@@ -248,9 +240,7 @@ export function Admin() {
                       {b.date} · {b.time}
                       <br />
                       {b.email} {b.phone}
-                      <br />
-                      DEMO REQUEST · NOT A CONFIRMED APPOINTMENT
-                    </p>
+                      <br />{m("DEMO REQUEST · NOT A CONFIRMED APPOINTMENT")}</p>
                   </div>
                   <Button
                     variant="ghost"
@@ -300,18 +290,15 @@ export function Admin() {
                   />
                 </label>
               ))}
-              <Button type="submit">
-                SAVE CONTACT DETAILS <Check />
+              <Button type="submit">{m("SAVE CONTACT DETAILS")}<Check />
               </Button>
             </form>
           )}
           {tab === "Brand appearance" && (
             <div className="noir-form">
-              <label className="field">
-                ACCENT COLOR
-                <div className="accent-swatches">
+              <label className="field">{m("ACCENT COLOR")}<div className="accent-swatches">
                   <input
-                    aria-label="Accent color"
+                    aria-label={m("Accent color")}
                     type="color"
                     value={data.accent}
                     onChange={(e) => save({ ...data, accent: e.target.value })}
@@ -329,18 +316,12 @@ export function Admin() {
                   });
                 }}
               >
-                <label className="field">
-                  BRAND STORY
-                  <textarea name="story" defaultValue={data.story} maxLength={2000} />
+                <label className="field">{m("BRAND STORY")}<textarea name="story" defaultValue={data.story} maxLength={2000} />
                 </label>
-                <Button type="submit">
-                  SAVE BRAND STORY <Check />
+                <Button type="submit">{m("SAVE BRAND STORY")}<Check />
                 </Button>
               </form>
-              <p className="sample-note">
-                Accent updates preview immediately across this device. Photography is generated
-                concept imagery; uploaded replacements remain local.
-              </p>
+              <p className="sample-note">{m("Accent updates preview immediately across this device. Photography is generated concept imagery; uploaded replacements remain local.")}</p>
             </div>
           )}
         </section>
@@ -355,7 +336,7 @@ export function Admin() {
           <DialogTitle>
             {data.services.some((s) => s.id === service?.id) ? "EDIT SERVICE" : "ADD SERVICE"}
           </DialogTitle>
-          <DialogDescription>Replaceable demo content and sample pricing.</DialogDescription>
+          <DialogDescription>{m("Replaceable demo content and sample pricing.")}</DialogDescription>
           {service && (
             <form
               className="noir-form max-h-[70svh] overflow-y-auto"
@@ -387,10 +368,9 @@ export function Admin() {
                   />
                 </label>
               ))}
-              <img className="image-preview" src={service.image} alt="Service image preview" />
+              <img className="image-preview" src={service.image} alt={m("Service image preview")} />
               {uploadControl((url) => setService({ ...service, image: url }))}
-              <Button type="submit">
-                SAVE SERVICE <Check />
+              <Button type="submit">{m("SAVE SERVICE")}<Check />
               </Button>
             </form>
           )}
@@ -403,8 +383,8 @@ export function Admin() {
         }}
       >
         <DialogContent>
-          <DialogTitle>GALLERY IMAGE</DialogTitle>
-          <DialogDescription>Preview and save a local demo image.</DialogDescription>
+          <DialogTitle>{m("GALLERY IMAGE")}</DialogTitle>
+          <DialogDescription>{m("Preview and save a local demo image.")}</DialogDescription>
           {gallery && (
             <form
               className="noir-form"
@@ -424,18 +404,14 @@ export function Admin() {
                 setGallery(null);
               }}
             >
-              <label className="field">
-                TITLE
-                <input
+              <label className="field">{m("TITLE")}<input
                   value={gallery.title}
                   required
                   maxLength={100}
                   onChange={(e) => setGallery({ ...gallery, title: e.target.value })}
                 />
               </label>
-              <label className="field">
-                CATEGORY
-                <select
+              <label className="field">{m("CATEGORY")}<select
                   value={gallery.category}
                   onChange={(e) => {
                     const parsed = gallerySchema.shape.category.safeParse(e.target.value);
@@ -447,10 +423,9 @@ export function Admin() {
                   ))}
                 </select>
               </label>
-              <img className="image-preview" src={gallery.image} alt="Gallery image preview" />
+              <img className="image-preview" src={gallery.image} alt={m("Gallery image preview")} />
               {uploadControl((url) => setGallery({ ...gallery, image: url }))}
-              <Button type="submit">
-                SAVE IMAGE <Check />
+              <Button type="submit">{m("SAVE IMAGE")}<Check />
               </Button>
             </form>
           )}
