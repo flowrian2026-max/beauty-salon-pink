@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { useDemo } from "./demo-provider";
 import { filterGallery } from "@/lib/noir-data";
 export function Gallery() {
-  const { m, c, t, lang } = useT();
+  const { m, c, t, fa } = useT();
   const { data } = useDemo();
   const [filter, setFilter] = useState("ALL");
   const [current, setCurrent] = useState<number | null>(null);
@@ -23,30 +23,30 @@ export function Gallery() {
     function key(e: KeyboardEvent) {
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        move(1);
+        move(fa ? -1 : 1);
       }
       if (e.key === "ArrowLeft") {
         e.preventDefault();
-        move(-1);
+        move(fa ? 1 : -1);
       }
     }
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [current, items.length]);
+  }, [current, items.length, fa]);
   return (
     <>
       <div className="filters" aria-label={m("Gallery categories")}>
-        {categories.map((c) => (
+        {categories.map((category) => (
           <Button
-            key={c}
-            variant={filter === c ? "default" : "ghost"}
-            aria-pressed={filter === c}
+            key={category}
+            variant={filter === category ? "default" : "ghost"}
+            aria-pressed={filter === category}
             onClick={() => {
-              setFilter(c);
+              setFilter(category);
               setCurrent(null);
             }}
           >
-            {c}
+            {c(category)}
           </Button>
         ))}
       </div>
@@ -57,11 +57,11 @@ export function Gallery() {
             variant="ghost"
             className="gallery-item"
             onClick={() => setCurrent(i)}
-            aria-label={`View ${g.title}`}
+            aria-label={t(`View ${g.title}`, `نمایش ${c(g.title)}`)}
           >
-            <img src={g.image} alt={g.title} width="864" height="1104" loading="lazy" decoding="async" />
+            <img src={g.image} alt={c(g.title)} width="864" height="1104" loading="lazy" decoding="async" />
             <span>
-              <small>{g.category} / 0{i + 1}</small>{g.title}
+              <small>{c(g.category)} / 0{i + 1}</small>{c(g.title)}
             </span>
           </Button>
         ))}
@@ -75,11 +75,11 @@ export function Gallery() {
         }}
       >
         <DialogContent className="lightbox">
-          <DialogTitle>{selected?.title}</DialogTitle>
+          <DialogTitle>{c(selected?.title || "")}</DialogTitle>
           <DialogDescription>
-            NOIR PINK · {selected?.category} · Concept photography
+            NOIR PINK · {c(selected?.category || "")} · {m("Concept photography")}
           </DialogDescription>
-          {selected && <img key={selected.id} className="lightbox-photo" src={selected.image} alt={selected.title} width="864" height="1104" decoding="async" />}
+          {selected && <img key={selected.id} className="lightbox-photo" src={selected.image} alt={c(selected.title)} width="864" height="1104" decoding="async" />}
           <div className="lightbox-controls">
             <Button
               variant="outline"
@@ -87,13 +87,13 @@ export function Gallery() {
               aria-label={m("Previous image")}
               onClick={() => move(-1)}
             >
-              <ArrowLeft />
+              {fa ? <ArrowRight /> : <ArrowLeft />}
             </Button>
             <p>
               {current === null ? 0 : current + 1} / {items.length}
             </p>
             <Button variant="outline" size="icon" aria-label={m("Next image")} onClick={() => move(1)}>
-              <ArrowRight />
+              {fa ? <ArrowLeft /> : <ArrowRight />}
             </Button>
           </div>
         </DialogContent>

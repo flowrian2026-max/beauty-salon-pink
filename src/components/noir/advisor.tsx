@@ -1,4 +1,5 @@
 import { useT } from "@/lib/i18n";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { ArrowRight, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,8 @@ import { useDemo } from "./demo-provider";
 export type Suggestion = { serviceId: string; message: string };
 
 export function BeautyAdvisor({ onApply }: { onApply: (s: Suggestion) => void }) {
-  const { m, c, t, lang } = useT();
+  const { m, c, lang } = useT();
+  const recommend = useServerFn(getRecommendation);
   const { data } = useDemo();
   const [form, setForm] = useState({ goals: "", preferences: "", occasion: "" });
   const [loading, setLoading] = useState(false);
@@ -18,12 +20,12 @@ export function BeautyAdvisor({ onApply }: { onApply: (s: Suggestion) => void })
 
   async function ask(e: React.FormEvent) {
     e.preventDefault();
-    const input = { ...form, services: data.services.map(({ id, title, description }) => ({ id, title, description })) };
+    const input = { ...form, language: lang, services: data.services.map(({ id, title, description }) => ({ id, title, description })) };
     const parsed = advisorInput.safeParse(input);
     if (!parsed.success) { setError(parsed.error.issues[0]?.message || "Check your answers"); return; }
     setLoading(true); setError(""); setRec(null);
     try {
-      const res = await getRecommendation({ data: parsed.data });
+      const res = await recommend({ data: parsed.data });
       if (res.ok) setRec(res); else setError(res.error);
     } catch { setError("The advisor is unavailable right now. You can still choose a service below."); }
     finally { setLoading(false); }
@@ -38,14 +40,14 @@ export function BeautyAdvisor({ onApply }: { onApply: (s: Suggestion) => void })
         <label className="field">{m("PREFERENCES · OPTIONAL")}<input value={form.preferences} maxLength={400} onChange={(e) => setForm({ ...form, preferences: e.target.value })} placeholder={m("Colours, finish, style")} /></label>
         <label className="field">{m("OCCASION · OPTIONAL")}<input value={form.occasion} maxLength={200} onChange={(e) => setForm({ ...form, occasion: e.target.value })} placeholder={m("Wedding, evening, everyday")} /></label>
       </div>
-      {error && <p role="alert" className="error-text">{error}</p>}
-      <Button type="submit" disabled={loading}>{loading ? "THINKING…" : "GET A RECOMMENDATION"} <Wand2 /></Button>
+      {error && <p role="alert" className="error-text">{m(error)}</p>}
+      <Button type="submit" disabled={loading}>{m(loading ? "THINKING…" : "GET A RECOMMENDATION")} <Wand2 /></Button>
     </form>
     {rec && service && <div className="review" role="status">
       <span className="eyebrow">{m("SUGGESTED FOR YOU")}</span>
-      <h3>{service.title}</h3>
+      <h3>{c(service.title)}</h3>
       <p>{rec.reason}</p>
-      <p className="sample-note">Draft message: “{rec.inquiryMessage}”</p>
+      <p className="sample-note">{m("Draft message:")} “{rec.inquiryMessage}”</p>
       <p className="sample-note">{m("AI-generated suggestion, not professional advice. The salon confirms suitability, pricing and availability.")}</p>
       <Button onClick={() => onApply({ serviceId: service.id, message: rec.inquiryMessage })}>{m("USE IN MY INQUIRY")}<ArrowRight /></Button>
     </div>}

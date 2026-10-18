@@ -16,10 +16,10 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 function Index() {
-  const { m, c, t, lang } = useT();
+  const { m, t } = useT();
   return (
     <>
-      <DepthVisual className="hero" image={images.campaign} alt="NOIR PINK editorial beauty concept with dramatic pink rim lighting" priority>
+      <DepthVisual className="hero" image={images.campaign} alt={t("NOIR PINK editorial beauty concept with dramatic pink rim lighting", "تصویر مفهومی زیبایی نوآر پینک با نور صورتی")} priority>
         <div className="hero-content">
           <div className="eyebrow">
             <span />{m("NOIR PINK / BEAUTY ON YOUR OWN TERMS")}</div>
@@ -81,7 +81,7 @@ function Index() {
           <div>
             <div className="eyebrow">
               <span />{m("A DIFFERENT PERSPECTIVE")}</div>
-            <h2>{m("SAME HAND.")}<br />{m("NEW EXPRESSION.")}</h2>
+            <h2>{t("SAME FACE.", "همان چهره.")}<br />{m("NEW EXPRESSION.")}</h2>
           </div>
           <Button asChild variant="link">
             <Link to="/experience">{m("THE EXPERIENCE")}<ArrowUpRight />

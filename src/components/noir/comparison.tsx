@@ -4,7 +4,7 @@ import { MoveHorizontal } from "lucide-react";
 import { useDemo } from "./demo-provider";
 import { comparisonSplit } from "@/lib/noir-data";
 export function Comparison() {
-  const { m, c, t, lang } = useT();
+  const { m, t } = useT();
   const { data } = useDemo();
   const [split, setSplit] = useState(50);
   const [dragging, setDragging] = useState(false);
@@ -63,7 +63,7 @@ export function Comparison() {
           onPointerCancel={() => setDragging(false)}
           onLostPointerCapture={() => setDragging(false)}
           aria-label={m("Before and after image comparison")}
-          aria-valuetext={`${Math.round(split)}% before, ${Math.round(100 - split)}% after`}
+          aria-valuetext={t(`${Math.round(split)}% before, ${Math.round(100 - split)}% after`, `${Math.round(split)}٪ قبل، ${Math.round(100 - split)}٪ بعد`)}
         />
       </div>
       <p className="sample-note">{m("AI MAKEUP CONCEPT · Same face and scene, makeup-only edit. Not a real customer result. Both images are replaceable in Demo Admin.")}</p>
