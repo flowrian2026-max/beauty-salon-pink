@@ -1,8 +1,10 @@
+import { useT } from "@/lib/i18n";
 import { useState, type CSSProperties, type PointerEvent } from "react";
 import { MoveHorizontal } from "lucide-react";
 import { useDemo } from "./demo-provider";
 import { comparisonSplit } from "@/lib/noir-data";
 export function Comparison() {
+  const { m, c, t, lang } = useT();
   const { data } = useDemo();
   const [split, setSplit] = useState(50);
   const [dragging, setDragging] = useState(false);
@@ -16,7 +18,7 @@ export function Comparison() {
         <img
           className="comparison-before"
           src={data.before}
-          alt="Before makeup — bare natural face, replaceable concept image"
+          alt={m("Before makeup \u2014 bare natural face, replaceable concept image")}
           width="1530"
           height="1011"
           loading="lazy"
@@ -24,7 +26,7 @@ export function Comparison() {
         <img
           className="comparison-after"
           src={data.after}
-          alt="After makeup — the same face with editorial pink makeup, replaceable concept image"
+          alt={m("After makeup \u2014 the same face with editorial pink makeup, replaceable concept image")}
           width="1530"
           height="1011"
           loading="lazy"
@@ -34,8 +36,8 @@ export function Comparison() {
             <MoveHorizontal size={20} />
           </span>
         </div>
-        <span className="compare-label before">BEFORE</span>
-        <span className="compare-label after">AFTER</span>
+        <span className="compare-label before">{m("BEFORE")}</span>
+        <span className="compare-label after">{m("AFTER")}</span>
         <input
           type="range"
           min="0"
@@ -60,13 +62,11 @@ export function Comparison() {
           }}
           onPointerCancel={() => setDragging(false)}
           onLostPointerCapture={() => setDragging(false)}
-          aria-label="Before and after image comparison"
+          aria-label={m("Before and after image comparison")}
           aria-valuetext={`${Math.round(split)}% before, ${Math.round(100 - split)}% after`}
         />
       </div>
-      <p className="sample-note">
-        AI MAKEUP CONCEPT · Same face and scene, makeup-only edit. Not a real customer result. Both images are replaceable in Demo Admin.
-      </p>
+      <p className="sample-note">{m("AI MAKEUP CONCEPT · Same face and scene, makeup-only edit. Not a real customer result. Both images are replaceable in Demo Admin.")}</p>
     </>
   );
 }

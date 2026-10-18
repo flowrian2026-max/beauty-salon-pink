@@ -1,3 +1,4 @@
+import { useT } from "@/lib/i18n";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { useDemo } from "./demo-provider";
 import { filterGallery } from "@/lib/noir-data";
 export function Gallery() {
+  const { m, c, t, lang } = useT();
   const { data } = useDemo();
   const [filter, setFilter] = useState("ALL");
   const [current, setCurrent] = useState<number | null>(null);
@@ -33,7 +35,7 @@ export function Gallery() {
   }, [current, items.length]);
   return (
     <>
-      <div className="filters" aria-label="Gallery categories">
+      <div className="filters" aria-label={m("Gallery categories")}>
         {categories.map((c) => (
           <Button
             key={c}
@@ -64,10 +66,8 @@ export function Gallery() {
           </Button>
         ))}
       </div>
-      {items.length === 0 && <p className="sample-note">No images in this collection yet.</p>}
-      <p className="sample-note">
-        AI-generated editorial concepts · Replaceable imagery, not customer results or salon work.
-      </p>
+      {items.length === 0 && <p className="sample-note">{m("No images in this collection yet.")}</p>}
+      <p className="sample-note">{m("AI-generated editorial concepts · Replaceable imagery, not customer results or salon work.")}</p>
       <Dialog
         open={Boolean(selected)}
         onOpenChange={(v) => {
@@ -84,7 +84,7 @@ export function Gallery() {
             <Button
               variant="outline"
               size="icon"
-              aria-label="Previous image"
+              aria-label={m("Previous image")}
               onClick={() => move(-1)}
             >
               <ArrowLeft />
@@ -92,7 +92,7 @@ export function Gallery() {
             <p>
               {current === null ? 0 : current + 1} / {items.length}
             </p>
-            <Button variant="outline" size="icon" aria-label="Next image" onClick={() => move(1)}>
+            <Button variant="outline" size="icon" aria-label={m("Next image")} onClick={() => move(1)}>
               <ArrowRight />
             </Button>
           </div>

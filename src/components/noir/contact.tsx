@@ -1,9 +1,11 @@
+import { useT } from "@/lib/i18n";
 import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDemo } from "./demo-provider";
 import { contactSchema, safeSocial, businessEmail, inquiryEmail } from "@/lib/noir-data";
 export function ContactContent() {
+  const { m, c, t, lang } = useT();
   const { data } = useDemo();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [done, setDone] = useState(false);
@@ -24,8 +26,8 @@ export function ContactContent() {
   return (
     <div className="form-layout">
       <aside>
-        <h2>LET’S CONNECT.</h2>
-        <p>Your next expression starts with a conversation.</p>
+        <h2>{m("LET’S CONNECT.")}</h2>
+        <p>{m("Your next expression starts with a conversation.")}</p>
         <dl className="contact-details">
           {[
             ["ADDRESS", data.contact.address],
@@ -51,7 +53,7 @@ export function ContactContent() {
             ) : null;
           })}
         </div>
-        {!recipient && <p className="sample-note">Business contact details have not yet been supplied. Online delivery is unavailable.</p>}
+        {!recipient && <p className="sample-note">{m("Business contact details have not yet been supplied. Online delivery is unavailable.")}</p>}
       </aside>
       {done ? (
         <div className="status" role="status">
@@ -59,16 +61,13 @@ export function ContactContent() {
           <p>
             {draft ? "Open your email app and press Send to deliver your inquiry. Nothing is sent automatically." : "Your message was validated but not sent or stored. A business email is needed for delivery."}
           </p>
-          {draft && <Button asChild className="mt-5"><a href={draft}>OPEN EMAIL INQUIRY <ArrowUpRight /></a></Button>}
-          <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>
-            WRITE ANOTHER MESSAGE <ArrowUpRight />
+          {draft && <Button asChild className="mt-5"><a href={draft}>{m("OPEN EMAIL INQUIRY")}<ArrowUpRight /></a></Button>}
+          <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>{m("WRITE ANOTHER MESSAGE")}<ArrowUpRight />
           </Button>
         </div>
       ) : (
         <form className="noir-form" noValidate onSubmit={submit}>
-          <label className="field">
-            YOUR NAME
-            <input
+          <label className="field">{m("YOUR NAME")}<input
               name="name"
               required
               maxLength={100}
@@ -77,9 +76,7 @@ export function ContactContent() {
             />
             {errors["name"] && <span className="error-text">{errors["name"]}</span>}
           </label>
-          <label className="field">
-            EMAIL
-            <input
+          <label className="field">{m("EMAIL")}<input
               name="email"
               type="email"
               required
@@ -89,9 +86,7 @@ export function ContactContent() {
             />
             {errors["email"] && <span className="error-text">{errors["email"]}</span>}
           </label>
-          <label className="field">
-            YOUR MESSAGE
-            <textarea
+          <label className="field">{m("YOUR MESSAGE")}<textarea
               name="message"
               required
               maxLength={1000}
@@ -100,8 +95,7 @@ export function ContactContent() {
             {errors["message"] && <span className="error-text">{errors["message"]}</span>}
           </label>
           <p className="sample-note">{recipient ? "Review your email draft before sending from your email app." : "Local preview only. No business email is configured; messages cannot be delivered."}</p>
-          <Button type="submit">
-            REVIEW YOUR MESSAGE <ArrowUpRight />
+          <Button type="submit">{m("REVIEW YOUR MESSAGE")}<ArrowUpRight />
           </Button>
         </form>
       )}

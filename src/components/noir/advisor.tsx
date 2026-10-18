@@ -1,3 +1,4 @@
+import { useT } from "@/lib/i18n";
 import { useState } from "react";
 import { ArrowRight, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { useDemo } from "./demo-provider";
 export type Suggestion = { serviceId: string; message: string };
 
 export function BeautyAdvisor({ onApply }: { onApply: (s: Suggestion) => void }) {
+  const { m, c, t, lang } = useT();
   const { data } = useDemo();
   const [form, setForm] = useState({ goals: "", preferences: "", occasion: "" });
   const [loading, setLoading] = useState(false);
@@ -28,24 +30,24 @@ export function BeautyAdvisor({ onApply }: { onApply: (s: Suggestion) => void })
   }
 
   return <section className="noir-form advisor" aria-labelledby="advisor-title">
-    <span className="eyebrow">00 / AI BEAUTY ADVISOR</span>
-    <h2 id="advisor-title">NOT SURE WHERE TO START?</h2>
+    <span className="eyebrow">{m("00 / AI BEAUTY ADVISOR")}</span>
+    <h2 id="advisor-title">{m("NOT SURE WHERE TO START?")}</h2>
     <form onSubmit={ask} noValidate className="grid gap-4">
-      <label className="field">YOUR BEAUTY GOALS<textarea value={form.goals} maxLength={600} onChange={(e) => setForm({ ...form, goals: e.target.value })} placeholder="e.g. A refined look that still feels bold" /></label>
+      <label className="field">{m("YOUR BEAUTY GOALS")}<textarea value={form.goals} maxLength={600} onChange={(e) => setForm({ ...form, goals: e.target.value })} placeholder={m("e.g. A refined look that still feels bold")} /></label>
       <div className="form-row">
-        <label className="field">PREFERENCES · OPTIONAL<input value={form.preferences} maxLength={400} onChange={(e) => setForm({ ...form, preferences: e.target.value })} placeholder="Colours, finish, style" /></label>
-        <label className="field">OCCASION · OPTIONAL<input value={form.occasion} maxLength={200} onChange={(e) => setForm({ ...form, occasion: e.target.value })} placeholder="Wedding, evening, everyday" /></label>
+        <label className="field">{m("PREFERENCES · OPTIONAL")}<input value={form.preferences} maxLength={400} onChange={(e) => setForm({ ...form, preferences: e.target.value })} placeholder={m("Colours, finish, style")} /></label>
+        <label className="field">{m("OCCASION · OPTIONAL")}<input value={form.occasion} maxLength={200} onChange={(e) => setForm({ ...form, occasion: e.target.value })} placeholder={m("Wedding, evening, everyday")} /></label>
       </div>
       {error && <p role="alert" className="error-text">{error}</p>}
       <Button type="submit" disabled={loading}>{loading ? "THINKING…" : "GET A RECOMMENDATION"} <Wand2 /></Button>
     </form>
     {rec && service && <div className="review" role="status">
-      <span className="eyebrow">SUGGESTED FOR YOU</span>
+      <span className="eyebrow">{m("SUGGESTED FOR YOU")}</span>
       <h3>{service.title}</h3>
       <p>{rec.reason}</p>
       <p className="sample-note">Draft message: “{rec.inquiryMessage}”</p>
-      <p className="sample-note">AI-generated suggestion, not professional advice. The salon confirms suitability, pricing and availability.</p>
-      <Button onClick={() => onApply({ serviceId: service.id, message: rec.inquiryMessage })}>USE IN MY INQUIRY <ArrowRight /></Button>
+      <p className="sample-note">{m("AI-generated suggestion, not professional advice. The salon confirms suitability, pricing and availability.")}</p>
+      <Button onClick={() => onApply({ serviceId: service.id, message: rec.inquiryMessage })}>{m("USE IN MY INQUIRY")}<ArrowRight /></Button>
     </div>}
   </section>;
 }

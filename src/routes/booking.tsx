@@ -1,3 +1,4 @@
+import { useT } from "@/lib/i18n";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { pageHead } from "@/lib/noir-data";
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/booking")({
   component: BookingPage,
 });
 function BookingPage() {
+  const { m, c, t, lang } = useT();
   const { service } = Route.useSearch();
   const [suggestion, setSuggestion] = useState<Suggestion & { n: number }>();
   return (
@@ -22,13 +24,9 @@ function BookingPage() {
       <Intro eyebrow="SOMETHING EXTRAORDINARY STARTS HERE" title="MAKE SPACE FOR YOU." />
       <div className="page-content form-layout">
         <aside>
-          <h2>YOUR NEXT EXPRESSION.</h2>
-          <p>
-            A considered moment. A fresh perspective. Choose the experience that feels like you.
-          </p>
-          <p className="sample-note">
-            BY INQUIRY
-            <br />
+          <h2>{m("YOUR NEXT EXPRESSION.")}</h2>
+          <p>{m("A considered moment. A fresh perspective. Choose the experience that feels like you.")}</p>
+          <p className="sample-note">{m("BY INQUIRY")}<br />
             Tell us what you have in mind. Preferred dates are requests, not reserved appointments.
             Where a business email is supplied, you can send your inquiry from your email app.
             Until then, this is a clearly labeled local preview.
