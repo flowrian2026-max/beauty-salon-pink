@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { DemoProvider } from "@/components/noir/demo-provider";
+import { LangProvider } from "@/lib/i18n";
 import { SiteHeader, SiteFooter, RevealObserver } from "@/components/noir/site-shell";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -104,7 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap",
       },
     ],
   }),
@@ -133,6 +134,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <LangProvider>
       <DemoProvider>
         <SiteHeader />
         <main>
@@ -141,6 +143,7 @@ function RootComponent() {
         <SiteFooter />
         <RevealObserver />
       </DemoProvider>
+      </LangProvider>
     </QueryClientProvider>
   );
 }
