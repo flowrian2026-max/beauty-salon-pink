@@ -29,6 +29,12 @@ describe("NOIR PINK demo rules", () => {
     const edited = { ...defaults, before: "custom-before", after: "custom-after" };
     expect(migrateComparison(edited)).toBe(edited);
   });
+  it("replaces the previous blonde default face with the new matched makeup pair", () => {
+    const previous = { ...defaults, before: images.legacyMakeupBefore, after: images.legacyMakeupAfter };
+    expect(migrateComparison(previous).before).toBe(images.makeupBefore);
+    expect(migrateComparison(previous).after).toBe(images.makeupAfter);
+    expect(images.makeupBefore).not.toBe(images.legacyMakeupBefore);
+  });
   it("reveals the correct position and clamps dragging to either edge", () => {
     expect(comparisonSplit(350, 100, 1000)).toBe(25);
     expect(comparisonSplit(50, 100, 1000)).toBe(0);
