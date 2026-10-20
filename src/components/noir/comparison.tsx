@@ -19,16 +19,16 @@ export function Comparison() {
           className="comparison-before"
           src={data.before}
           alt={m("Before makeup \u2014 bare natural face, replaceable concept image")}
-          width="1530"
-          height="1011"
+          width="1264"
+          height="848"
           loading="lazy"
         />
         <img
           className="comparison-after"
           src={data.after}
           alt={m("After makeup \u2014 the same face with editorial pink makeup, replaceable concept image")}
-          width="1530"
-          height="1011"
+          width="1264"
+          height="848"
           loading="lazy"
         />
         <div className="compare-divider">

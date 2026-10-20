@@ -5,14 +5,16 @@ import hair from "@/assets/hair.jpg";
 import skin from "@/assets/skincare.jpg";
 import manicureBefore from "@/assets/manicure-before.jpg";
 import manicureAfter from "@/assets/manicure-after.png";
-import makeupBefore from "@/assets/makeup-before.jpg";
-import makeupAfter from "@/assets/makeup-after.jpg";
-export const images = { campaign, nails, hair, skin, manicureBefore, manicureAfter, makeupBefore, makeupAfter };
+import legacyMakeupBefore from "@/assets/makeup-before.jpg";
+import legacyMakeupAfter from "@/assets/makeup-after.jpg";
+import makeupBefore from "@/assets/makeup-blonde-before.jpg";
+import makeupAfter from "@/assets/makeup-blonde-after.jpg";
+export const images = { campaign, nails, hair, skin, manicureBefore, manicureAfter, legacyMakeupBefore, legacyMakeupAfter, makeupBefore, makeupAfter };
 export function comparisonSplit(clientX: number, left: number, width: number) {
   return width <= 0 ? 50 : Math.min(100, Math.max(0, ((clientX - left) / width) * 100));
 }
 export function migrateComparison(data: DemoState): DemoState {
-  const legacy = (data.before === skin && data.after === campaign) || (data.before === manicureBefore && data.after === manicureAfter);
+  const legacy = (data.before === skin && data.after === campaign) || (data.before === manicureBefore && data.after === manicureAfter) || (data.before === legacyMakeupBefore && data.after === legacyMakeupAfter);
   return legacy
     ? { ...data, before: makeupBefore, after: makeupAfter }
     : data;
