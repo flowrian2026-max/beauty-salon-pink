@@ -37,7 +37,7 @@ export function ContactContent() {
           ].map(([k, v]) => (
             <div key={k}>
               <dt>{m(k)}</dt>
-              <dd>{k === "EMAIL" && recipient ? <a href={`mailto:${encodeURIComponent(recipient)}`}>{recipient}</a> : c(v)}</dd>
+              <dd>{k === "EMAIL" && recipient ? <a href={`mailto:${encodeURIComponent(recipient)}`}>{recipient}</a> : c(v ?? "")}</dd>
             </div>
           ))}
         </dl>
