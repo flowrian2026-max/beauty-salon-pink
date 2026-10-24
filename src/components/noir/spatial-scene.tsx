@@ -7,7 +7,7 @@ import bridal from "@/assets/hair.jpg";
 import { shouldReduceQuality, spatialPose, type SpatialQuality } from "@/lib/noir-spatial";
 import { studioTexture, sceneColor } from "./spatial-geometry";
 
-export type SceneProps = { progress: RefObject<number>; requestRender: RefObject<(() => void) | null>; finish: number; unfolded: boolean; quality: SpatialQuality; active: boolean; onReady: () => void; onUnfold: () => void; onFailure: () => void; onSlow: () => void };
+export type SceneProps = { progress: RefObject<number>; requestRender: RefObject<(() => void) | null>; quality: SpatialQuality; active: boolean; onReady: () => void; onFailure: () => void; onSlow: () => void };
 
 function Portrait({ image, position, rotation, width, height }: { image: string; position: [number, number, number]; rotation: [number, number, number]; width: number; height: number }) {
   const texture = useTexture(image);
@@ -19,7 +19,7 @@ function Portrait({ image, position, rotation, width, height }: { image: string;
   </group>;
 }
 
-function Installation({ progress, requestRender, finish, unfolded, quality, active, onReady, onSlow }: SceneProps) {
+function Installation({ progress, requestRender, quality, active, onReady, onSlow }: SceneProps) {
   const photographs = useRef<THREE.Group>(null);
   const { size, invalidate, gl } = useThree();
   const compact = quality === "compact";
@@ -32,7 +32,7 @@ function Installation({ progress, requestRender, finish, unfolded, quality, acti
   const initialized = useRef(false);
   useEffect(() => { onReady(); }, [onReady]);
   useEffect(() => { requestRender.current = () => { if (active) invalidate(); }; if (active) invalidate(); return () => { requestRender.current = null; }; }, [active, invalidate, requestRender]);
-  useEffect(() => { if (active) invalidate(); }, [finish, unfolded, quality, active, invalidate]);
+  useEffect(() => { if (active) invalidate(); }, [quality, active, invalidate]);
   useEffect(() => () => grain.dispose(), [grain]);
   useFrame(({ camera }, rawDelta) => {
     if (!active) return;
@@ -68,8 +68,6 @@ function Installation({ progress, requestRender, finish, unfolded, quality, acti
     gl.domElement.dataset['camera'] = camera.position.toArray().map(v => v.toFixed(2)).join(',');
     gl.domElement.dataset['progress'] = p.toFixed(3);
     gl.domElement.dataset['quality'] = quality;
-    gl.domElement.dataset['finish'] = String(finish);
-    gl.domElement.dataset['unfolded'] = String(unfolded);
     gl.domElement.dataset['frames'] = String(Number(gl.domElement.dataset['frames'] ?? 0) + 1);
   });
   return <>
