@@ -5,7 +5,7 @@ import * as THREE from "three";
 import campaign from "@/assets/noir-campaign.jpg";
 import bridal from "@/assets/hair.jpg";
 import { shouldReduceQuality, spatialPose, type SpatialQuality } from "@/lib/noir-spatial";
-import { signatureGeometry, studioTexture, pigmentTexture, sceneColor } from "./spatial-geometry";
+import { studioTexture, sceneColor } from "./spatial-geometry";
 
 export type SceneProps = { progress: RefObject<number>; requestRender: RefObject<(() => void) | null>; finish: number; unfolded: boolean; quality: SpatialQuality; active: boolean; onReady: () => void; onUnfold: () => void; onFailure: () => void; onSlow: () => void };
 
@@ -19,16 +19,12 @@ function Portrait({ image, position, rotation, width, height }: { image: string;
   </group>;
 }
 
-function Installation({ progress, requestRender, finish, unfolded, quality, active, onReady, onUnfold, onSlow }: SceneProps) {
-  const signature = useRef<THREE.Group>(null);
-  const material = useRef<THREE.MeshPhysicalMaterial>(null);
+function Installation({ progress, requestRender, finish, unfolded, quality, active, onReady, onSlow }: SceneProps) {
   const photographs = useRef<THREE.Group>(null);
   const { size, invalidate, gl } = useThree();
   const compact = quality === "compact";
-  const geometry = useMemo(() => signatureGeometry(compact ? 90 : 180, compact ? 6 : 10), [compact]);
   const grain = useMemo(studioTexture, []);
-  const pigment = useMemo(pigmentTexture, []);
-  const palette = useMemo(() => ({ background: sceneColor("--background"), ivory: sceneColor("--foreground"), rose: sceneColor("--primary"), gold: sceneColor("--soft-pink"), floor: sceneColor("--secondary") }), []);
+  const palette = useMemo(() => ({ background: sceneColor("--background"), ivory: sceneColor("--foreground"), gold: sceneColor("--soft-pink"), floor: sceneColor("--secondary") }), []);
   const target = useMemo(() => new THREE.Vector3(), []);
   const look = useMemo(() => new THREE.Vector3(), []);
   const lookTarget = useMemo(() => new THREE.Vector3(), []);
@@ -37,9 +33,7 @@ function Installation({ progress, requestRender, finish, unfolded, quality, acti
   useEffect(() => { onReady(); }, [onReady]);
   useEffect(() => { requestRender.current = () => { if (active) invalidate(); }; if (active) invalidate(); return () => { requestRender.current = null; }; }, [active, invalidate, requestRender]);
   useEffect(() => { if (active) invalidate(); }, [finish, unfolded, quality, active, invalidate]);
-  useEffect(() => () => geometry.dispose(), [geometry]);
   useEffect(() => () => grain.dispose(), [grain]);
-  useEffect(() => () => pigment.dispose(), [pigment]);
   useFrame(({ camera }, rawDelta) => {
     if (!active) return;
     const delta = Math.min(rawDelta, 0.05);
@@ -50,36 +44,15 @@ function Installation({ progress, requestRender, finish, unfolded, quality, acti
     let settling = camera.position.distanceToSquared(target) > 0.00001;
     settling ||= look.distanceToSquared(lookTarget) > 0.00001;
     camera.position.lerp(target, damping); look.lerp(lookTarget, damping); camera.lookAt(look);
-    if (signature.current) {
-      const spread = unfolded ? 1 : pose.spread;
-      const scale = size.width < 760 ? 0.94 - spread * 0.04 : 0.82 - spread * 0.08;
-      target.setScalar(scale);
-      settling ||= signature.current.scale.distanceToSquared(target) > 0.00001;
-      signature.current.scale.lerp(target, damping);
-      // Leave negative space beside each chapter; the installation never bobs or spins.
-      const horizontal = p < 0.5 ? 2.25 - pose.spread * 4.1 : -1.85 + (1 - pose.spread) / 0.45 * 4.1;
-      target.set(size.width < 760 ? 0 : horizontal, 0.15, 0);
-      settling ||= signature.current.position.distanceToSquared(target) > 0.00001;
-      signature.current.position.lerp(target, damping);
-      const rotation = -0.18 + p * 0.45 + (unfolded ? 0.55 : 0);
-      settling ||= Math.abs(signature.current.rotation.y - rotation) > 0.001;
-      signature.current.rotation.y += (rotation - signature.current.rotation.y) * damping;
-      signature.current.rotation.z = -0.04;
-    }
-    if (material.current) {
-      const color = finish === 0 ? palette.rose : finish === 1 ? palette.gold : palette.ivory;
-      settling ||= Math.abs(material.current.color.r - color.r) + Math.abs(material.current.color.g - color.g) + Math.abs(material.current.color.b - color.b) > 0.001;
-      material.current.color.lerp(color, damping);
-      const metalness = finish === 2 ? 0.22 : finish === 1 ? 0.78 : 0.62;
-      const roughness = finish === 2 ? 0.42 : finish === 1 ? 0.3 : 0.36;
-      settling ||= Math.abs(material.current.metalness - metalness) > 0.001 || Math.abs(material.current.roughness - roughness) > 0.001;
-      material.current.metalness += (metalness - material.current.metalness) * damping;
-      material.current.roughness += (roughness - material.current.roughness) * damping;
-    }
     if (photographs.current) {
-      const rotation = -p * 0.08;
+      const spread = size.width < 760 ? 0.48 : 1.0 - Math.abs(p - 0.5) * 0.7;
+      target.set(size.width < 760 ? 0 : (p < 0.5 ? -0.6 : 0.55), 0, -2.2 + spread * 0.25);
+      settling ||= photographs.current.position.distanceToSquared(target) > 0.00001;
+      photographs.current.position.lerp(target, damping);
+      const rotation = p < 0.5 ? -0.025 : 0.025;
       settling ||= Math.abs(photographs.current.rotation.y - rotation) > 0.001;
       photographs.current.rotation.y += (rotation - photographs.current.rotation.y) * damping;
+      photographs.current.scale.setScalar(size.width < 760 ? 0.82 : 1.0 + spread * 0.08);
     }
     initialized.current = true;
     if (settling) invalidate();
@@ -111,17 +84,9 @@ function Installation({ progress, requestRender, finish, unfolded, quality, acti
       <Lightformer position={[0, 6, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[7, 5, 1]} intensity={3} color={palette.ivory} />
       <Lightformer position={[1, 3, -4]} rotation={[0, Math.PI, 0]} scale={[2, 5, 1]} intensity={3} color={palette.gold} />
     </Environment>
-    <group ref={signature} position={[1.2, 0.15, 0]}>
-      <mesh geometry={geometry} castShadow receiveShadow onClick={event => { event.stopPropagation(); onUnfold(); }}>
-        <meshPhysicalMaterial ref={material} color={palette.rose} metalness={0.62} roughness={0.36} roughnessMap={pigment} bumpMap={pigment} bumpScale={0.012} clearcoat={0.3} clearcoatRoughness={0.35} sheen={0.25} sheenColor={palette.ivory} sheenRoughness={0.65} envMapIntensity={1.15} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh geometry={geometry} position={[0, 0, -0.45]} rotation={[0, 0.12, 0.08]} scale={0.97} castShadow>
-        <meshStandardMaterial color={palette.gold} metalness={0.72} roughness={0.4} roughnessMap={pigment} bumpMap={pigment} bumpScale={0.008} side={THREE.DoubleSide} />
-      </mesh>
-    </group>
-    <Suspense fallback={null}><group ref={photographs}>
-      <Portrait image={campaign} position={[0.9, 1.5, -4.8]} rotation={[0, 0.08, 0]} width={2.5} height={1.67} />
-      <Portrait image={bridal} position={[4.9, 1.4, -5.8]} rotation={[0, -0.12, 0]} width={1.45} height={1.89} />
+    <Suspense fallback={null}><group ref={photographs} position={[0, 0.1, -2.2]}>
+      <Portrait image={campaign} position={[-2.05, 0.65, -1.1]} rotation={[0, 0.055, 0]} width={3.55} height={2.45} />
+      <Portrait image={bridal} position={[2.0, 0.05, -0.4]} rotation={[0, -0.07, 0]} width={2.2} height={3.05} />
     </group></Suspense>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2.15, 0]} receiveShadow><planeGeometry args={[60, 60]} /><meshStandardMaterial color={palette.floor} roughness={0.82} metalness={0.06} bumpMap={grain} bumpScale={0.014} /></mesh>
   </>;
