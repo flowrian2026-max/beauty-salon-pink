@@ -60,6 +60,17 @@ function Index() {
         <Services preview />
       </section>
 
+      <section className="pinko-manifesto" data-reveal aria-label={m("Beauty manifesto")}>
+        <span className="pinko-manifesto-index">NO. 01 / THE PINKO POINT OF VIEW</span>
+        <p>
+          {t("Beauty is not about becoming someone else.", "زیبایی یعنی خودت باشی؛ نه اینکه به شخص دیگری تبدیل شوی.")}
+        </p>
+        <div className="pinko-manifesto-bottom">
+          <span>{t("A LITTLE BOLDER. ENTIRELY YOU.", "جسورتر؛ اما کاملاً خودت.")}</span>
+          <span className="pinko-manifesto-star" aria-hidden="true">✳</span>
+        </div>
+      </section>
+
       <section className="editorial-section transformation-section" data-reveal>
         <div className="section-top" data-reveal>
           <div>
