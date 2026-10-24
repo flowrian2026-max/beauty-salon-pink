@@ -13,13 +13,13 @@ export function signatureGeometry(segments = 180, across = 10) {
     const t = i / segments;
     const center = path.getPoint(t), tangent = path.getTangent(t);
     const side = new THREE.Vector3().crossVectors(tangent, new THREE.Vector3(0, 0, 1)).normalize();
-    const twist = Math.sin(t * Math.PI * 3.3) * 1.1 + t * 1.8;
+    const twist = Math.sin(t * Math.PI * 2.2) * 0.48 + t * 0.72;
     side.applyAxisAngle(tangent, twist);
     const normal = new THREE.Vector3().crossVectors(side, tangent).normalize();
-    const width = 0.62 + Math.sin(t * Math.PI) * 0.14;
+    const width = 0.43 + Math.sin(t * Math.PI) * 0.09;
     for (let j = 0; j <= across; j++) {
       const s = j / across * 2 - 1;
-      const v = center.clone().addScaledVector(side, s * width).addScaledVector(normal, (1 - s * s) * 0.16);
+      const v = center.clone().addScaledVector(side, s * width).addScaledVector(normal, (1 - s * s) * 0.11);
       vertices.push(v.x, v.y, v.z); normals.push(normal.x, normal.y, normal.z); uv.push(t, j / across);
       if (i < segments && j < across) {
         const n = i * (across + 1) + j;
