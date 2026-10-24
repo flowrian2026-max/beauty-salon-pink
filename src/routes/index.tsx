@@ -7,6 +7,7 @@ import { Services } from "@/components/noir/services";
 import { Comparison } from "@/components/noir/comparison";
 import { NextChapter } from "@/components/noir/site-shell";
 import { SpatialJourney } from "@/components/noir/spatial-journey";
+import { ScrollReveals } from "@/components/noir/scroll-reveals";
 
 export const Route = createFileRoute("/")({
   head: () =>
@@ -22,6 +23,7 @@ function Index() {
 
   return (
     <>
+      <ScrollReveals />
       <SpatialJourney />
 
       <div className="ticker" aria-hidden="true">
@@ -36,7 +38,7 @@ function Index() {
         <span>{m("SELF EXPRESSION")}</span>
       </div>
 
-      <section className="editorial-section" id="services">
+      <section className="editorial-section" id="services" data-reveal>
         <div className="section-top" data-reveal>
           <div>
             <div className="eyebrow">
@@ -58,7 +60,7 @@ function Index() {
         <Services preview />
       </section>
 
-      <section className="editorial-section transformation-section">
+      <section className="editorial-section transformation-section" data-reveal>
         <div className="section-top" data-reveal>
           <div>
             <div className="eyebrow">
