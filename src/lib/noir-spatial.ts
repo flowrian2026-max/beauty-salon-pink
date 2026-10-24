@@ -24,6 +24,6 @@ export function spatialPose(progress: number, mobile = false): SpatialPose {
   const ease = t * t * t * (t * (t * 6 - 15) + 10);
   const interpolate = (start: [number, number, number], end: [number, number, number]): [number, number, number] => [start[0] + (end[0] - start[0]) * ease, start[1] + (end[1] - start[1]) * ease, start[2] + (end[2] - start[2]) * ease];
   const position = interpolate(a.position, b.position);
-  if (mobile) { position[0] *= 0.25; position[2] += 3; }
+  if (mobile) { position[0] *= 0.25; position[2] -= 3.5; }
   return { position, target: interpolate(a.target, b.target), spread: a.spread + (b.spread - a.spread) * ease };
 }
