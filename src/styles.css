@@ -1997,3 +1997,79 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   .gallery-item img,
   .editorial-button { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+
+/* Pinko manifesto: a deliberate editorial pause between the hero and the transformation story. */
+.pinko-manifesto {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(76px, 12vw, 176px) 8%;
+  border-block: 1px solid color-mix(in oklab, var(--primary) 26%, var(--border));
+  background:
+    radial-gradient(ellipse at 78% 44%, color-mix(in oklab, var(--primary) 15%, transparent), transparent 38%),
+    linear-gradient(125deg, color-mix(in oklab, var(--secondary) 88%, var(--background)), var(--background) 62%);
+}
+.pinko-manifesto::before {
+  content: "P";
+  position: absolute;
+  z-index: -1;
+  right: 2%;
+  top: 50%;
+  transform: translateY(-56%);
+  font-family: var(--font-display);
+  font-size: clamp(280px, 48vw, 740px);
+  font-weight: 700;
+  line-height: .7;
+  letter-spacing: -.1em;
+  color: color-mix(in oklab, var(--primary) 7%, transparent);
+  pointer-events: none;
+}
+.pinko-manifesto-index {
+  display: block;
+  margin-bottom: clamp(28px, 5vw, 70px);
+  color: var(--soft-pink);
+  font-size: 9px;
+  letter-spacing: .2em;
+}
+.pinko-manifesto > p {
+  max-width: 1050px;
+  font-family: var(--font-display);
+  font-size: clamp(42px, 8.2vw, 118px);
+  font-weight: 500;
+  line-height: .99;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+.pinko-manifesto-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: clamp(35px, 7vw, 90px);
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 9px;
+  letter-spacing: .16em;
+}
+.pinko-manifesto-star {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid color-mix(in oklab, var(--primary) 50%, var(--border));
+  border-radius: 50%;
+  color: var(--primary);
+  font-size: 22px;
+  animation: pinko-star-turn 18s linear infinite;
+}
+@keyframes pinko-star-turn { to { transform: rotate(360deg); } }
+@media (max-width: 700px) {
+  .pinko-manifesto { padding-inline: 6%; }
+  .pinko-manifesto > p { font-size: clamp(39px, 11vw, 66px); }
+  .pinko-manifesto-index, .pinko-manifesto-bottom { letter-spacing: .1em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pinko-manifesto-star { animation: none; }
+}
