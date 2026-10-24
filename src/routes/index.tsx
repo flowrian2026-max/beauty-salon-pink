@@ -6,7 +6,7 @@ import { images, pageHead } from "@/lib/noir-data";
 import { Services } from "@/components/noir/services";
 import { Comparison } from "@/components/noir/comparison";
 import { NextChapter } from "@/components/noir/site-shell";
-import { DepthVisual } from "@/components/noir/depth-visual";
+import { SpatialJourney } from "@/components/noir/spatial-journey";
 export const Route = createFileRoute("/")({
   head: () =>
     pageHead(
@@ -19,38 +19,7 @@ function Index() {
   const { m, t } = useT();
   return (
     <>
-      <DepthVisual className="hero" image={images.campaign} alt={t("NOIR PINK editorial beauty concept with dramatic pink rim lighting", "تصویر مفهومی زیبایی نوآر پینک با نور صورتی")} priority>
-        <div className="hero-content">
-          <div className="eyebrow">
-            <span />{m("NOIR PINK / BEAUTY ON YOUR OWN TERMS")}</div>
-          <h1>{m("BEAUTY,")}<br />
-            <em>{m("REDEFINED.")}</em>
-          </h1>
-          <p className="hero-copy">{m("Precision, creativity, and confidence in every detail.")}</p>
-          <div className="hero-actions">
-            <Button asChild>
-              <Link to="/booking">{m("BOOK YOUR VISIT")}<ArrowUpRight />
-              </Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <a href="#services">{m("EXPLORE THE EXPERIENCE")}<ArrowRight />
-              </a>
-            </Button>
-          </div>
-        </div>
-        <div className="hero-index">
-          <span>{m("01 / THE NEW BEAUTY")}</span>
-          <br />{m("NOT FOR EVERYONE.")}<br />{m("ENTIRELY FOR YOU.")}</div>
-        <div className="hero-bottom">
-          <a href="#services" className="scroll-cue">
-            <ArrowDown size={15} />{m("SCROLL TO DISCOVER")}</a>
-          <div className="hero-note">
-            <span>{m("INDIVIDUALITY IS EVERYTHING.")}</span>
-            <span>{m("NOIR PINK / CONCEPT")}<Plus size={10} className="inline ml-2" />
-            </span>
-          </div>
-        </div>
-      </DepthVisual>
+      <SpatialJourney />
       <div className="ticker" aria-hidden="true">
         <span>{m("NAIL ART")}</span>
         <span>✦</span>
