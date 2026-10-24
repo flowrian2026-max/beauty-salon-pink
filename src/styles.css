@@ -2128,3 +2128,95 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 @media (prefers-reduced-motion: reduce) {
   .journey-stage::after { box-shadow: none; }
 }
+
+
+/* Mobile art-direction correction: the scene is the hero, not a thumbnail strip. */
+@media (max-width: 760px) {
+  .spatial-journey { height: 245svh; }
+  .journey-stage {
+    min-height: 0;
+    background: #090709;
+  }
+  .scene-layer {
+    inset: 0 !important;
+    z-index: -2;
+    overflow: hidden;
+  }
+  .scene-layer > div,
+  .scene-layer canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .scene-fallback {
+    object-fit: cover;
+    object-position: 58% center;
+    opacity: .72;
+    transform: scale(1.04);
+  }
+  .scene-layer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(7,5,7,.18) 0%, rgba(7,5,7,.04) 30%, rgba(7,5,7,.34) 56%, #090709 94%),
+      linear-gradient(90deg, rgba(7,5,7,.55), transparent 78%);
+    pointer-events: none;
+  }
+  .journey-stage::after {
+    display: none;
+  }
+  .journey-title {
+    top: 19%;
+    left: 22px;
+    right: 18px;
+    max-width: 95%;
+  }
+  .journey-title h1 {
+    font-size: clamp(56px, 14vw, 88px);
+    line-height: .88;
+    letter-spacing: -.08em;
+  }
+  .journey-title h1 > span {
+    max-width: 8em;
+    margin-top: 14px;
+    font-size: clamp(22px, 6vw, 34px);
+    line-height: .98;
+  }
+  .journey-intro {
+    left: 22px;
+    bottom: 120px;
+    max-width: calc(100% - 44px);
+  }
+  .journey-intro p {
+    font-size: 14px;
+    line-height: 1.55;
+    text-shadow: 0 2px 20px rgba(0,0,0,.7);
+  }
+  .journey-intro .journey-primary-button {
+    min-height: 48px;
+    font-size: 10px;
+    letter-spacing: .1em;
+  }
+  .journey-chapter {
+    left: 22px;
+    right: 22px;
+    bottom: 155px;
+    width: auto;
+    padding: 22px;
+    border: 1px solid rgba(244,183,209,.22);
+    background: linear-gradient(135deg, rgba(18,12,17,.82), rgba(18,12,17,.46));
+    backdrop-filter: blur(14px);
+  }
+  .journey-chapter h2 {
+    font-size: clamp(34px, 9vw, 48px);
+  }
+  .journey-chapter p { line-height: 1.7; }
+  .signature-controls { display: none !important; }
+  .journey-bottom {
+    left: 22px;
+    right: 22px;
+    bottom: 20px;
+    padding-top: 13px;
+    border-color: rgba(244,183,209,.24);
+  }
+}
