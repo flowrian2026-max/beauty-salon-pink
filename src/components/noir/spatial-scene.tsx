@@ -11,7 +11,7 @@ export type SceneProps = { progress: RefObject<number>; requestRender: RefObject
 
 function Portrait({ image, position, rotation, width, height }: { image: string; position: [number, number, number]; rotation: [number, number, number]; width: number; height: number }) {
   const texture = useTexture(image);
-  const ivory = useMemo(() => sceneColor("--ivory"), []);
+  const ivory = useMemo(() => sceneColor("--foreground"), []);
   useEffect(() => { texture.colorSpace = THREE.SRGBColorSpace; }, [texture]);
   return <group position={position} rotation={rotation}>
     <mesh position={[0, 0, -0.06]}><boxGeometry args={[width + 0.035, height + 0.035, 0.08]} /><meshStandardMaterial color={ivory} metalness={0.35} roughness={0.5} /></mesh>
