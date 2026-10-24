@@ -4,7 +4,7 @@ import { Environment, Lightformer, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import campaign from "@/assets/noir-campaign.jpg";
 import bridal from "@/assets/hair.jpg";
-import { shouldReduceQuality, spatialPose, type SpatialQuality } from "@/lib/velora-spatial";
+import { shouldReduceQuality, spatialPose, type SpatialQuality } from "@/lib/noir-spatial";
 import { signatureGeometry, studioTexture, pigmentTexture, sceneColor } from "./spatial-geometry";
 
 export type SceneProps = { progress: RefObject<number>; requestRender: RefObject<(() => void) | null>; finish: number; unfolded: boolean; quality: SpatialQuality; active: boolean; onReady: () => void; onUnfold: () => void; onFailure: () => void; onSlow: () => void };
