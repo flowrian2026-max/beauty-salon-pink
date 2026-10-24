@@ -1684,8 +1684,8 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 @media (max-width: 760px) {
  .spatial-journey { height: 230svh; }
  .journey-stage { height: 100svh; min-height: 0; }
- .scene-layer { inset: 260px 0 240px; }
- .journey-stage[data-chapter="2"] .scene-layer, .journey-stage[data-chapter="3"] .scene-layer { inset: 120px 0 355px; }
+ .scene-layer { inset: 232px 0 218px; }
+ .journey-stage[data-chapter="2"] .scene-layer, .journey-stage[data-chapter="3"] .scene-layer { inset: 116px 0 326px; }
  .journey-coordinates { left: 22px; right: 22px; top: 112px; font-size: 7px; }
  .journey-coordinates span:last-child { display: none; }
  .journey-title { left: 22px; right: 22px; top: 112px; }
