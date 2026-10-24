@@ -59,7 +59,7 @@ export function SpatialJourney() {
   return <section ref={section} className={`spatial-journey ${still ? "journey-static" : ""}`} data-rendering={still ? "static" : effectiveQuality} aria-label="PINKO signature beauty journey">
     <div ref={stage} className="journey-stage" data-chapter="1">
       <div className="scene-layer" aria-hidden="true">
-        {(!ready || still) && <img className="scene-fallback" src={campaign} width={1920} height={1280} alt="" fetchPriority="high" />}
+        <img className="scene-fallback" src={campaign} width={1920} height={1280} alt="" fetchPriority="high" />
         {mounted && !still && <SceneBoundary onFailure={onFailure}><Suspense fallback={null}><SpatialScene progress={progress} quality={effectiveQuality} requestRender={requestRender} active={active} onReady={onReady} onFailure={onFailure} onSlow={onSlow} /></Suspense></SceneBoundary>}
       </div>
       <div className="journey-coordinates" aria-hidden="true"><span>PINKO / THE SIGNATURE EXPERIENCE</span><span>BEAUTY / FORM / SELF-EXPRESSION</span></div>
