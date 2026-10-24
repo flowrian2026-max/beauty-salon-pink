@@ -2220,3 +2220,66 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
     border-color: rgba(244,183,209,.24);
   }
 }
+
+
+/* PINKO hero art direction — one immersive campaign image, no floating picture frames. */
+.spatial-journey {
+  height: 260svh;
+  background: #10090f;
+  --journey-signature-shade: linear-gradient(90deg, #10090f 0%, rgba(16,9,15,.88) 28%, rgba(16,9,15,.28) 60%, rgba(16,9,15,.06) 100%);
+}
+.journey-stage { min-height: 620px; background: #10090f; }
+.spatial-journey .scene-layer { z-index: 0; overflow: hidden; background: #10090f; }
+.spatial-journey .scene-layer canvas { display: none !important; }
+.spatial-journey .scene-fallback {
+  width: 100%; height: 100%; object-fit: cover; object-position: 72% 38%;
+  opacity: 1; transform: scale(1.035);
+  filter: saturate(.84) contrast(1.06);
+  animation: pinkoHeroReveal 1.3s cubic-bezier(.2,.7,.2,1) both;
+}
+.spatial-journey .scene-layer::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, #10090f 0%, rgba(16,9,15,.91) 26%, rgba(16,9,15,.5) 48%, rgba(16,9,15,.05) 76%),
+    linear-gradient(0deg, #10090f 0%, transparent 28%, rgba(16,9,15,.1) 72%, rgba(16,9,15,.42) 100%);
+}
+.spatial-journey .journey-coordinates,
+.spatial-journey .journey-title,
+.spatial-journey .journey-intro,
+.spatial-journey .journey-chapter,
+.spatial-journey .journey-bottom { z-index: 2; }
+.spatial-journey .journey-title { top: 22%; max-width: 780px; }
+.spatial-journey .journey-title > .eyebrow { letter-spacing: .22em; color: #f2a8c5; }
+.spatial-journey .journey-title h1 {
+  font-size: clamp(76px, 10.8vw, 156px); line-height: .84; letter-spacing: -.055em;
+  text-shadow: 0 8px 40px rgba(0,0,0,.18);
+}
+.spatial-journey .journey-title h1 > span {
+  font-size: clamp(28px, 3.2vw, 46px); line-height: 1.06; letter-spacing: -.025em;
+  margin-top: 25px; max-width: 440px; color: #fff4f7;
+}
+.spatial-journey .journey-intro { bottom: 19%; }
+.spatial-journey .journey-intro p { color: #f5e7ed; font-size: 15px; line-height: 1.8; }
+.spatial-journey .journey-primary-button { min-height: 50px; padding-inline: 24px; font-size: 10px; letter-spacing: .12em; }
+.spatial-journey .journey-coordinates { top: 128px; color: rgba(255,235,243,.72); letter-spacing: .16em; }
+.spatial-journey .journey-bottom { border-color: rgba(255,235,243,.25); color: rgba(255,235,243,.78); }
+.spatial-journey .journey-bottom .chapter-track { color: rgba(255,235,243,.62); }
+.spatial-journey .journey-chapter { bottom: 23%; }
+.spatial-journey .journey-chapter h2 { font-size: clamp(42px, 5vw, 70px); letter-spacing: -.045em; }
+.spatial-journey .journey-chapter .eyebrow { color: #f2a8c5; letter-spacing: .16em; }
+.spatial-journey .journey-chapter p { color: #f5e7ed; line-height: 1.9; }
+@keyframes pinkoHeroReveal { from { opacity: .25; transform: scale(1.09); } to { opacity: 1; transform: scale(1.035); } }
+@media (max-width: 760px) {
+  .spatial-journey { height: 230svh; }
+  .spatial-journey .scene-layer { inset: 0 !important; }
+  .spatial-journey .scene-fallback { object-position: 65% center; }
+  .spatial-journey .scene-layer::before {
+    background: linear-gradient(0deg, #10090f 0%, rgba(16,9,15,.8) 20%, rgba(16,9,15,.15) 56%, rgba(16,9,15,.38) 100%),
+      linear-gradient(90deg, rgba(16,9,15,.5), transparent 100%);
+  }
+  .spatial-journey .journey-title { top: 20%; left: 22px; right: 16px; }
+  .spatial-journey .journey-title h1 { font-size: clamp(60px, 17vw, 92px); line-height: .86; }
+  .spatial-journey .journey-title h1 > span { font-size: 26px; max-width: 280px; margin-top: 18px; }
+  .spatial-journey .journey-intro { left: 22px; bottom: 18%; }
+  .spatial-journey .journey-coordinates { display: none; }
+  .spatial-journey .journey-chapter { left: 22px; right: 22px; bottom: 22%; }
+}
