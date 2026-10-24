@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
   head: () =>
     pageHead(
       "Beauty, redefined",
-      "A cinematic world of self-expression. Discover the NOIR PINK beauty concept: nail art, hair, makeup and skincare.",
+      "A cinematic world of self-expression. Discover PINKO beauty: nail art, hair, makeup and skincare.",
     ),
   component: Index,
 });
