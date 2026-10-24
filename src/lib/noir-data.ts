@@ -14,9 +14,14 @@ export function comparisonSplit(clientX: number, left: number, width: number) {
   return width <= 0 ? 50 : Math.min(100, Math.max(0, ((clientX - left) / width) * 100));
 }
 export function migrateComparison(data: DemoState): DemoState {
-  const legacy = (data.before === skin && data.after === campaign) || (data.before === manicureBefore && data.after === manicureAfter) || (data.before === legacyMakeupBefore && data.after === legacyMakeupAfter);
-  return legacy
-    ? { ...data, before: makeupBefore, after: makeupAfter }
+  // The blonde comparison was the previous demo default. Switch saved demo
+  // sessions to the alternate makeup model as well as new visitors.
+  const previousDefault = data.before === makeupBefore && data.after === makeupAfter;
+  const olderDemo = (data.before === skin && data.after === campaign)
+    || (data.before === manicureBefore && data.after === manicureAfter)
+    || (data.before === legacyMakeupBefore && data.after === legacyMakeupAfter);
+  return previousDefault || olderDemo
+    ? { ...data, before: legacyMakeupBefore, after: legacyMakeupAfter }
     : data;
 }
 export const serviceSchema = z.object({
@@ -118,8 +123,8 @@ export const defaults = {
     tiktok: "",
   },
   accent: "#D694AE",
-  before: makeupBefore,
-  after: makeupAfter,
+  before: legacyMakeupBefore,
+  after: legacyMakeupAfter,
   story:
     "A space for self-expression. A different perspective on beauty. At NOIR PINK, creativity and considered detail come together to make every look distinctly yours.",
 };
