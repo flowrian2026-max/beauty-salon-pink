@@ -2283,3 +2283,56 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   .spatial-journey .journey-coordinates { display: none; }
   .spatial-journey .journey-chapter { left: 22px; right: 22px; bottom: 22%; }
 }
+
+
+/* PINKO Blossom Hero — progressive beauty, warm light, restrained depth */
+.spatial-journey {
+  background: #f7f0e8;
+  --journey-signature-shade: linear-gradient(90deg, rgba(247,240,232,.96) 0%, rgba(247,240,232,.84) 34%, rgba(247,240,232,.24) 68%, rgba(247,240,232,.05) 100%);
+}
+.journey-stage {
+  background: radial-gradient(ellipse at 76% 44%, rgba(232,182,193,.34) 0%, rgba(232,182,193,0) 43%), linear-gradient(135deg, #f7f0e8 0%, #f5dde2 55%, #e8d5c4 100%);
+  color: #682b43;
+}
+.scene-layer { overflow: hidden; }
+.scene-layer::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(ellipse at 74% 42%, rgba(255,244,232,.05) 0%, rgba(245,221,226,.2) 42%, rgba(247,240,232,.42) 100%), linear-gradient(90deg, rgba(247,240,232,.88) 0%, rgba(247,240,232,.68) 29%, rgba(247,240,232,.12) 59%, rgba(247,240,232,.08) 100%);
+  mix-blend-mode: screen;
+}
+.scene-fallback { opacity: .76; filter: saturate(.88) brightness(1.12) contrast(.96); transform: scale(1.025); animation: pinko-soft-drift 18s ease-in-out infinite alternate; }
+.journey-coordinates { color: #865567; letter-spacing: .16em; }
+.journey-title { color: #682b43; text-shadow: 0 1px 24px rgba(247,240,232,.22); }
+.journey-title h1 { letter-spacing: -.055em; }
+.journey-title h1 > span { color: #682b43; }
+.journey-intro p { color: #684b56; }
+.journey-intro .journey-primary-button { background: #682b43; border-color: #682b43; color: #fff7f1; box-shadow: 0 10px 28px rgba(104,43,67,.13); }
+.journey-intro .journey-primary-button:hover { background: #d58c9f; border-color: #d58c9f; color: #fffaf6; }
+.journey-chapter { color: #682b43; text-shadow: 0 1px 24px rgba(247,240,232,.42); }
+.journey-chapter p { color: #684b56; }
+.journey-chapter h2 em { color: #b66f85; }
+.journey-secondary-button { border-color: rgba(104,43,67,.45); color: #682b43; background: rgba(247,240,232,.32); }
+.journey-bottom, .signature-controls { color: #684b56; }
+.scroll-indicator { color: #682b43; }
+.journey-stage[data-chapter="2"] .scene-layer::after {
+  background: radial-gradient(ellipse at 72% 42%, rgba(255,240,228,.04) 0%, rgba(232,182,193,.12) 46%, rgba(247,240,232,.48) 100%), linear-gradient(90deg, rgba(247,240,232,.78) 0%, rgba(247,240,232,.38) 36%, rgba(247,240,232,.08) 100%);
+}
+.journey-stage[data-chapter="3"] .scene-layer::after {
+  background: radial-gradient(ellipse at 76% 46%, rgba(255,246,234,.26) 0%, rgba(245,221,226,.28) 48%, rgba(247,240,232,.56) 100%), linear-gradient(90deg, rgba(247,240,232,.58) 0%, rgba(247,240,232,.18) 42%, rgba(247,240,232,.16) 100%);
+}
+@keyframes pinko-soft-drift { from { transform: scale(1.025) translate3d(-.25%, 0, 0); } to { transform: scale(1.07) translate3d(.4%, -.3%, 0); } }
+@media (max-width: 760px) {
+  .spatial-journey { height: 235svh; }
+  .journey-stage { min-height: 600px; }
+  .scene-layer::after { background: linear-gradient(180deg, rgba(247,240,232,.28) 0%, rgba(247,240,232,.06) 34%, rgba(247,240,232,.58) 100%), linear-gradient(90deg, rgba(247,240,232,.54), rgba(247,240,232,.06)); }
+  .journey-title { top: 20%; left: 6%; }
+  .journey-title h1 { font-size: clamp(58px, 17vw, 88px); }
+  .journey-title h1 > span { font-size: clamp(25px, 7vw, 34px); }
+  .journey-intro { left: 6%; bottom: 125px; }
+  .journey-chapter { left: 6%; right: 6%; bottom: 17%; width: auto; }
+  .journey-chapter h2 { font-size: clamp(36px, 10vw, 48px); }
+  .journey-coordinates { top: 105px; left: 6%; right: 6%; font-size: 7px; gap: 12px; }
+  .journey-coordinates span:last-child { text-align: right; }
+  .journey-bottom { bottom: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { .scene-fallback { animation: none; transform: none; } }
