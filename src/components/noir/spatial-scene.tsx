@@ -3,7 +3,6 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import campaign from "@/assets/noir-campaign.jpg";
-import bridal from "@/assets/hair.jpg";
 import { shouldReduceQuality, spatialPose, type SpatialQuality } from "@/lib/noir-spatial";
 import { sceneColor } from "./spatial-geometry";
 
@@ -11,10 +10,8 @@ export type SceneProps = { progress: RefObject<number>; requestRender: RefObject
 
 function Portrait({ image, position, rotation, width, height }: { image: string; position: [number, number, number]; rotation: [number, number, number]; width: number; height: number }) {
   const texture = useTexture(image);
-  const ivory = useMemo(() => sceneColor("--foreground"), []);
   useEffect(() => { texture.colorSpace = THREE.SRGBColorSpace; }, [texture]);
   return <group position={position} rotation={rotation}>
-    <mesh position={[0, 0, -0.06]}><boxGeometry args={[width + 0.035, height + 0.035, 0.08]} /><meshStandardMaterial color={ivory} metalness={0.35} roughness={0.5} /></mesh>
     <mesh><planeGeometry args={[width, height]} /><meshBasicMaterial map={texture} toneMapped={false} side={THREE.DoubleSide} /></mesh>
   </group>;
 }
@@ -82,8 +79,7 @@ function Installation({ progress, requestRender, quality, active, onReady, onSlo
       <Lightformer position={[1, 3, -4]} rotation={[0, Math.PI, 0]} scale={[2, 5, 1]} intensity={3} color={palette.gold} />
     </Environment>
     <Suspense fallback={null}><group ref={photographs} position={[0, 0.15, 0.8]}>
-      <Portrait image={campaign} position={[-1.05, 0.2, -0.7]} rotation={[0, 0.035, 0]} width={5.8} height={4.0} />
-      <Portrait image={bridal} position={[2.65, -0.18, 0.05]} rotation={[0, -0.045, 0]} width={3.15} height={4.35} />
+      <Portrait image={campaign} position={[0, 0, -0.7]} rotation={[0, 0, 0]} width={8.4} height={5.8} />
     </group></Suspense>
   </>;
 }
