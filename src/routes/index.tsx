@@ -19,6 +19,23 @@ function Index() {
   const { m, t } = useT();
   return (
     <>
+      <div
+        role="status"
+        style={{
+          position: "relative",
+          zIndex: 9999,
+          padding: "18px 20px",
+          background: "#ff2d55",
+          color: "#ffffff",
+          textAlign: "center",
+          fontWeight: 800,
+          letterSpacing: "0.12em",
+          fontSize: "14px",
+          borderBottom: "4px solid #111111",
+        }}
+      >
+        GITHUB SYNC TEST · OCT 24 · IF YOU CAN SEE THIS, THE NEW CODE IS LOADED
+      </div>
       <SpatialJourney />
       <div className="ticker" aria-hidden="true">
         <span>{m("NAIL ART")}</span>
