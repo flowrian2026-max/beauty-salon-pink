@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight, Expand, Minimize } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import campaign from "@/assets/noir-campaign.jpg";
-import { spatialRendering, type SpatialQuality } from "@/lib/velora-spatial";
+import { spatialRendering, type SpatialQuality } from "@/lib/noir-spatial";
 const SpatialScene = lazy(() => import("./spatial-scene"));
 
 class SceneBoundary extends Component<{ children: ReactNode; onFailure: () => void }, { failed: boolean }> {
