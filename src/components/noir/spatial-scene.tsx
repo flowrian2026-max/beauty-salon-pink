@@ -52,7 +52,7 @@ function Installation({ progress, requestRender, finish, unfolded, quality, acti
     camera.position.lerp(target, damping); look.lerp(lookTarget, damping); camera.lookAt(look);
     if (signature.current) {
       const spread = unfolded ? 1 : pose.spread;
-      const scale = 0.82 - spread * 0.08;
+      const scale = size.width < 760 ? 1.16 - spread * 0.06 : 0.82 - spread * 0.08;
       target.setScalar(scale);
       settling ||= signature.current.scale.distanceToSquared(target) > 0.00001;
       signature.current.scale.lerp(target, damping);
