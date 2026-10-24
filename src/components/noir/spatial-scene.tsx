@@ -5,7 +5,7 @@ import * as THREE from "three";
 import campaign from "@/assets/noir-campaign.jpg";
 import bridal from "@/assets/hair.jpg";
 import { shouldReduceQuality, spatialPose, type SpatialQuality } from "@/lib/noir-spatial";
-import { studioTexture, sceneColor } from "./spatial-geometry";
+import { sceneColor } from "./spatial-geometry";
 
 export type SceneProps = { progress: RefObject<number>; requestRender: RefObject<(() => void) | null>; quality: SpatialQuality; active: boolean; onReady: () => void; onFailure: () => void; onSlow: () => void };
 
@@ -23,8 +23,8 @@ function Installation({ progress, requestRender, quality, active, onReady, onSlo
   const photographs = useRef<THREE.Group>(null);
   const { size, invalidate, gl } = useThree();
   const compact = quality === "compact";
-  const grain = useMemo(studioTexture, []);
-  const palette = useMemo(() => ({ background: sceneColor("--background"), ivory: sceneColor("--foreground"), gold: sceneColor("--soft-pink"), floor: sceneColor("--secondary") }), []);
+
+  const palette = useMemo(() => ({ background: sceneColor("--background"), ivory: sceneColor("--foreground"), gold: sceneColor("--soft-pink") }), []);
   const target = useMemo(() => new THREE.Vector3(), []);
   const look = useMemo(() => new THREE.Vector3(), []);
   const lookTarget = useMemo(() => new THREE.Vector3(), []);
@@ -33,7 +33,6 @@ function Installation({ progress, requestRender, quality, active, onReady, onSlo
   useEffect(() => { onReady(); }, [onReady]);
   useEffect(() => { requestRender.current = () => { if (active) invalidate(); }; if (active) invalidate(); return () => { requestRender.current = null; }; }, [active, invalidate, requestRender]);
   useEffect(() => { if (active) invalidate(); }, [quality, active, invalidate]);
-  useEffect(() => () => grain.dispose(), [grain]);
   useFrame(({ camera }, rawDelta) => {
     if (!active) return;
     const delta = Math.min(rawDelta, 0.05);
@@ -82,11 +81,10 @@ function Installation({ progress, requestRender, quality, active, onReady, onSlo
       <Lightformer position={[0, 6, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[7, 5, 1]} intensity={3} color={palette.ivory} />
       <Lightformer position={[1, 3, -4]} rotation={[0, Math.PI, 0]} scale={[2, 5, 1]} intensity={3} color={palette.gold} />
     </Environment>
-    <Suspense fallback={null}><group ref={photographs} position={[0, 0.1, -2.2]}>
-      <Portrait image={campaign} position={[-2.05, 0.65, -1.1]} rotation={[0, 0.055, 0]} width={3.55} height={2.45} />
-      <Portrait image={bridal} position={[2.0, 0.05, -0.4]} rotation={[0, -0.07, 0]} width={2.2} height={3.05} />
+    <Suspense fallback={null}><group ref={photographs} position={[0, 0.15, 0.8]}>
+      <Portrait image={campaign} position={[-1.05, 0.2, -0.7]} rotation={[0, 0.035, 0]} width={5.8} height={4.0} />
+      <Portrait image={bridal} position={[2.65, -0.18, 0.05]} rotation={[0, -0.045, 0]} width={3.15} height={4.35} />
     </group></Suspense>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2.15, 0]} receiveShadow><planeGeometry args={[60, 60]} /><meshStandardMaterial color={palette.floor} roughness={0.82} metalness={0.06} bumpMap={grain} bumpScale={0.014} /></mesh>
   </>;
 }
 
