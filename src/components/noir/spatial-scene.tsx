@@ -27,9 +27,9 @@ function SignatureRibbon({ progress, compact }: { progress: RefObject<number>; c
     const p = progress.current;
     const mobile = size.width < 760;
     const ease = 1 - Math.exp(-4.2 * Math.min(delta, 0.05));
-    const targetX = mobile ? 0.12 : 1.45 + Math.sin(p * Math.PI) * 0.24;
+    const targetX = mobile ? 0.12 : p < 0.3 ? 1.55 : p < 0.73 ? -1.35 : 1.5;
     const targetY = 0.02 + Math.sin(p * Math.PI * 2) * 0.12;
-    const targetZ = 2.05 + p * 0.52;
+    const targetZ = 2.05 + p * 0.72;
     ribbon.current.position.x += (targetX - ribbon.current.position.x) * ease;
     ribbon.current.position.y += (targetY - ribbon.current.position.y) * ease;
     ribbon.current.position.z += (targetZ - ribbon.current.position.z) * ease;
