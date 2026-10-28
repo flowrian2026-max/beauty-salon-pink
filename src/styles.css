@@ -2336,3 +2336,59 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   .journey-bottom { bottom: 22px; }
 }
 @media (prefers-reduced-motion: reduce) { .scene-fallback { animation: none; transform: none; } }
+
+
+/* Signature scroll experience — a full pinned scene with the 3D artwork in focus. */
+.site-header { min-height: 84px; padding-inline: 4.8%; gap: 28px; }
+.site-header.scrolled { min-height: 66px; }
+.wordmark { font-size: 28px; }
+.desktop-nav { gap: 24px; }
+.header-actions { gap: 14px; }
+.header-book { height: 36px !important; }
+.spatial-journey { height: 300svh; }
+.journey-stage { min-height: 0; }
+.scene-layer { z-index: 0; }
+.scene-layer canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
+.journey-stage::before { z-index: 1; }
+.journey-coordinates, .journey-title, .journey-intro, .journey-chapter, .signature-controls, .journey-bottom { z-index: 2; }
+.journey-stage { background: var(--background); }
+.scene-fallback { opacity: .46; filter: saturate(.92) contrast(1.04); }
+.journey-title h1 { font-size: clamp(76px, 8.3vw, 124px); }
+.journey-title h1 > span { font-size: clamp(28px, 2.8vw, 40px); }
+.journey-chapter { width: min(430px, 39vw); }
+.journey-chapter h2 { font-size: clamp(42px, 4.2vw, 60px); }
+.journey-bottom { bottom: 26px; }
+.chapter-track i { transition: width .35s ease, background .35s ease; }
+.journey-stage[data-chapter="1"] .track-one,
+.journey-stage[data-chapter="2"] .track-two,
+.journey-stage[data-chapter="3"] .track-three { text-shadow: 0 0 18px color-mix(in oklab, var(--primary) 50%, transparent); }
+.journey-stage[data-chapter="2"] .chapter-track i:first-of-type,
+.journey-stage[data-chapter="3"] .chapter-track i { background: var(--primary); }
+.spatial-journey .journey-chapter .eyebrow { color: var(--pinko-rose-light); letter-spacing: .15em; }
+.spatial-journey .journey-chapter p { color: color-mix(in oklab, var(--foreground) 76%, var(--primary)); line-height: 1.9; }
+@media (max-width: 760px) {
+  .site-header { min-height: 72px; padding-inline: 5%; }
+  .site-header.scrolled { min-height: 62px; }
+  .wordmark { font-size: 25px; }
+  .spatial-journey { height: 250svh; }
+  .scene-layer,
+  .journey-stage[data-chapter="2"] .scene-layer,
+  .journey-stage[data-chapter="3"] .scene-layer { inset: 0; }
+  .scene-fallback { opacity: .34; }
+  .spatial-journey .journey-stage::before {
+    background:
+      linear-gradient(180deg, rgba(9,6,12,.18), transparent 24%, rgba(9,6,12,.16) 52%, rgba(9,6,12,.78) 100%),
+      radial-gradient(ellipse at 66% 42%, transparent 0 18%, rgba(5,4,7,.3) 78%);
+  }
+  .journey-title { top: 15%; }
+  .journey-intro { bottom: 145px; }
+  .journey-chapter { bottom: 150px; }
+  .journey-title h1 { font-size: clamp(52px, 15vw, 68px); }
+  .journey-title h1 > span { font-size: 21px; }
+  .journey-chapter h2 { font-size: clamp(34px, 10vw, 42px); }
+  .signature-controls { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spatial-journey { height: auto; }
+  .journey-stage { position: relative; }
+}
