@@ -16,15 +16,25 @@ const stops: SpatialPose[] = [
 ];
 
 export function spatialPose(progress: number, mobile = false): SpatialPose {
-  const p = Math.max(0, Math.min(1, progress)) * 2;
-  const index = Math.min(1, Math.floor(p));
-  const a = stops[index] ?? stops[0];
-  const b = stops[index + 1] ?? stops[2];
-  if (!a || !b) return { position: [0, 0, 11], target: [0, 0, 0], spread: 0 };
-  const t = p - index;
-  // Minimum-jerk easing makes the camera travel feel intentional rather than like a jump cut.
+  const p = Math.max(0, Math.min(1, progress));
+  const first = stops[0];
+  const second = stops[1];
+  const third = stops[2];
+  if (!first || !second || !third) return { position: [0, 0, 11], target: [0, 0, 0], spread: 0 };
+
+  // Align the camera's two moves with the three on-screen scroll chapters.
+  const a = p < 0.3 ? first : second;
+  const b = p < 0.3 ? second : third;
+  const segmentStart = p < 0.3 ? 0 : 0.3;
+  const segmentEnd = p < 0.3 ? 0.3 : 0.73;
+  const rawT = p >= 0.73 ? 1 : (p - segmentStart) / (segmentEnd - segmentStart);
+  const t = Math.max(0, Math.min(1, rawT));
   const ease = t * t * t * (t * (t * 6 - 15) + 10);
-  const interpolate = (start: [number, number, number], end: [number, number, number]): [number, number, number] => [start[0] + (end[0] - start[0]) * ease, start[1] + (end[1] - start[1]) * ease, start[2] + (end[2] - start[2]) * ease];
+  const interpolate = (start: [number, number, number], end: [number, number, number]): [number, number, number] => [
+    start[0] + (end[0] - start[0]) * ease,
+    start[1] + (end[1] - start[1]) * ease,
+    start[2] + (end[2] - start[2]) * ease,
+  ];
   const position = interpolate(a.position, b.position);
   if (mobile) { position[0] *= 0.25; position[2] -= 1.2; }
   return { position, target: interpolate(a.target, b.target), spread: a.spread + (b.spread - a.spread) * ease };
