@@ -12,6 +12,7 @@ export async function recommendService(input: {
   goals: string;
   preferences: string;
   occasion: string;
+  language: "en" | "fa";
   services: { id: string; title: string; description: string }[];
 }) {
   const apiKey = process.env['LOVABLE_API_KEY'];
@@ -27,6 +28,7 @@ export async function recommendService(input: {
     system:
       "You are the NOIR PINK beauty concierge. Recommend exactly one service from the catalog using its exact id. " +
       "Never invent prices, durations, availability, credentials, results or medical/skin treatment claims. " +
+      "Write reason and inquiryMessage in the requested language only: English when the language is en, Persian (Farsi) when the language is fa. " +
       "reason: 1-2 confident editorial sentences addressed to the visitor. " +
       "inquiryMessage: a short first-person message (max 600 characters) the visitor can send to the salon describing their goals, preferences and occasion, asking the salon to confirm suitability and availability.",
     prompt: `Catalog:\n${catalog}\n\nGoals: ${input.goals}\nPreferences: ${input.preferences || "None"}\nOccasion: ${input.occasion || "None"}`,

@@ -13,7 +13,19 @@ import {
   businessEmail,
   inquiryEmail,
 } from "@/lib/noir-data";
+import { advisorInput } from "@/lib/advisor.functions";
 describe("NOIR PINK demo rules", () => {
+  const advisorBase = {
+    goals: "Glossy subtle pink nails for a wedding",
+    preferences: "",
+    occasion: "",
+    services: [{ id: "nails", title: "Nail Art", description: "Considered nail design" }],
+  };
+  it("defaults the advisor reply to English and accepts Persian", () => {
+    expect(advisorInput.parse(advisorBase).language).toBe("en");
+    expect(advisorInput.parse({ ...advisorBase, language: "fa" }).language).toBe("fa");
+    expect(advisorInput.safeParse({ ...advisorBase, language: "de" }).success).toBe(false);
+  });
   it("uses a matched manicure concept instead of unrelated skincare and portrait defaults", () => {
     expect(defaults.before).toBe(images.makeupBefore);
     expect(defaults.after).toBe(images.makeupAfter);

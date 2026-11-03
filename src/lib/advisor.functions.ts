@@ -5,6 +5,7 @@ export const advisorInput = z.object({
   goals: z.string().trim().min(5, "Tell us a little about your goals").max(600),
   preferences: z.string().trim().max(400),
   occasion: z.string().trim().max(200),
+  language: z.enum(["en", "fa"]).default("en"),
   services: z.array(z.object({ id: z.string().max(100), title: z.string().max(70), description: z.string().max(300) })).min(1).max(30),
 });
 
