@@ -58,7 +58,7 @@ function ServiceDetail() {
           <h1>{c(s.title)}</h1>
           <p>{c(s.description)}</p>
           <div className="service-hero-actions">
-            <Button asChild><Link to="/booking" search={{ service: s.id } as never}>{t("SEND AN INQUIRY", "ارسال درخواست")} <ArrowUpRight /></Link></Button>
+            <Button asChild><Link to="/booking" search={{ service: s.id }}>{t("SEND AN INQUIRY", "ارسال درخواست")} <ArrowUpRight /></Link></Button>
             <span className="service-meta"><span>{s.price || t("PRICING ON INQUIRY", "قیمت با استعلام")}</span>{s.duration && <span>{s.duration}</span>}</span>
           </div>
         </div>
