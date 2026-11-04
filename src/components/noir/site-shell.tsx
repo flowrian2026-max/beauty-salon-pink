@@ -151,6 +151,10 @@ export function SiteFooter() {
               {t(en, fa)}
             </Link>
           ))}
+        <Link to="/journal">{t("Journal", "ژورنال")}</Link>
+        <Link to="/gift-cards">{t("Gift cards", "کارت هدیه")}</Link>
+        <Link to="/faq">{t("FAQ", "پرسش‌ها")}</Link>
+        <Link to="/policies">{t("Policies", "قوانین")}</Link>
         <Link to="/booking">
           {t("Booking", "رزرو")} <ArrowUpRight size={13} />
         </Link>
