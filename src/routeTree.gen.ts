@@ -15,7 +15,11 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ExperienceRouteImport } from './routes/experience'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as GiftCardsRouteImport } from './routes/gift-cards'
+import { Route as JournalRouteImport } from './routes/journal'
+import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ServicesServiceIdRouteImport } from './routes/services_.$serviceId'
 
@@ -49,9 +53,29 @@ const ExperienceRoute = ExperienceRouteImport.update({
   path: '/experience',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GiftCardsRoute = GiftCardsRouteImport.update({
+  id: '/gift-cards',
+  path: '/gift-cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesRoute = PoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -72,7 +96,11 @@ export interface FileRoutesByFullPath {
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/gift-cards': typeof GiftCardsRoute
+  '/journal': typeof JournalRoute
+  '/policies': typeof PoliciesRoute
   '/services': typeof ServicesRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
 }
@@ -83,7 +111,11 @@ export interface FileRoutesByTo {
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/gift-cards': typeof GiftCardsRoute
+  '/journal': typeof JournalRoute
+  '/policies': typeof PoliciesRoute
   '/services': typeof ServicesRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
 }
@@ -95,7 +127,11 @@ export interface FileRoutesById {
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
+  '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/gift-cards': typeof GiftCardsRoute
+  '/journal': typeof JournalRoute
+  '/policies': typeof PoliciesRoute
   '/services': typeof ServicesRoute
   '/services_/$serviceId': typeof ServicesServiceIdRoute
 }
@@ -108,7 +144,11 @@ export interface FileRouteTypes {
     | '/booking'
     | '/contact'
     | '/experience'
+    | '/faq'
     | '/gallery'
+    | '/gift-cards'
+    | '/journal'
+    | '/policies'
     | '/services'
     | '/services/$serviceId'
   fileRoutesByTo: FileRoutesByTo
@@ -119,7 +159,11 @@ export interface FileRouteTypes {
     | '/booking'
     | '/contact'
     | '/experience'
+    | '/faq'
     | '/gallery'
+    | '/gift-cards'
+    | '/journal'
+    | '/policies'
     | '/services'
     | '/services/$serviceId'
   id:
@@ -130,7 +174,11 @@ export interface FileRouteTypes {
     | '/booking'
     | '/contact'
     | '/experience'
+    | '/faq'
     | '/gallery'
+    | '/gift-cards'
+    | '/journal'
+    | '/policies'
     | '/services'
     | '/services_/$serviceId'
   fileRoutesById: FileRoutesById
@@ -142,7 +190,11 @@ export interface RootRouteChildren {
   BookingRoute: typeof BookingRoute
   ContactRoute: typeof ContactRoute
   ExperienceRoute: typeof ExperienceRoute
+  FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
+  GiftCardsRoute: typeof GiftCardsRoute
+  JournalRoute: typeof JournalRoute
+  PoliciesRoute: typeof PoliciesRoute
   ServicesRoute: typeof ServicesRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
 }
@@ -191,11 +243,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExperienceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gallery': {
       id: '/gallery'
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gift-cards': {
+      id: '/gift-cards'
+      path: '/gift-cards'
+      fullPath: '/gift-cards'
+      preLoaderRoute: typeof GiftCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies': {
+      id: '/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof PoliciesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -222,7 +302,11 @@ const rootRouteChildren: RootRouteChildren = {
   BookingRoute: BookingRoute,
   ContactRoute: ContactRoute,
   ExperienceRoute: ExperienceRoute,
+  FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
+  GiftCardsRoute: GiftCardsRoute,
+  JournalRoute: JournalRoute,
+  PoliciesRoute: PoliciesRoute,
   ServicesRoute: ServicesRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
 }

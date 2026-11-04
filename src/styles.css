@@ -2427,3 +2427,12 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 @media (max-width: 900px) { .ritual-list { grid-template-columns: 1fr 1fr; } .ritual-list li:nth-child(2) { border-inline-end: 0; } }
 @media (max-width: 600px) { .ritual-list, .related-services { grid-template-columns: 1fr; } .ritual-list li { border-inline-end: 0; border-bottom: 1px solid var(--border); } }
 @media (prefers-reduced-motion: reduce) { .related-service img, .faq-item summary::after { transition: none; } }
+
+/* Info pages (journal, FAQ, gifting, policies) */
+.info-page { display: grid; gap: 2.5rem; }
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2.5rem 2rem; }
+.info-block { border-top: 1px solid var(--border); padding-top: 1.25rem; }
+.info-index { color: var(--primary); font-family: var(--font-display); letter-spacing: .2em; font-size: .8rem; }
+.info-block h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin: .6rem 0; }
+.info-block p { color: var(--muted-foreground); }
+.info-cta { justify-self: start; display: inline-flex; gap: .5rem; align-items: center; color: var(--primary); font-family: var(--font-display); letter-spacing: .15em; }
