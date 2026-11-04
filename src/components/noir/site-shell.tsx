@@ -16,8 +16,24 @@ export function LangSwitch() {
   const { lang, setLang } = useT();
   return (
     <div className="lang-switch" role="group" aria-label="Language / زبان">
-      <Button variant="ghost" size="sm" type="button" aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</Button>
-      <Button variant="ghost" size="sm" type="button" aria-pressed={lang === "fa"} onClick={() => setLang("fa")}>فا</Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        type="button"
+        aria-pressed={lang === "en"}
+        onClick={() => setLang("en")}
+      >
+        EN
+      </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        type="button"
+        aria-pressed={lang === "fa"}
+        onClick={() => setLang("fa")}
+      >
+        فا
+      </Button>
     </div>
   );
 }
@@ -36,13 +52,21 @@ export function SiteHeader() {
     const first = menu.current?.querySelector<HTMLAnchorElement>("a");
     first?.focus();
     function key(e: KeyboardEvent) {
-      if (e.key === "Escape") { setOpen(false); toggle.current?.focus(); }
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggle.current?.focus();
+      }
       if (e.key !== "Tab") return;
       const links = menu.current?.querySelectorAll<HTMLElement>("a, button");
       if (!links?.length) return;
       const last = links[links.length - 1];
-      if (e.shiftKey && document.activeElement === links[0]) { e.preventDefault(); last?.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); links[0]?.focus(); }
+      if (e.shiftKey && document.activeElement === links[0]) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        links[0]?.focus();
+      }
     }
     document.addEventListener("keydown", key);
     return () => document.removeEventListener("keydown", key);
@@ -55,7 +79,12 @@ export function SiteHeader() {
   }, []);
   return (
     <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
-      <Link to="/" className="wordmark" aria-label={t("NOIR PINK home", "صفحه‌ی اصلی نوآر پینک")} dir="ltr">
+      <Link
+        to="/"
+        className="wordmark"
+        aria-label={t("NOIR PINK home", "صفحه‌ی اصلی نوآر پینک")}
+        dir="ltr"
+      >
         NOIR<span>PINK</span>
         <i>®</i>
       </Link>
@@ -115,18 +144,36 @@ export function SiteFooter() {
       </Link>
       <p>{t("BEAUTY. ON YOUR OWN TERMS.", "زیبایی، به سبک خودتان.")}</p>
       <nav className="footer-nav" aria-label={t("Footer navigation", "منوی پایین صفحه")}>
-        {navigation.filter(([name]) => name !== "Experience").map(([en, fa, to]) => <Link key={to} to={to}>{t(en, fa)}</Link>)}
-        <Link to="/booking">{t("Booking", "رزرو")} <ArrowUpRight size={13} /></Link>
+        {navigation
+          .filter(([name]) => name !== "Experience")
+          .map(([en, fa, to]) => (
+            <Link key={to} to={to}>
+              {t(en, fa)}
+            </Link>
+          ))}
+        <Link to="/booking">
+          {t("Booking", "رزرو")} <ArrowUpRight size={13} />
+        </Link>
       </nav>
       <div className="footer-socials">
-        {(["instagram", "tiktok"] as const).map(key => {
+        {(["instagram", "tiktok"] as const).map((key) => {
           const url = safeSocial(data.contact[key]);
-          return url ? <a key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={`NOIR PINK ${key}`}>
-            {key === "instagram" ? <Instagram size={18} /> : "TIKTOK"}
-          </a> : null;
+          return url ? (
+            <a
+              key={key}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`NOIR PINK ${key}`}
+            >
+              {key === "instagram" ? <Instagram size={18} /> : "TIKTOK"}
+            </a>
+          ) : null;
         })}
       </div>
-      <small>© {new Date().getFullYear()} NOIR PINK · {t("CONCEPT EXPERIENCE", "تجربه‌ی مفهومی")}</small>
+      <small>
+        © {new Date().getFullYear()} NOIR PINK · {t("CONCEPT EXPERIENCE", "تجربه‌ی مفهومی")}
+      </small>
     </footer>
   );
 }
@@ -175,7 +222,8 @@ export function NextChapter() {
     <section className="next-chapter">
       <span className="eyebrow">{t("YOUR NEXT CHAPTER", "فصل بعدی شما")}</span>
       <h2>
-        {t("MAKE IT ", "این بار، ")}<em>{t("YOU.", "خودِ شما.")}</em>
+        {t("MAKE IT ", "این بار، ")}
+        <em>{t("YOU.", "خودِ شما.")}</em>
       </h2>
       <Button asChild>
         <Link to="/booking">

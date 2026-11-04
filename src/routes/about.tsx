@@ -16,7 +16,10 @@ function AboutPage() {
   const { t, c } = useT();
   return (
     <>
-      <Intro eyebrow={t("THE NOIR PINK POINT OF VIEW", "نگاه نوآر پینک")} title={t("BEYOND THE ORDINARY.", "فراتر از معمول.")} />
+      <Intro
+        eyebrow={t("THE NOIR PINK POINT OF VIEW", "نگاه نوآر پینک")}
+        title={t("BEYOND THE ORDINARY.", "فراتر از معمول.")}
+      />
       <section className="page-content story">
         <img
           className="story-image"
@@ -32,11 +35,15 @@ function AboutPage() {
           </div>
           <h2>
             {t("NOT A LOOK.", "نه فقط یک ظاهر؛")}
-            <br />{t("A FEELING.", "یک حس.")}
+            <br />
+            {t("A FEELING.", "یک حس.")}
           </h2>
           <p>{c(data.story)}</p>
           <p className="sample-note">
-            {t("Editable brand concept copy · AI-generated sample photography. The salon’s real story will be added here.", "متن مفهومی و قابل ویرایش · عکس‌های نمونه با هوش مصنوعی. داستان واقعی سالن اینجا اضافه می‌شود.")}
+            {t(
+              "Editable brand concept copy · AI-generated sample photography. The salon’s real story will be added here.",
+              "متن مفهومی و قابل ویرایش · عکس‌های نمونه با هوش مصنوعی. داستان واقعی سالن اینجا اضافه می‌شود.",
+            )}
           </p>
         </div>
       </section>

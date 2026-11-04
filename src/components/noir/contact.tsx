@@ -20,7 +20,13 @@ export function ContactContent() {
       return;
     }
     setErrors({});
-    setDraft(inquiryEmail(data.contact.email, t("NOIR PINK contact inquiry", "پیام به NOIR PINK"), `${m("Name")}: ${result.data.name}\n${m("Email")}: ${result.data.email}\n\n${result.data.message}`) || "");
+    setDraft(
+      inquiryEmail(
+        data.contact.email,
+        t("NOIR PINK contact inquiry", "پیام به NOIR PINK"),
+        `${m("Name")}: ${result.data.name}\n${m("Email")}: ${result.data.email}\n\n${result.data.message}`,
+      ) || "",
+    );
     setDone(true);
   }
   return (
@@ -37,7 +43,13 @@ export function ContactContent() {
           ].map(([k, v]) => (
             <div key={k}>
               <dt>{m(k)}</dt>
-              <dd>{k === "EMAIL" && recipient ? <a href={`mailto:${encodeURIComponent(recipient)}`}>{recipient}</a> : c(v ?? "")}</dd>
+              <dd>
+                {k === "EMAIL" && recipient ? (
+                  <a href={`mailto:${encodeURIComponent(recipient)}`}>{recipient}</a>
+                ) : (
+                  c(v ?? "")
+                )}
+              </dd>
             </div>
           ))}
         </dl>
@@ -53,21 +65,42 @@ export function ContactContent() {
             ) : null;
           })}
         </div>
-        {!recipient && <p className="sample-note">{m("Business contact details have not yet been supplied. Online delivery is unavailable.")}</p>}
+        {!recipient && (
+          <p className="sample-note">
+            {m(
+              "Business contact details have not yet been supplied. Online delivery is unavailable.",
+            )}
+          </p>
+        )}
       </aside>
       {done ? (
         <div className="status" role="status">
           <h2>{m(draft ? "YOUR EMAIL DRAFT IS READY." : "LOCAL MESSAGE PREVIEW.")}</h2>
           <p>
-            {m(draft ? "Open your email app and press Send to deliver your inquiry. Nothing is sent automatically." : "Your message was validated but not sent or stored. A business email is needed for delivery.")}
+            {m(
+              draft
+                ? "Open your email app and press Send to deliver your inquiry. Nothing is sent automatically."
+                : "Your message was validated but not sent or stored. A business email is needed for delivery.",
+            )}
           </p>
-          {draft && <Button asChild className="mt-5"><a href={draft}>{m("OPEN EMAIL INQUIRY")}<ArrowUpRight /></a></Button>}
-          <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>{m("WRITE ANOTHER MESSAGE")}<ArrowUpRight />
+          {draft && (
+            <Button asChild className="mt-5">
+              <a href={draft}>
+                {m("OPEN EMAIL INQUIRY")}
+                <ArrowUpRight />
+              </a>
+            </Button>
+          )}
+          <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>
+            {m("WRITE ANOTHER MESSAGE")}
+            <ArrowUpRight />
           </Button>
         </div>
       ) : (
         <form className="noir-form" noValidate onSubmit={submit}>
-          <label className="field">{m("YOUR NAME")}<input
+          <label className="field">
+            {m("YOUR NAME")}
+            <input
               name="name"
               required
               maxLength={100}
@@ -76,7 +109,9 @@ export function ContactContent() {
             />
             {errors["name"] && <span className="error-text">{m(errors["name"])}</span>}
           </label>
-          <label className="field">{m("EMAIL")}<input
+          <label className="field">
+            {m("EMAIL")}
+            <input
               name="email"
               type="email"
               required
@@ -86,7 +121,9 @@ export function ContactContent() {
             />
             {errors["email"] && <span className="error-text">{m(errors["email"])}</span>}
           </label>
-          <label className="field">{m("YOUR MESSAGE")}<textarea
+          <label className="field">
+            {m("YOUR MESSAGE")}
+            <textarea
               name="message"
               required
               maxLength={1000}
@@ -94,8 +131,16 @@ export function ContactContent() {
             />
             {errors["message"] && <span className="error-text">{m(errors["message"])}</span>}
           </label>
-          <p className="sample-note">{m(recipient ? "Review your email draft before sending from your email app." : "Local preview only. No business email is configured; messages cannot be delivered.")}</p>
-          <Button type="submit">{m("REVIEW YOUR MESSAGE")}<ArrowUpRight />
+          <p className="sample-note">
+            {m(
+              recipient
+                ? "Review your email draft before sending from your email app."
+                : "Local preview only. No business email is configured; messages cannot be delivered.",
+            )}
+          </p>
+          <Button type="submit">
+            {m("REVIEW YOUR MESSAGE")}
+            <ArrowUpRight />
           </Button>
         </form>
       )}

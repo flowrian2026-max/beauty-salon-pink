@@ -14,7 +14,10 @@ export function Comparison() {
   }
   return (
     <>
-      <div className={`comparison ${dragging ? "is-dragging" : ""}`} style={{ "--split": `${split}%` } as CSSProperties}>
+      <div
+        className={`comparison ${dragging ? "is-dragging" : ""}`}
+        style={{ "--split": `${split}%` } as CSSProperties}
+      >
         <img
           className="comparison-before"
           src={data.before}
@@ -26,7 +29,9 @@ export function Comparison() {
         <img
           className="comparison-after"
           src={data.after}
-          alt={m("After makeup \u2014 the same face with editorial pink makeup, replaceable concept image")}
+          alt={m(
+            "After makeup \u2014 the same face with editorial pink makeup, replaceable concept image",
+          )}
           width="1264"
           height="848"
           loading="lazy"
@@ -52,7 +57,9 @@ export function Comparison() {
             setDragging(true);
             move(e);
           }}
-          onPointerMove={(e) => { if (e.currentTarget.hasPointerCapture(e.pointerId)) move(e); }}
+          onPointerMove={(e) => {
+            if (e.currentTarget.hasPointerCapture(e.pointerId)) move(e);
+          }}
           onPointerUp={(e) => {
             if (e.currentTarget.hasPointerCapture(e.pointerId)) {
               move(e);
@@ -63,10 +70,17 @@ export function Comparison() {
           onPointerCancel={() => setDragging(false)}
           onLostPointerCapture={() => setDragging(false)}
           aria-label={m("Before and after image comparison")}
-          aria-valuetext={t(`${Math.round(split)}% before, ${Math.round(100 - split)}% after`, `${Math.round(split)}٪ قبل، ${Math.round(100 - split)}٪ بعد`)}
+          aria-valuetext={t(
+            `${Math.round(split)}% before, ${Math.round(100 - split)}% after`,
+            `${Math.round(split)}٪ قبل، ${Math.round(100 - split)}٪ بعد`,
+          )}
         />
       </div>
-      <p className="sample-note">{m("AI MAKEUP CONCEPT · Same face and scene, makeup-only edit. Not a real customer result. Both images are replaceable in Demo Admin.")}</p>
+      <p className="sample-note">
+        {m(
+          "AI MAKEUP CONCEPT · Same face and scene, makeup-only edit. Not a real customer result. Both images are replaceable in Demo Admin.",
+        )}
+      </p>
     </>
   );
 }

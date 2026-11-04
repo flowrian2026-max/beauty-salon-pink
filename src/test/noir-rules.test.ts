@@ -33,7 +33,11 @@ describe("NOIR PINK demo rules", () => {
   });
   it("upgrades the legacy mismatched pair without removing local bookings", () => {
     const old = { ...defaults, before: images.skin, after: images.campaign };
-    expect(migrateComparison(old)).toEqual({ ...old, before: images.makeupBefore, after: images.makeupAfter });
+    expect(migrateComparison(old)).toEqual({
+      ...old,
+      before: images.makeupBefore,
+      after: images.makeupAfter,
+    });
     const nails = { ...defaults, before: images.manicureBefore, after: images.manicureAfter };
     expect(migrateComparison(nails).before).toBe(images.makeupBefore);
   });
@@ -42,7 +46,11 @@ describe("NOIR PINK demo rules", () => {
     expect(migrateComparison(edited)).toBe(edited);
   });
   it("replaces the previous blonde default face with the new matched makeup pair", () => {
-    const previous = { ...defaults, before: images.legacyMakeupBefore, after: images.legacyMakeupAfter };
+    const previous = {
+      ...defaults,
+      before: images.legacyMakeupBefore,
+      after: images.legacyMakeupAfter,
+    };
     expect(migrateComparison(previous).before).toBe(images.makeupBefore);
     expect(migrateComparison(previous).after).toBe(images.makeupAfter);
     expect(images.makeupBefore).not.toBe(images.legacyMakeupBefore);
@@ -70,20 +78,28 @@ describe("NOIR PINK demo rules", () => {
     expect(bookingSchema.safeParse({ ...booking, date: "", time: "" }).success).toBe(true);
   });
   it("accepts an optional inquiry message", () => {
-    expect(bookingSchema.parse({ ...booking, message: "A pink manicure, please." }).message).toBe("A pink manicure, please.");
+    expect(bookingSchema.parse({ ...booking, message: "A pink manicure, please." }).message).toBe(
+      "A pink manicure, please.",
+    );
     expect(bookingSchema.parse(booking).message).toBe("");
   });
   it("rejects messages longer than 1000 characters", () => {
     expect(bookingSchema.safeParse({ ...booking, message: "x".repeat(1001) }).success).toBe(false);
   });
   it("has no invented default prices or durations", () => {
-    expect(defaults.services.every(s => s.price === "" && s.duration === "")).toBe(true);
+    expect(defaults.services.every((s) => s.price === "" && s.duration === "")).toBe(true);
   });
   it("removes legacy sample pricing while preserving edited pricing", () => {
-    const nails = defaults.services.find(s => s.id === "nails");
-    const hair = defaults.services.find(s => s.id === "hair");
+    const nails = defaults.services.find((s) => s.id === "nails");
+    const hair = defaults.services.find((s) => s.id === "hair");
     if (!nails || !hair) throw new Error("Required services missing");
-    const state = { ...defaults, services: [{ ...nails, price: "From 65", duration: "60–90 min" }, { ...hair, price: "120 SEK", duration: "80 min" }] };
+    const state = {
+      ...defaults,
+      services: [
+        { ...nails, price: "From 65", duration: "60–90 min" },
+        { ...hair, price: "120 SEK", duration: "80 min" },
+      ],
+    };
     const next = migrateDemo(state);
     expect(next.services[0]?.price).toBe("");
     expect(next.services[0]?.duration).toBe("");
@@ -96,7 +112,9 @@ describe("NOIR PINK demo rules", () => {
     expect(businessEmail("salon@example.com")).toBe("salon@example.com");
   });
   it("encodes email inquiry details rather than injecting email fields", () => {
-    expect(inquiryEmail("salon@example.com", "A & B", "Name: X\n&bcc=evil@example.com")).toBe("mailto:salon%40example.com?subject=A%20%26%20B&body=Name%3A%20X%0A%26bcc%3Devil%40example.com");
+    expect(inquiryEmail("salon@example.com", "A & B", "Name: X\n&bcc=evil@example.com")).toBe(
+      "mailto:salon%40example.com?subject=A%20%26%20B&body=Name%3A%20X%0A%26bcc%3Devil%40example.com",
+    );
   });
   it("rejects invalid contact email", () =>
     expect(

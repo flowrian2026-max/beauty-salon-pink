@@ -135,14 +135,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LangProvider>
-      <DemoProvider>
-        <SiteHeader />
-        <main>
-          <Outlet />
-        </main>
-        <SiteFooter />
-        <RevealObserver />
-      </DemoProvider>
+        <DemoProvider>
+          <SiteHeader />
+          <main>
+            <Outlet />
+          </main>
+          <SiteFooter />
+          <RevealObserver />
+        </DemoProvider>
       </LangProvider>
     </QueryClientProvider>
   );

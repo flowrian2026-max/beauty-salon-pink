@@ -59,15 +59,31 @@ export function Gallery() {
             onClick={() => setCurrent(i)}
             aria-label={t(`View ${g.title}`, `نمایش ${c(g.title)}`)}
           >
-            <img src={g.image} alt={c(g.title)} width="864" height="1104" loading="lazy" decoding="async" />
+            <img
+              src={g.image}
+              alt={c(g.title)}
+              width="864"
+              height="1104"
+              loading="lazy"
+              decoding="async"
+            />
             <span>
-              <small>{c(g.category)} / 0{i + 1}</small>{c(g.title)}
+              <small>
+                {c(g.category)} / 0{i + 1}
+              </small>
+              {c(g.title)}
             </span>
           </Button>
         ))}
       </div>
-      {items.length === 0 && <p className="sample-note">{m("No images in this collection yet.")}</p>}
-      <p className="sample-note">{m("AI-generated editorial concepts · Replaceable imagery, not customer results or salon work.")}</p>
+      {items.length === 0 && (
+        <p className="sample-note">{m("No images in this collection yet.")}</p>
+      )}
+      <p className="sample-note">
+        {m(
+          "AI-generated editorial concepts · Replaceable imagery, not customer results or salon work.",
+        )}
+      </p>
       <Dialog
         open={Boolean(selected)}
         onOpenChange={(v) => {
@@ -79,7 +95,17 @@ export function Gallery() {
           <DialogDescription>
             NOIR PINK · {c(selected?.category || "")} · {m("Concept photography")}
           </DialogDescription>
-          {selected && <img key={selected.id} className="lightbox-photo" src={selected.image} alt={c(selected.title)} width="864" height="1104" decoding="async" />}
+          {selected && (
+            <img
+              key={selected.id}
+              className="lightbox-photo"
+              src={selected.image}
+              alt={c(selected.title)}
+              width="864"
+              height="1104"
+              decoding="async"
+            />
+          )}
           <div className="lightbox-controls">
             <Button
               variant="outline"
@@ -92,7 +118,12 @@ export function Gallery() {
             <p>
               {current === null ? 0 : current + 1} / {items.length}
             </p>
-            <Button variant="outline" size="icon" aria-label={m("Next image")} onClick={() => move(1)}>
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label={m("Next image")}
+              onClick={() => move(1)}
+            >
               {fa ? <ArrowLeft /> : <ArrowRight />}
             </Button>
           </div>

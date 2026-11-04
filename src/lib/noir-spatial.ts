@@ -1,9 +1,28 @@
-export type SpatialPose = { position: [number, number, number]; target: [number, number, number]; spread: number };
+export type SpatialPose = {
+  position: [number, number, number];
+  target: [number, number, number];
+  spread: number;
+};
 export type SpatialQuality = "studio" | "compact";
-export type RenderingHints = { width: number; reduced: boolean; saveData?: boolean | undefined; cores?: number | undefined; memory?: number | undefined };
+export type RenderingHints = {
+  width: number;
+  reduced: boolean;
+  saveData?: boolean | undefined;
+  cores?: number | undefined;
+  memory?: number | undefined;
+};
 export function spatialRendering(hints: RenderingHints) {
-  const compact = hints.width <= 760 || hints.saveData || (hints.cores !== undefined && hints.cores <= 4) || (hints.memory !== undefined && hints.memory <= 4);
-  return { static: hints.reduced, quality: (compact ? "compact" : "studio") as SpatialQuality, dpr: compact ? 1 : 1.5, shadows: !compact };
+  const compact =
+    hints.width <= 760 ||
+    hints.saveData ||
+    (hints.cores !== undefined && hints.cores <= 4) ||
+    (hints.memory !== undefined && hints.memory <= 4);
+  return {
+    static: hints.reduced,
+    quality: (compact ? "compact" : "studio") as SpatialQuality,
+    dpr: compact ? 1 : 1.5,
+    shadows: !compact,
+  };
 }
 export function shouldReduceQuality(samples: number, elapsed: number) {
   return samples >= 60 && elapsed / samples > 0.04;
@@ -30,12 +49,22 @@ export function spatialPose(progress: number, mobile = false): SpatialPose {
   const rawT = p >= 0.73 ? 1 : (p - segmentStart) / (segmentEnd - segmentStart);
   const t = Math.max(0, Math.min(1, rawT));
   const ease = t * t * t * (t * (t * 6 - 15) + 10);
-  const interpolate = (start: [number, number, number], end: [number, number, number]): [number, number, number] => [
+  const interpolate = (
+    start: [number, number, number],
+    end: [number, number, number],
+  ): [number, number, number] => [
     start[0] + (end[0] - start[0]) * ease,
     start[1] + (end[1] - start[1]) * ease,
     start[2] + (end[2] - start[2]) * ease,
   ];
   const position = interpolate(a.position, b.position);
-  if (mobile) { position[0] *= 0.25; position[2] -= 1.2; }
-  return { position, target: interpolate(a.target, b.target), spread: a.spread + (b.spread - a.spread) * ease };
+  if (mobile) {
+    position[0] *= 0.25;
+    position[2] -= 1.2;
+  }
+  return {
+    position,
+    target: interpolate(a.target, b.target),
+    spread: a.spread + (b.spread - a.spread) * ease,
+  };
 }

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/booking")({
   head: () =>
     pageHead(
       "Book your experience",
-       "Review your NOIR PINK booking inquiry. Email handoff when contact details are configured; no appointment is automatically confirmed.",
+      "Review your NOIR PINK booking inquiry. Email handoff when contact details are configured; no appointment is automatically confirmed.",
     ),
   component: BookingPage,
 });
@@ -25,15 +25,38 @@ function BookingPage() {
       <div className="page-content form-layout">
         <aside>
           <h2>{m("YOUR NEXT EXPRESSION.")}</h2>
-          <p>{m("A considered moment. A fresh perspective. Choose the experience that feels like you.")}</p>
-          <p className="sample-note">{m("BY INQUIRY")}<br />
-            {m("Tell us what you have in mind. Preferred dates are requests, not reserved appointments.")} {m("Where a business email is supplied, you can send your inquiry from your email app.")} {m("Until then, this is a clearly labeled local preview.")}
+          <p>
+            {m(
+              "A considered moment. A fresh perspective. Choose the experience that feels like you.",
+            )}
+          </p>
+          <p className="sample-note">
+            {m("BY INQUIRY")}
+            <br />
+            {m(
+              "Tell us what you have in mind. Preferred dates are requests, not reserved appointments.",
+            )}{" "}
+            {m(
+              "Where a business email is supplied, you can send your inquiry from your email app.",
+            )}{" "}
+            {m("Until then, this is a clearly labeled local preview.")}
           </p>
         </aside>
         <div className="grid gap-10">
-          <BeautyAdvisor onApply={(s) => { setSuggestion((p) => ({ ...s, n: (p?.n ?? 0) + 1 })); requestAnimationFrame(() => document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth" })); }} />
+          <BeautyAdvisor
+            onApply={(s) => {
+              setSuggestion((p) => ({ ...s, n: (p?.n ?? 0) + 1 }));
+              requestAnimationFrame(() =>
+                document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth" }),
+              );
+            }}
+          />
           <div id="inquiry-form">
-            <BookingForm key={suggestion?.n ?? 0} initialService={suggestion?.serviceId ?? service} initialMessage={suggestion?.message} />
+            <BookingForm
+              key={suggestion?.n ?? 0}
+              initialService={suggestion?.serviceId ?? service}
+              initialMessage={suggestion?.message}
+            />
           </div>
         </div>
       </div>
