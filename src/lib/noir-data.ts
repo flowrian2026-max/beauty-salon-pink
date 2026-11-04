@@ -9,16 +9,28 @@ import legacyMakeupBefore from "@/assets/makeup-before.jpg";
 import legacyMakeupAfter from "@/assets/makeup-after.jpg";
 import makeupBefore from "@/assets/makeup-blonde-before.jpg";
 import makeupAfter from "@/assets/makeup-blonde-after.jpg";
-export const images = { campaign, nails, hair, skin, manicureBefore, manicureAfter, legacyMakeupBefore, legacyMakeupAfter, makeupBefore, makeupAfter };
+export const images = {
+  campaign,
+  nails,
+  hair,
+  skin,
+  manicureBefore,
+  manicureAfter,
+  legacyMakeupBefore,
+  legacyMakeupAfter,
+  makeupBefore,
+  makeupAfter,
+};
 export function comparisonSplit(clientX: number, left: number, width: number) {
   return width <= 0 ? 50 : Math.min(100, Math.max(0, ((clientX - left) / width) * 100));
 }
 export function migrateComparison(data: DemoState): DemoState {
   // Older demo sessions point at rejected or mismatched pairs. Move them to the
   // current matched makeup pair; never restore a rejected face as the default.
-  const olderDemo = (data.before === skin && data.after === campaign)
-    || (data.before === manicureBefore && data.after === manicureAfter)
-    || (data.before === legacyMakeupBefore && data.after === legacyMakeupAfter);
+  const olderDemo =
+    (data.before === skin && data.after === campaign) ||
+    (data.before === manicureBefore && data.after === manicureAfter) ||
+    (data.before === legacyMakeupBefore && data.after === legacyMakeupAfter);
   return olderDemo ? { ...data, before: makeupBefore, after: makeupAfter } : data;
 }
 export const serviceSchema = z.object({
@@ -147,11 +159,20 @@ export function migrateDemo(data: DemoState): DemoState {
   const legacy = ["From 65", "From 85", "From 75", "From 90", "From 40", "From 50"];
   const durations = ["60–90 min", "60–120 min", "60 min", "75 min", "45 min", "60 min"];
   const ids = ["nails", "hair", "makeup", "skin", "manicure", "pedicure"];
-  return migrateComparison({ ...data, accent: data.accent === "#FF2D95" ? defaults.accent : data.accent,
-    services: data.services.map(s => {
+  return migrateComparison({
+    ...data,
+    accent: data.accent === "#FF2D95" ? defaults.accent : data.accent,
+    services: data.services.map((s) => {
       const i = ids.indexOf(s.id);
-      return i >= 0 ? { ...s, price: s.price === legacy[i] ? "" : s.price, duration: s.duration === durations[i] ? "" : s.duration } : s;
-    }) });
+      return i >= 0
+        ? {
+            ...s,
+            price: s.price === legacy[i] ? "" : s.price,
+            duration: s.duration === durations[i] ? "" : s.duration,
+          }
+        : s;
+    }),
+  });
 }
 export function businessEmail(value: string) {
   const parsed = z.string().trim().email().max(255).safeParse(value);

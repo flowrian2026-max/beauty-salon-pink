@@ -22,7 +22,15 @@ export function Services({ preview = false }: { preview?: boolean }) {
               <span className="service-number">0{i + 1} /</span>
             </div>
             <div className="service-caption">
-              <h3><Link to="/services/$serviceId" params={{ serviceId: s.id }} className="service-link">{c(s.title)}</Link></h3>
+              <h3>
+                <Link
+                  to="/services/$serviceId"
+                  params={{ serviceId: s.id }}
+                  className="service-link"
+                >
+                  {c(s.title)}
+                </Link>
+              </h3>
               <ArrowUpRight size={23} className="text-primary" />
             </div>
             <p>{c(s.description)}</p>
@@ -35,7 +43,10 @@ export function Services({ preview = false }: { preview?: boolean }) {
         ))}
       </div>
       <p className="sample-note">
-        {t("AI-generated concept photography. Service details and availability are confirmed on inquiry.", "عکس‌های مفهومی ساخته‌شده با هوش مصنوعی. جزئیات و زمان خدمات هنگام استعلام تأیید می‌شود.")}
+        {t(
+          "AI-generated concept photography. Service details and availability are confirmed on inquiry.",
+          "عکس‌های مفهومی ساخته‌شده با هوش مصنوعی. جزئیات و زمان خدمات هنگام استعلام تأیید می‌شود.",
+        )}
       </p>
     </>
   );

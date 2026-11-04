@@ -15,14 +15,16 @@ export async function recommendService(input: {
   language: "en" | "fa";
   services: { id: string; title: string; description: string }[];
 }) {
-  const apiKey = process.env['LOVABLE_API_KEY'];
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("AI advisor is not configured.");
   const provider = createOpenAI({
     baseURL: "https://ai.gateway.lovable.dev/v1",
     apiKey,
     headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
   });
-  const catalog = input.services.map((s) => `- id: ${s.id} | ${s.title}: ${s.description}`).join("\n");
+  const catalog = input.services
+    .map((s) => `- id: ${s.id} | ${s.title}: ${s.description}`)
+    .join("\n");
   const result = streamText({
     model: provider.responses("openai/gpt-6-astra"),
     system:
@@ -35,10 +37,17 @@ export async function recommendService(input: {
     output: Output.object({ schema: recommendationSchema }),
     maxRetries: 0,
     providerOptions: {
-      openai: { forceReasoning: true, reasoningEffort: "low", reasoningSummary: "auto", store: false, include: ["reasoning.encrypted_content"] },
+      openai: {
+        forceReasoning: true,
+        reasoningEffort: "low",
+        reasoningSummary: "auto",
+        store: false,
+        include: ["reasoning.encrypted_content"],
+      },
     },
   });
   const out = await result.output;
-  if (!input.services.some((s) => s.id === out.serviceId)) throw new Error("No matching service was recommended. Please try again.");
+  if (!input.services.some((s) => s.id === out.serviceId))
+    throw new Error("No matching service was recommended. Please try again.");
   return { ...out, inquiryMessage: out.inquiryMessage.slice(0, 1000) };
 }

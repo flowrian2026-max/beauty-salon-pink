@@ -1948,6 +1948,13 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   margin: -1px 0 34px;
   background: linear-gradient(90deg, transparent, rgba(244,183,209,.26), transparent);
 }
+/* The transformation section keeps its own absolutely positioned hairline; keep it
+   inside the viewport so it cannot create sideways scrolling. */
+.transformation-section::before {
+  width: auto;
+  left: 5%;
+  right: 5%;
+}
 .section-top h2 {
   letter-spacing: -.055em;
   text-wrap: balance;

@@ -18,7 +18,10 @@ function GalleryPage() {
       <Intro
         eyebrow={t("THE NOIR PINK EDIT", "گزیده‌ی نوآر پینک")}
         title={t("EXPRESSION. UNFILTERED.", "بیان، بی‌فیلتر.")}
-        copy={t("A visual world where individuality takes the spotlight.", "دنیایی تصویری که فردیت در مرکز آن است.")}
+        copy={t(
+          "A visual world where individuality takes the spotlight.",
+          "دنیایی تصویری که فردیت در مرکز آن است.",
+        )}
       />
       <div className="page-content">
         <Gallery />

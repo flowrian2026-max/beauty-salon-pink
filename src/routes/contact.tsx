@@ -15,7 +15,10 @@ function ContactPage() {
   const { t } = useT();
   return (
     <>
-      <Intro eyebrow={t("START A CONVERSATION", "گفت‌وگو را شروع کنید")} title={t("YOUR WORLD. OUR CANVAS.", "دنیای شما، بوم ما.")} />
+      <Intro
+        eyebrow={t("START A CONVERSATION", "گفت‌وگو را شروع کنید")}
+        title={t("YOUR WORLD. OUR CANVAS.", "دنیای شما، بوم ما.")}
+      />
       <div className="page-content">
         <ContactContent />
       </div>

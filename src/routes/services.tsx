@@ -18,7 +18,10 @@ function ServicesPage() {
       <Intro
         eyebrow={t("PRECISION MEETS PERSONALITY", "دقت در کنار شخصیت")}
         title={t("THE ART OF TRANSFORMATION.", "هنر دگرگونی.")}
-        copy={t("Considered rituals. Uncompromising detail. A new way to express who you are.", "آیین‌هایی سنجیده، جزئیاتی بی‌نقص، راهی تازه برای بیان خودتان.")}
+        copy={t(
+          "Considered rituals. Uncompromising detail. A new way to express who you are.",
+          "آیین‌هایی سنجیده، جزئیاتی بی‌نقص، راهی تازه برای بیان خودتان.",
+        )}
       />
       <div className="page-content">
         <Services />
