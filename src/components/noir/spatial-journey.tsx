@@ -1,76 +1,26 @@
-import {
-  Component,
-  lazy,
-  Suspense,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import campaign from "@/assets/noir-campaign.jpg";
-import { spatialRendering, type SpatialQuality } from "@/lib/noir-spatial";
-const SpatialScene = lazy(() => import("./spatial-scene"));
-
-class SceneBoundary extends Component<
-  { children: ReactNode; onFailure: () => void },
-  { failed: boolean }
-> {
-  override state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  override componentDidCatch() {
-    this.props.onFailure();
-  }
-  override render() {
-    return this.state.failed ? null : this.props.children;
-  }
-}
+import heroVideo from "@/assets/hero-portrait.mp4.asset.json";
+import heroPoster from "@/assets/hero-poster.jpg.asset.json";
 
 export function SpatialJourney() {
   const section = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const progress = useRef(0);
-  const requestRender = useRef<(() => void) | null>(null);
-  const [mounted, setMounted] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const [active, setActive] = useState(true);
   const [reduced, setReduced] = useState(false);
-  const [quality, setQuality] = useState<SpatialQuality>("compact");
-  const [degraded, setDegraded] = useState(false);
-  const onReady = useCallback(() => setReady(true), []);
-  const onFailure = useCallback(() => setFailed(true), []);
-  const onSlow = useCallback(() => setDegraded(true), []);
+
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const device = navigator as Navigator & {
-      deviceMemory?: number;
-      connection?: { saveData?: boolean };
-    };
-    const preference = () => {
-      setReduced(media.matches);
-      setReady(false);
-      update();
-    };
+    const preference = () => setReduced(media.matches);
+    preference();
+    media.addEventListener("change", preference);
     let frame = 0;
     const update = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         if (!section.current || !stage.current) return;
-        setQuality(
-          spatialRendering({
-            width: window.innerWidth,
-            reduced: media.matches,
-            cores: navigator.hardwareConcurrency,
-            memory: device.deviceMemory,
-            saveData: device.connection?.saveData,
-          }).quality,
-        );
         const bounds = section.current.getBoundingClientRect();
         progress.current = Math.max(
           0,
@@ -79,69 +29,49 @@ export function SpatialJourney() {
         stage.current.style.setProperty("--journey-progress", String(progress.current));
         const chapter = progress.current < 0.3 ? "1" : progress.current < 0.73 ? "2" : "3";
         stage.current.dataset["chapter"] = media.matches ? "1" : chapter;
-        requestRender.current?.();
       });
     };
-    preference();
-    setMounted(true);
-    media.addEventListener("change", preference);
-    let intersecting = true;
-    const visibility = () => setActive(intersecting && !document.hidden);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        intersecting = Boolean(entries[0]?.isIntersecting);
-        visibility();
-      },
-      { rootMargin: "100px" },
-    );
-    if (section.current) observer.observe(section.current);
     update();
     window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
-    document.addEventListener("visibilitychange", visibility);
     return () => {
       media.removeEventListener("change", preference);
-      observer.disconnect();
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
-      document.removeEventListener("visibilitychange", visibility);
     };
   }, []);
-  const still = reduced || failed;
-  const effectiveQuality = degraded ? "compact" : quality;
+
   return (
     <section
       ref={section}
-      className={`spatial-journey ${still ? "journey-static" : ""}`}
-      data-rendering={still ? "static" : effectiveQuality}
+      className={`spatial-journey ${reduced ? "journey-static" : ""}`}
       aria-label="PINKO signature beauty journey"
     >
       <div ref={stage} className="journey-stage" data-chapter="1">
         <div className="scene-layer" aria-hidden="true">
-          <img
-            className="scene-fallback"
-            src={campaign}
-            width={1920}
-            height={1280}
-            alt=""
-            fetchPriority="high"
-          />
-          {mounted && !still && (
-            <SceneBoundary onFailure={onFailure}>
-              <Suspense fallback={null}>
-                <SpatialScene
-                  progress={progress}
-                  quality={effectiveQuality}
-                  requestRender={requestRender}
-                  active={active}
-                  onReady={onReady}
-                  onFailure={onFailure}
-                  onSlow={onSlow}
-                />
-              </Suspense>
-            </SceneBoundary>
+          {reduced ? (
+            <img
+              className="scene-fallback"
+              src={heroPoster.url}
+              width={720}
+              height={1280}
+              alt=""
+              fetchPriority="high"
+            />
+          ) : (
+            <video
+              className="scene-video"
+              src={heroVideo.url}
+              poster={heroPoster.url}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
           )}
+          <div className="scene-shade" />
         </div>
         <div className="journey-coordinates" aria-hidden="true">
           <span>PINKO / THE SIGNATURE EXPERIENCE</span>
@@ -196,7 +126,7 @@ export function SpatialJourney() {
             </Link>
           </Button>
         </div>
-        {!still && (
+        {!reduced && (
           <div className="signature-controls" aria-hidden="true">
             <span className="finish-name">PINKO / BEAUTY STUDY</span>
             <span className="control-rule" />
