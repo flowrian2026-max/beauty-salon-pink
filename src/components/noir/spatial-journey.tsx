@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/lib/i18n";
 import heroVideo from "@/assets/hero-portrait.mp4.asset.json";
 import heroPoster from "@/assets/hero-poster.jpg.asset.json";
 
 export function SpatialJourney() {
+  const { t } = useT();
   const section = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const progress = useRef(0);
@@ -46,7 +48,7 @@ export function SpatialJourney() {
     <section
       ref={section}
       className={`spatial-journey ${reduced ? "journey-static" : ""}`}
-      aria-label="PINKO signature beauty journey"
+      aria-label={t("PINKO signature beauty journey", "تجربهٔ زیبایی پینکو")}
     >
       <div ref={stage} className="journey-stage" data-chapter="1">
         <div className="scene-layer" aria-hidden="true">
@@ -74,69 +76,73 @@ export function SpatialJourney() {
           <div className="scene-shade" />
         </div>
         <div className="journey-coordinates" aria-hidden="true">
-          <span>PINKO / THE SIGNATURE EXPERIENCE</span>
-          <span>BEAUTY / FORM / SELF-EXPRESSION</span>
+          <span>{t("PINKO / THE SIGNATURE EXPERIENCE", "پینکو / تجربهٔ امضادار")}</span>
+          <span>{t("BEAUTY / FORM / SELF-EXPRESSION", "زیبایی / فرم / بیان خود")}</span>
         </div>
         <div className="journey-title">
-          <span className="eyebrow">PINKO · BEAUTY STUDIO</span>
+          <span className="eyebrow">{t("PINKO · BEAUTY STUDIO", "پینکو · استودیو زیبایی")}</span>
           <h1>
             PINKO
             <span>
-              BEAUTY,
+              {t("BEAUTY,", "زیبایی،")}
               <br />
-              REDEFINED.
+              {t("REDEFINED.", "با تعریفی تازه.")}
             </span>
           </h1>
         </div>
         <div className="journey-intro">
           <p>
-            Beauty as an art.
+            {t("Beauty as an art.", "زیبایی به‌مثابه هنر.")}
             <br />
-            Self-expression as a signature.
+            {t("Self-expression as a signature.", "بیان خود، به‌جای امضا.")}
           </p>
           <Button variant="default" className="journey-primary-button" asChild>
             <Link to="/services">
-              EXPLORE THE WORK <ArrowUpRight />
+              {t("EXPLORE THE WORK", "مشاهدهٔ نمونه‌کارها")} <ArrowUpRight />
             </Link>
           </Button>
         </div>
         <div className="journey-chapter journey-chapter-two">
-          <span className="eyebrow">01 — BEAUTY ON YOUR TERMS</span>
+          <span className="eyebrow">{t("01 — BEAUTY ON YOUR TERMS", "۰۱ — زیبایی به سبک خودتان")}</span>
           <h2>
-            Not a standard.
+            {t("Not a standard.", "نه یک قالب.")}
             <br />
-            <em>Your signature.</em>
+            <em>{t("Your signature.", "امضای خودتان.")}</em>
           </h2>
           <p>
-            Beauty is not a formula.
+            {t("Beauty is not a formula.", "زیبایی یک فرمول نیست.")}
             <br />
-            It is your own expression.
+            {t("It is your own expression.", "بیان خودِ شماست.")}
           </p>
         </div>
         <div className="journey-chapter journey-chapter-three">
-          <span className="eyebrow">02 — EVERY DETAIL, YOURS</span>
+          <span className="eyebrow">{t("02 — EVERY DETAIL, YOURS", "۰۲ — هر جزئیات، مال شما")}</span>
           <h2>
-            Every detail.
+            {t("Every detail.", "هر جزئیات.")}
             <br />
-            <em>A new dimension.</em>
+            <em>{t("A new dimension.", "بُعدی تازه.")}</em>
           </h2>
           <Button variant="outline" className="journey-secondary-button" asChild>
             <Link to="/services">
-              ENTER THE COLLECTION <ArrowUpRight />
+              {t("ENTER THE COLLECTION", "ورود به مجموعه")} <ArrowUpRight />
             </Link>
           </Button>
         </div>
         {!reduced && (
           <div className="signature-controls" aria-hidden="true">
-            <span className="finish-name">PINKO / BEAUTY STUDY</span>
+            <span className="finish-name">{t("PINKO / BEAUTY STUDY", "پینکو / مطالعهٔ زیبایی")}</span>
             <span className="control-rule" />
             <span className="finish-name">01 — 03</span>
           </div>
         )}
         <div className="journey-bottom">
-          <a href="#services" className="scroll-indicator" aria-label="Scroll to services">
+          <a
+            href="#services"
+            className="scroll-indicator"
+            aria-label={t("Scroll to services", "رفتن به خدمات")}
+          >
             <ArrowDown size={18} />
-            <span>BEYOND THE SURFACE</span>
+            <span>{t("BEYOND THE SURFACE", "فراتر از ظاهر")}</span>
           </a>
           <div className="chapter-track" aria-hidden="true">
             <span className="track-one">01</span>
@@ -145,7 +151,7 @@ export function SpatialJourney() {
             <i />
             <span className="track-three">03</span>
           </div>
-          <span className="journey-edition">PINKO / STUDIO EXPERIENCE</span>
+          <span className="journey-edition">{t("PINKO / STUDIO EXPERIENCE", "پینکو / تجربهٔ استودیو")}</span>
         </div>
       </div>
     </section>
