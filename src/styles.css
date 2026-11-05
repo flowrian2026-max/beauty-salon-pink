@@ -2454,3 +2454,4 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
     linear-gradient(0deg, color-mix(in oklab, var(--background) 80%, transparent) 0%, transparent 36%);
 }
 .spatial-journey:not(.journey-static) .scene-layer { inset: 0; }
+.scene-video { filter: brightness(0.62) saturate(1.08) contrast(1.04); }
