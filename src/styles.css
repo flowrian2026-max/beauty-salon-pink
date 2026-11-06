@@ -2477,3 +2477,13 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 .spatial-journey:not(.journey-static) .journey-chapter h2 em { color: var(--soft-pink); }
 .spatial-journey:not(.journey-static) .journey-secondary-button { color: var(--foreground); border-color: color-mix(in oklab, var(--foreground) 50%, transparent); background: rgba(8,6,9,.35); }
 .spatial-journey:not(.journey-static) .scene-layer::before { content: none; }
+
+/* Hero text: keep off the face, no panels */
+.spatial-journey .journey-chapter { padding: 0; border: 0; background: none; backdrop-filter: none; text-shadow: 0 2px 18px rgba(0,0,0,.75); }
+@media (max-width: 760px) {
+  .spatial-journey:not(.journey-static) .journey-title { top: auto; bottom: 265px; }
+  .spatial-journey:not(.journey-static) .journey-title h1 { font-size: clamp(48px, 13vw, 72px); }
+  .spatial-journey:not(.journey-static) .journey-intro { bottom: 100px; }
+  .spatial-journey:not(.journey-static) .journey-intro p { margin-bottom: 12px; }
+  .spatial-journey:not(.journey-static) .journey-chapter { bottom: 110px; }
+}
