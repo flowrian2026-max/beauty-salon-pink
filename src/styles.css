@@ -2455,3 +2455,25 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 }
 .spatial-journey:not(.journey-static) .scene-layer { inset: 0; }
 .scene-video { filter: brightness(0.88) saturate(1.05); }
+
+/* Hero video clarity — remove the cream veil so the footage shows at full strength */
+.spatial-journey:not(.journey-static) .scene-layer::after { content: none; }
+.spatial-journey:not(.journey-static) .journey-stage::before { mix-blend-mode: normal; background: none; }
+.spatial-journey:not(.journey-static) .scene-video { filter: none; }
+.spatial-journey:not(.journey-static) .scene-shade {
+  background:
+    linear-gradient(180deg, rgba(8,6,9,.35) 0%, transparent 22%, transparent 58%, rgba(8,6,9,.7) 100%);
+}
+.spatial-journey:not(.journey-static) .journey-title,
+.spatial-journey:not(.journey-static) .journey-title h1 > span,
+.spatial-journey:not(.journey-static) .journey-chapter,
+.spatial-journey:not(.journey-static) .journey-intro p,
+.spatial-journey:not(.journey-static) .journey-chapter p,
+.spatial-journey:not(.journey-static) .journey-bottom,
+.spatial-journey:not(.journey-static) .scroll-indicator { color: var(--foreground); text-shadow: 0 2px 18px rgba(0,0,0,.55); }
+.spatial-journey:not(.journey-static) .journey-title h1 { color: var(--primary); text-shadow: 0 4px 30px rgba(0,0,0,.45); }
+.spatial-journey:not(.journey-static) .journey-title > .eyebrow,
+.spatial-journey:not(.journey-static) .journey-coordinates,
+.spatial-journey:not(.journey-static) .journey-chapter h2 em { color: var(--soft-pink); }
+.spatial-journey:not(.journey-static) .journey-secondary-button { color: var(--foreground); border-color: color-mix(in oklab, var(--foreground) 50%, transparent); background: rgba(8,6,9,.35); }
+.spatial-journey:not(.journey-static) .scene-layer::before { content: none; }
