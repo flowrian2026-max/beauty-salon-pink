@@ -56,8 +56,8 @@ export function SpatialJourney() {
             <img
               className="scene-fallback"
               src={heroPoster.url}
-              width={720}
-              height={1280}
+              width={1344}
+              height={768}
               alt=""
               fetchPriority="high"
             />
