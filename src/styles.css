@@ -2476,3 +2476,4 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 .spatial-journey:not(.journey-static) .journey-coordinates,
 .spatial-journey:not(.journey-static) .journey-chapter h2 em { color: var(--soft-pink); }
 .spatial-journey:not(.journey-static) .journey-secondary-button { color: var(--foreground); border-color: color-mix(in oklab, var(--foreground) 50%, transparent); background: rgba(8,6,9,.35); }
+.spatial-journey:not(.journey-static) .scene-layer::before { content: none; }
