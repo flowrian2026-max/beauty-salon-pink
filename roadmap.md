@@ -1,7 +1,7 @@
 # NOIR PINK — launch readiness
 
 ## Current video update
-- [ ] Replace the hero with the latest uploaded video, retain slower playback, and verify it renders.
+- [x] Replace the hero with the latest uploaded video, retain slower playback, and verify it renders in Persian on mobile.
 
 ## Implemented in the current codebase (needs visual regression check)
 - [x] Persian/English language switch with local preference persistence.
