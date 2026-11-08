@@ -152,6 +152,8 @@ export function SiteFooter() {
             </Link>
           ))}
         <Link to="/journal">{t("Journal", "ژورنال")}</Link>
+        <Link to="/consultation">{t("Consultation", "مشاورهٔ شخصی")}</Link>
+        <Link to="/occasions">{t("Occasions", "مناسبت‌ها")}</Link>
         <Link to="/gift-cards">{t("Gift cards", "کارت هدیه")}</Link>
         <Link to="/faq">{t("FAQ", "پرسش‌ها")}</Link>
         <Link to="/policies">{t("Policies", "قوانین")}</Link>

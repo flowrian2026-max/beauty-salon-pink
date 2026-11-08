@@ -2479,6 +2479,23 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 .spatial-journey:not(.journey-static) .scene-layer::before { content: none; }
 
 /* Hero text: keep off the face, no panels */
+.service-category-nav { display: flex; flex-wrap: wrap; gap: .5rem; padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
+.consultation-entry { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border); display: grid; gap: 2rem; }
+.consultation-entry h2 { font-family: var(--font-display); font-size: 2rem; }
+.consultation-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 4rem; align-items: start; }
+.consultation-photo { margin: 0; position: sticky; top: 2rem; }
+.consultation-photo img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
+.consultation-photo figcaption { font-size: .7rem; color: var(--muted-foreground); padding-top: 1rem; }
+.consultation-fields { display: grid; gap: 2rem; min-width: 0; }
+.consultation-fields fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.consultation-fields legend { font-size: 1.2rem; margin-bottom: 1rem; }
+.consultation-fields legend span { color: var(--primary); margin-inline-end: .8rem; }
+.consultation-options { display: flex; flex-wrap: wrap; gap: .6rem; }
+.consultation-summary { border-top: 1px solid var(--border); padding-top: 2rem; display: grid; gap: 1rem; justify-items: start; }
+.consultation-summary p { overflow-wrap: anywhere; }
+.consultation-summary h2 { font-family: var(--font-display); font-size: 1.8rem; }
+.consultation-preparation { margin-top: 2rem; }
+@media (max-width: 760px) { .consultation-layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; } .consultation-photo { position: relative; top: auto; } .consultation-photo img { aspect-ratio: 4/3; } }
 .spatial-journey .journey-chapter { padding: 0; border: 0; background: none; backdrop-filter: none; text-shadow: 0 2px 18px rgba(0,0,0,.75); }
 @media (max-width: 760px) {
   .spatial-journey:not(.journey-static) .journey-title { top: auto; bottom: 265px; }
