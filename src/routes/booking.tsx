@@ -7,7 +7,7 @@ import { BookingForm } from "@/components/noir/booking";
 import { BeautyAdvisor, type Suggestion } from "@/components/noir/advisor";
 import { useState } from "react";
 export const Route = createFileRoute("/booking")({
-  validateSearch: z.object({ service: z.string().max(100).optional() }),
+  validateSearch: z.object({ service: z.string().max(100).optional(), message: z.string().max(1000).optional() }),
   head: () =>
     pageHead(
       "Book your experience",
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/booking")({
 });
 function BookingPage() {
   const { m } = useT();
-  const { service } = Route.useSearch();
+  const { service, message } = Route.useSearch();
   const [suggestion, setSuggestion] = useState<Suggestion & { n: number }>();
   return (
     <>
@@ -55,7 +55,7 @@ function BookingPage() {
             <BookingForm
               key={suggestion?.n ?? 0}
               initialService={suggestion?.serviceId ?? service}
-              initialMessage={suggestion?.message}
+              initialMessage={suggestion?.message ?? message}
             />
           </div>
         </div>

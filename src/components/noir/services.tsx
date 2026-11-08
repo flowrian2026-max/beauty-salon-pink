@@ -3,13 +3,28 @@ import { Link } from "@tanstack/react-router";
 import { useDemo } from "./demo-provider";
 import { BookLink } from "./site-shell";
 import { useT } from "@/lib/i18n";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 export function Services({ preview = false }: { preview?: boolean }) {
   const { data } = useDemo();
   const { t, c } = useT();
+  const [category, setCategory] = useState("all");
+  const categories = [
+    { id: "all", label: t("All services", "همهٔ خدمات"), ids: [] },
+    { id: "nails", label: t("Nails", "ناخن"), ids: ["nails", "manicure", "pedicure"] },
+    { id: "hair", label: t("Hair", "مو"), ids: ["hair"] },
+    { id: "makeup", label: t("Makeup", "آرایش"), ids: ["makeup"] },
+    { id: "skin", label: t("Skin", "پوست"), ids: ["skin"] },
+  ];
+  const active = categories.find((item) => item.id === category);
+  const visible = data.services.filter((s) => preview || category === "all" || active?.ids.includes(s.id));
   return (
     <>
+      {!preview && <div className="service-category-nav" role="group" aria-label={t("Service categories", "دسته‌بندی خدمات")}>
+        {categories.map((item) => <Button key={item.id} variant={category === item.id ? "default" : "ghost"} aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.label}</Button>)}
+      </div>}
       <div className="service-grid">
-        {data.services.slice(0, preview ? 4 : undefined).map((s, i) => (
+        {visible.slice(0, preview ? 4 : undefined).map((s, i) => (
           <article className="service-item" key={s.id} data-reveal>
             <div className="service-image">
               <img

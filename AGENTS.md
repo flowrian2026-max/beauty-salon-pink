@@ -18,3 +18,4 @@
 - Use pointer capture for comparison dragging and retain a native range for keyboard input; mouse, touch and assistive controls share one split value.
 - Use a validated central contact configuration for email-draft inquiry handoffs; opening a draft must never be reported as external delivery, and missing configuration keeps the explicitly local demo available.
 - Migrate only known legacy sample prices and durations to inquiry-based empty values; preserve business-supplied local edits.
+- Consultation and occasion planners share one frontend form and pass a validated inquiry draft to booking; they never represent a reservation or a salon-approved recommendation.
