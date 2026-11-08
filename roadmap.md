@@ -1,5 +1,9 @@
 # NOIR PINK — launch readiness
 
+## Current request
+- [ ] Replace the hero with the newest uploaded video, preserving the clear unboxed presentation.
+- [ ] Research official luxury salon websites and add suitable bilingual frontend experiences without invented business claims.
+
 ## Implemented in the current codebase (needs visual regression check)
 - [x] Persian/English language switch with local preference persistence.
 - [x] Set document language and text direction to LTR/RTL when language changes.
