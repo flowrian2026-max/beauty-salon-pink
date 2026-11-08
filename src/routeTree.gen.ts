@@ -13,12 +13,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as BookingRouteImport } from './routes/booking'
+import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as GiftCardsRouteImport } from './routes/gift-cards'
 import { Route as JournalRouteImport } from './routes/journal'
+import { Route as OccasionsRouteImport } from './routes/occasions'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ServicesServiceIdRouteImport } from './routes/services_.$serviceId'
@@ -41,6 +43,11 @@ const AdminRoute = AdminRouteImport.update({
 const BookingRoute = BookingRouteImport.update({
   id: '/booking',
   path: '/booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsultationRoute = ConsultationRouteImport.update({
+  id: '/consultation',
+  path: '/consultation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -73,6 +80,11 @@ const JournalRoute = JournalRouteImport.update({
   path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OccasionsRoute = OccasionsRouteImport.update({
+  id: '/occasions',
+  path: '/occasions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PoliciesRoute = PoliciesRouteImport.update({
   id: '/policies',
   path: '/policies',
@@ -94,12 +106,14 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/booking': typeof BookingRoute
+  '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/gift-cards': typeof GiftCardsRoute
   '/journal': typeof JournalRoute
+  '/occasions': typeof OccasionsRoute
   '/policies': typeof PoliciesRoute
   '/services': typeof ServicesRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
@@ -109,12 +123,14 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/booking': typeof BookingRoute
+  '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/gift-cards': typeof GiftCardsRoute
   '/journal': typeof JournalRoute
+  '/occasions': typeof OccasionsRoute
   '/policies': typeof PoliciesRoute
   '/services': typeof ServicesRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
@@ -125,12 +141,14 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/booking': typeof BookingRoute
+  '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/gift-cards': typeof GiftCardsRoute
   '/journal': typeof JournalRoute
+  '/occasions': typeof OccasionsRoute
   '/policies': typeof PoliciesRoute
   '/services': typeof ServicesRoute
   '/services_/$serviceId': typeof ServicesServiceIdRoute
@@ -142,12 +160,14 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/booking'
+    | '/consultation'
     | '/contact'
     | '/experience'
     | '/faq'
     | '/gallery'
     | '/gift-cards'
     | '/journal'
+    | '/occasions'
     | '/policies'
     | '/services'
     | '/services/$serviceId'
@@ -157,12 +177,14 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/booking'
+    | '/consultation'
     | '/contact'
     | '/experience'
     | '/faq'
     | '/gallery'
     | '/gift-cards'
     | '/journal'
+    | '/occasions'
     | '/policies'
     | '/services'
     | '/services/$serviceId'
@@ -172,12 +194,14 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/booking'
+    | '/consultation'
     | '/contact'
     | '/experience'
     | '/faq'
     | '/gallery'
     | '/gift-cards'
     | '/journal'
+    | '/occasions'
     | '/policies'
     | '/services'
     | '/services_/$serviceId'
@@ -188,12 +212,14 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   BookingRoute: typeof BookingRoute
+  ConsultationRoute: typeof ConsultationRoute
   ContactRoute: typeof ContactRoute
   ExperienceRoute: typeof ExperienceRoute
   FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
   GiftCardsRoute: typeof GiftCardsRoute
   JournalRoute: typeof JournalRoute
+  OccasionsRoute: typeof OccasionsRoute
   PoliciesRoute: typeof PoliciesRoute
   ServicesRoute: typeof ServicesRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
@@ -227,6 +253,13 @@ declare module '@tanstack/react-router' {
       path: '/booking'
       fullPath: '/booking'
       preLoaderRoute: typeof BookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consultation': {
+      id: '/consultation'
+      path: '/consultation'
+      fullPath: '/consultation'
+      preLoaderRoute: typeof ConsultationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -271,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/occasions': {
+      id: '/occasions'
+      path: '/occasions'
+      fullPath: '/occasions'
+      preLoaderRoute: typeof OccasionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/policies': {
       id: '/policies'
       path: '/policies'
@@ -300,12 +340,14 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   BookingRoute: BookingRoute,
+  ConsultationRoute: ConsultationRoute,
   ContactRoute: ContactRoute,
   ExperienceRoute: ExperienceRoute,
   FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
   GiftCardsRoute: GiftCardsRoute,
   JournalRoute: JournalRoute,
+  OccasionsRoute: OccasionsRoute,
   PoliciesRoute: PoliciesRoute,
   ServicesRoute: ServicesRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
