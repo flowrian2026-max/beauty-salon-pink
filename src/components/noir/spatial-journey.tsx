@@ -3,8 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
-import heroVideo from "@/assets/hero-portrait.mp4.asset.json";
-import heroPoster from "@/assets/hero-poster.jpg.asset.json";
+import heroVideo from "@/assets/hero-portrait.mp4";
+import heroPoster from "@/assets/hero-poster.jpg";
 
 export function SpatialJourney() {
   const { t } = useT();
