@@ -3,8 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
-import heroVideo from "@/assets/hero-portrait.mp4.asset.json";
-import heroPoster from "@/assets/hero-poster.jpg.asset.json";
+import heroVideo from "@/assets/hero-portrait.mp4";
+import heroPoster from "@/assets/hero-poster.jpg";
 
 export function SpatialJourney() {
   const { t } = useT();
@@ -55,7 +55,7 @@ export function SpatialJourney() {
           {reduced ? (
             <img
               className="scene-fallback"
-              src={heroPoster.url}
+              src={heroPoster}
               width={1344}
               height={768}
               alt=""
@@ -64,8 +64,8 @@ export function SpatialJourney() {
           ) : (
             <video
               className="scene-video"
-              src={heroVideo.url}
-              poster={heroPoster.url}
+              src={heroVideo}
+              poster={heroPoster}
               autoPlay
               muted
               loop
