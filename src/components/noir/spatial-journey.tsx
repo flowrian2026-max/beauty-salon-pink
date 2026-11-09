@@ -55,7 +55,7 @@ export function SpatialJourney() {
           {reduced ? (
             <img
               className="scene-fallback"
-              src={heroPoster.url}
+              src={heroPoster}
               width={1344}
               height={768}
               alt=""
@@ -64,8 +64,8 @@ export function SpatialJourney() {
           ) : (
             <video
               className="scene-video"
-              src={heroVideo.url}
-              poster={heroPoster.url}
+              src={heroVideo}
+              poster={heroPoster}
               autoPlay
               muted
               loop

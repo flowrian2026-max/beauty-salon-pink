@@ -2480,8 +2480,7 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 .spatial-journey:not(.journey-static) .journey-stage::before { mix-blend-mode: normal; background: none; }
 .spatial-journey:not(.journey-static) .scene-video { filter: none; }
 .spatial-journey:not(.journey-static) .scene-shade {
-  background:
-    linear-gradient(180deg, rgba(8,6,9,.35) 0%, transparent 22%, transparent 58%, rgba(8,6,9,.7) 100%);
+  background: none;
 }
 .spatial-journey:not(.journey-static) .journey-title,
 .spatial-journey:not(.journey-static) .journey-title h1 > span,
