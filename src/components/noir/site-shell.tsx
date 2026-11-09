@@ -119,7 +119,7 @@ export function SiteHeader() {
           {navigation.map(([en, fa, to]) => (
             <Link key={to} to={to}>
               {t(en, fa)}
-              <ArrowUpRight size={20} />
+              <ArrowUpRight size={14} />
             </Link>
           ))}
           <LangSwitch />
