@@ -3,44 +3,109 @@ import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
-import heroVideo from "@/assets/hero-portrait.mp4";
-import heroPoster from "@/assets/hero-poster.jpg";
+import heroVideo from "@/assets/chrome-melt.mp4";
+import heroPoster from "@/assets/chrome-melt-poster.jpg";
 
+/**
+ * Cinematic scroll-scrubbed hero.
+ * The portrait video no longer loops — its currentTime is driven by scroll progress,
+ * so the model’s turn and reveal feel locked to the user’s scroll.
+ */
 export function SpatialJourney() {
   const { t } = useT();
   const section = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const progress = useRef(0);
+  const smooth = useRef(0);
+  const raf = useRef(0);
+  const videoReady = useRef(false);
+
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const preference = () => setReduced(media.matches);
-    preference();
-    media.addEventListener("change", preference);
-    let frame = 0;
-    const update = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        if (!section.current || !stage.current) return;
-        const bounds = section.current.getBoundingClientRect();
-        progress.current = Math.max(
-          0,
-          Math.min(1, -bounds.top / Math.max(1, bounds.height - window.innerHeight)),
-        );
-        stage.current.style.setProperty("--journey-progress", String(progress.current));
-        const chapter = progress.current < 0.3 ? "1" : progress.current < 0.73 ? "2" : "3";
-        stage.current.dataset["chapter"] = media.matches ? "1" : chapter;
-      });
+    const onPref = () => setReduced(media.matches);
+    onPref();
+    media.addEventListener("change", onPref);
+
+    const video = videoRef.current;
+    if (video) {
+      // Keep the video paused; we control time manually.
+      video.pause();
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = "auto";
+
+      const markReady = () => {
+        videoReady.current = true;
+        // Jump to first frame once metadata is known.
+        if (video.duration && !Number.isNaN(video.duration)) {
+          video.currentTime = 0.001;
+        }
+      };
+
+      if (video.readyState >= 1) markReady();
+      else video.addEventListener("loadedmetadata", markReady, { once: true });
+    }
+
+    const measure = () => {
+      if (!section.current) return 0;
+      const bounds = section.current.getBoundingClientRect();
+      const total = Math.max(1, bounds.height - window.innerHeight);
+      return Math.max(0, Math.min(1, -bounds.top / total));
     };
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+
+    const tick = () => {
+      const target = measure();
+      // Smooth lerp — feels more premium than raw scroll values.
+      smooth.current += (target - smooth.current) * 0.085;
+      // Snap when very close to avoid endless micro-updates.
+      if (Math.abs(target - smooth.current) < 0.0008) smooth.current = target;
+
+      progress.current = smooth.current;
+      const p = progress.current;
+
+      if (stage.current) {
+        stage.current.style.setProperty("--journey-progress", String(p));
+
+        // Chapter breakpoints aligned with the three narrative beats.
+        const chapter = p < 0.28 ? "1" : p < 0.68 ? "2" : "3";
+        if (stage.current.dataset["chapter"] !== chapter) {
+          stage.current.dataset["chapter"] = media.matches ? "1" : chapter;
+        }
+
+        // Subtle scale + vertical drift for depth.
+        const scale = 1 + p * 0.08;
+        const yShift = p * -2.5; // percent
+        stage.current.style.setProperty("--journey-scale", String(scale));
+        stage.current.style.setProperty("--journey-y", `${yShift}%`);
+      }
+
+      // Scrub the video. We leave a tiny head/tail margin so the first/last frames stay clean.
+      if (video && videoReady.current && video.duration && !media.matches) {
+        const start = 0.05;
+        const end = Math.max(start + 0.1, video.duration - 0.08);
+        const time = start + p * (end - start);
+        // Only seek when the difference is meaningful (avoids jank on some browsers).
+        if (Math.abs(video.currentTime - time) > 0.04) {
+          try {
+            video.currentTime = time;
+          } catch {
+            // Ignore seek errors during rapid scrubbing.
+          }
+        }
+      }
+
+      raf.current = requestAnimationFrame(tick);
+    };
+
+    raf.current = requestAnimationFrame(tick);
+
     return () => {
-      media.removeEventListener("change", preference);
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      media.removeEventListener("change", onPref);
+      cancelAnimationFrame(raf.current);
     };
   }, []);
 
@@ -63,22 +128,25 @@ export function SpatialJourney() {
             />
           ) : (
             <video
-              className="scene-video"
+              ref={videoRef}
+              className="scene-video scene-video-scrub"
               src={heroVideo}
               poster={heroPoster}
-              autoPlay
               muted
-              loop
               playsInline
               preload="auto"
+              // No autoPlay / loop — time is driven by scroll.
             />
           )}
           <div className="scene-shade" />
+          <div className="scene-vignette" />
         </div>
+
         <div className="journey-coordinates" aria-hidden="true">
           <span>{t("PINKO / THE SIGNATURE EXPERIENCE", "پینکو / تجربهٔ امضادار")}</span>
           <span>{t("BEAUTY / FORM / SELF-EXPRESSION", "زیبایی / فرم / بیان خود")}</span>
         </div>
+
         <div className="journey-title">
           <span className="eyebrow">{t("PINKO · BEAUTY STUDIO", "پینکو · استودیو زیبایی")}</span>
           <h1>
@@ -90,6 +158,7 @@ export function SpatialJourney() {
             </span>
           </h1>
         </div>
+
         <div className="journey-intro">
           <p>
             {t("Beauty as an art.", "زیبایی به‌مثابه هنر.")}
@@ -102,6 +171,7 @@ export function SpatialJourney() {
             </Link>
           </Button>
         </div>
+
         <div className="journey-chapter journey-chapter-two">
           <span className="eyebrow">{t("01 — BEAUTY ON YOUR TERMS", "۰۱ — زیبایی به سبک خودتان")}</span>
           <h2>
@@ -115,6 +185,7 @@ export function SpatialJourney() {
             {t("It is your own expression.", "بیان خودِ شماست.")}
           </p>
         </div>
+
         <div className="journey-chapter journey-chapter-three">
           <span className="eyebrow">{t("02 — EVERY DETAIL, YOURS", "۰۲ — هر جزئیات، مال شما")}</span>
           <h2>
@@ -128,6 +199,7 @@ export function SpatialJourney() {
             </Link>
           </Button>
         </div>
+
         {!reduced && (
           <div className="signature-controls" aria-hidden="true">
             <span className="finish-name">{t("PINKO / BEAUTY STUDY", "پینکو / مطالعهٔ زیبایی")}</span>
@@ -135,6 +207,7 @@ export function SpatialJourney() {
             <span className="finish-name">01 — 03</span>
           </div>
         )}
+
         <div className="journey-bottom">
           <a
             href="#services"
@@ -153,6 +226,13 @@ export function SpatialJourney() {
           </div>
           <span className="journey-edition">{t("PINKO / STUDIO EXPERIENCE", "پینکو / تجربهٔ استودیو")}</span>
         </div>
+
+        {/* Progress bar — subtle cinematic cue */}
+        {!reduced && (
+          <div className="journey-progress-bar" aria-hidden="true">
+            <span className="journey-progress-fill" />
+          </div>
+        )}
       </div>
     </section>
   );

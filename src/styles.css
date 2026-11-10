@@ -1299,7 +1299,7 @@
 .depth-photo { position: absolute; inset: -1%; width: 102%; height: 102%; max-width: none; object-fit: cover; transition: translate 1s cubic-bezier(.2,.65,.2,1), transform 1.2s ease; }
 .depth-visual:after { content: ""; position: absolute; inset: 0; background: var(--cinematic-shade); z-index: 1; pointer-events: none; }
 .hero { height: min(940px, 94svh); min-height: 660px; }
-.hero .depth-photo { object-position: 68% center; animation: imageEntrance 1.8s ease both; }
+.hero .depth-photo { object-position: 78% center; animation: imageEntrance 1.8s ease both; }
 .hero-content { padding: 230px 5% 100px; max-width: none; }
 .hero h1 { font-size: 142px; line-height: .9; font-weight: 600; margin: 30px 0; }
 .hero h1 em { color: var(--foreground); text-shadow: 0 0 60px color-mix(in oklab, var(--primary) 15%, transparent); }
@@ -1394,7 +1394,7 @@
 }
 @media (max-width: 700px) {
   .hero { height: 94svh; min-height: 680px; max-height: 880px; }
-  .hero .depth-photo { height: 76%; top: 0; object-position: 72% center; }
+  .hero .depth-photo { height: 76%; top: 0; object-position: 82% center; }
   .hero:after { background: linear-gradient(0deg, var(--background) 14%, color-mix(in oklab, var(--background) 50%, transparent) 42%, transparent 70%); }
   .hero-content { padding: 360px 6% 100px; }
   .hero h1 { font-size: 76px; margin: 20px 0; }
@@ -1635,7 +1635,7 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 .scene-layer { position: absolute; inset: 0; z-index: -2; }
 .scene-layer > div { width: 100%; height: 100%; }
 .scene-layer canvas { touch-action: pan-y; }
-.scene-fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-position: 68% center; opacity: .6; }
+.scene-fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-position: 78% center; opacity: .6; }
 .journey-coordinates { position: absolute; top: 142px; left: 5.6%; right: 5.6%; display: flex; justify-content: space-between; font-size: 9px; color: var(--soft-pink); pointer-events: none; }
 .journey-title { position: absolute; top: 23%; left: 5.6%; pointer-events: none; transition: opacity .5s, transform .7s; }
 .journey-title > .eyebrow { font-size: 9px; }
@@ -2521,4 +2521,108 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   .spatial-journey:not(.journey-static) .journey-intro { bottom: 100px; }
   .spatial-journey:not(.journey-static) .journey-intro p { margin-bottom: 12px; }
   .spatial-journey:not(.journey-static) .journey-chapter { bottom: 110px; }
+}
+
+/* ──────────────────────────────────────────────
+   Scroll-scrubbed cinematic hero upgrades
+   ────────────────────────────────────────────── */
+
+.scene-video-scrub {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 78% center;
+  transform: scale(var(--journey-scale, 1)) translate3d(0, var(--journey-y, 0%), 0);
+  transform-origin: 75% 42%;
+  will-change: transform;
+  filter: brightness(0.92) contrast(1.04) saturate(1.05);
+  transition: filter 0.6s ease;
+}
+
+.scene-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    /* left side dark so white/pink text stays readable */
+    linear-gradient(90deg, rgba(8,6,10,0.88) 0%, rgba(8,6,10,0.55) 28%, rgba(8,6,10,0.12) 52%, transparent 68%),
+    /* bottom fade into page */
+    linear-gradient(0deg, rgba(8,6,10,0.82) 0%, rgba(8,6,10,0.25) 28%, transparent 48%),
+    /* soft edge vignette */
+    radial-gradient(ellipse at 72% 45%, transparent 0%, transparent 38%, rgba(5,4,8,0.35) 100%);
+}
+
+/* Chrome melt hero — slightly cooler grade */
+.spatial-journey:not(.journey-static) .scene-video-scrub {
+  filter: brightness(0.95) contrast(1.06) saturate(0.92);
+}
+
+.journey-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: color-mix(in oklab, var(--border) 70%, transparent);
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.journey-progress-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--journey-progress, 0) * 100%);
+  background: linear-gradient(90deg, var(--primary), var(--soft-pink));
+  box-shadow: 0 0 18px color-mix(in oklab, var(--primary) 55%, transparent);
+  transition: width 0.05s linear;
+}
+
+/* Tighter chapter crossfades when driven by smooth progress */
+.spatial-journey:not(.journey-static) .journey-title,
+.spatial-journey:not(.journey-static) .journey-intro {
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.55s;
+}
+
+.spatial-journey:not(.journey-static) .journey-chapter {
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.65s;
+}
+
+/* Slight parallax feel on coordinates */
+.spatial-journey:not(.journey-static) .journey-coordinates {
+  opacity: calc(1 - var(--journey-progress, 0) * 0.7);
+  transform: translateY(calc(var(--journey-progress, 0) * -12px));
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Scroll indicator fades as you progress */
+.spatial-journey:not(.journey-static) .scroll-indicator {
+  opacity: calc(1 - min(1, var(--journey-progress, 0) * 2.2));
+  transition: opacity 0.3s ease;
+}
+
+/* Mobile: keep scrub but reduce motion intensity */
+@media (max-width: 760px) {
+  .scene-video-scrub {
+    object-position: 82% center;
+    transform: scale(calc(1 + var(--journey-progress, 0) * 0.05)) translate3d(0, calc(var(--journey-progress, 0) * -1.5%), 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-video-scrub {
+    transform: none;
+  }
+  .journey-progress-bar {
+    display: none;
+  }
 }
