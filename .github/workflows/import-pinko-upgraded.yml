@@ -1,0 +1,91 @@
+name: One-time Pinko source import
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/import-pinko-upgraded.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Check out current repository without persisting credentials
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Download, sanitize, and validate the upgraded source
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP="$RUNNER_TEMP/pinko-source.zip"
+          STAGE="$RUNNER_TEMP/pinko-stage"
+          curl -fL --retry 3 --retry-all-errors "https://d2ol7oe51mr4n9.cloudfront.net/user_3KyoBPAMzbJTHii9o99E3up6QL9/610e47f8-6cbe-4f66-b76d-6484908fe36b.zip" -o "$ZIP"
+          unzip -tq "$ZIP"
+          mkdir -p "$STAGE"
+          unzip -q "$ZIP" -d "$STAGE"
+          SRC="$STAGE/beauty-salon-pink-main"
+          test -f "$SRC/package.json"
+          find "$SRC" -type f \( -name '.env' -o -name '*.bak' \) -delete
+          rsync -a --exclude='.env' --exclude='*.bak' "$SRC/" "$GITHUB_WORKSPACE/"
+          rm -f "$GITHUB_WORKSPACE/.env"
+          find "$GITHUB_WORKSPACE" -type f -name '*.bak' -delete
+          test -f "$GITHUB_WORKSPACE/bun.lock"
+          test ! -e "$GITHUB_WORKSPACE/.env"
+          echo "Source files copied; lockfile preserved; environment files excluded."
+      - name: Install dependencies from preserved lockfile
+        run: bun install --frozen-lockfile
+      - name: Run tests
+        run: bun run test
+      - name: Build production bundle
+        run: bun run build
+
+  commit:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Check out main for the final commit
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply the validated source and push it to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP="$RUNNER_TEMP/pinko-source.zip"
+          STAGE="$RUNNER_TEMP/pinko-stage"
+          curl -fL --retry 3 --retry-all-errors "https://d2ol7oe51mr4n9.cloudfront.net/user_3KyoBPAMzbJTHii9o99E3up6QL9/610e47f8-6cbe-4f66-b76d-6484908fe36b.zip" -o "$ZIP"
+          unzip -tq "$ZIP"
+          mkdir -p "$STAGE"
+          unzip -q "$ZIP" -d "$STAGE"
+          SRC="$STAGE/beauty-salon-pink-main"
+          test -f "$SRC/package.json"
+          find "$SRC" -type f \( -name '.env' -o -name '*.bak' \) -delete
+          rsync -a --exclude='.env' --exclude='*.bak' "$SRC/" "$GITHUB_WORKSPACE/"
+          rm -f "$GITHUB_WORKSPACE/.env"
+          find "$GITHUB_WORKSPACE" -type f -name '*.bak' -delete
+          git add -A
+          git diff --cached --stat
+          if git diff --cached --quiet; then
+            echo "No source differences to commit."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Import upgraded Pinko beauty salon source"
+          git push origin HEAD:main
