@@ -38,3 +38,5 @@ jobs:
           git add src/assets/chrome-melt.mp4 src/assets/chrome-melt-poster.jpg
           git commit -m "Optimize gold chrome hero media for scroll scrubbing"
           git push origin HEAD:fix/pinko-gold-chrome-scroll
+
+# Trigger feature-branch media update.
