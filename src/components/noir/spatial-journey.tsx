@@ -17,94 +17,112 @@ export function SpatialJourney() {
   const stage = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const progress = useRef(0);
-  const smooth = useRef(0);
   const raf = useRef(0);
   const videoReady = useRef(false);
+  const lastSeekAt = useRef(0);
 
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onPref = () => setReduced(media.matches);
-    onPref();
-    media.addEventListener("change", onPref);
-
     const video = videoRef.current;
-    if (video) {
-      // Keep the video paused; we control time manually.
-      video.pause();
-      video.muted = true;
-      video.playsInline = true;
-      video.preload = "auto";
-
-      const markReady = () => {
-        videoReady.current = true;
-        // Jump to first frame once metadata is known.
-        if (video.duration && !Number.isNaN(video.duration)) {
-          video.currentTime = 0.001;
-        }
-      };
-
-      if (video.readyState >= 1) markReady();
-      else video.addEventListener("loadedmetadata", markReady, { once: true });
-    }
 
     const measure = () => {
       if (!section.current) return 0;
       const bounds = section.current.getBoundingClientRect();
-      const total = Math.max(1, bounds.height - window.innerHeight);
+      // Measure against the actual sticky stage, not innerHeight. Chrome's
+      // mobile browser bars can change innerHeight while svh stays stable.
+      const stickyHeight = stage.current?.getBoundingClientRect().height ?? window.innerHeight;
+      const total = Math.max(1, bounds.height - stickyHeight);
       return Math.max(0, Math.min(1, -bounds.top / total));
     };
 
     const tick = () => {
-      const target = measure();
-      // Smooth lerp — feels more premium than raw scroll values.
-      smooth.current += (target - smooth.current) * 0.085;
-      // Snap when very close to avoid endless micro-updates.
-      if (Math.abs(target - smooth.current) < 0.0008) smooth.current = target;
-
-      progress.current = smooth.current;
-      const p = progress.current;
+      raf.current = 0;
+      const p = measure();
 
       if (stage.current) {
         stage.current.style.setProperty("--journey-progress", String(p));
 
-        // Chapter breakpoints aligned with the three narrative beats.
         const chapter = p < 0.28 ? "1" : p < 0.68 ? "2" : "3";
-        if (stage.current.dataset["chapter"] !== chapter) {
-          stage.current.dataset["chapter"] = media.matches ? "1" : chapter;
+        const nextChapter = media.matches ? "1" : chapter;
+        if (stage.current.dataset["chapter"] !== nextChapter) {
+          stage.current.dataset["chapter"] = nextChapter;
         }
 
-        // Subtle scale + vertical drift for depth.
-        const scale = 1 + p * 0.08;
-        const yShift = p * -2.5; // percent
-        stage.current.style.setProperty("--journey-scale", String(scale));
-        stage.current.style.setProperty("--journey-y", `${yShift}%`);
+        stage.current.style.setProperty("--journey-scale", String(1 + p * 0.08));
+        stage.current.style.setProperty("--journey-y", `${p * -2.5}%`);
       }
 
-      // Scrub the video. We leave a tiny head/tail margin so the first/last frames stay clean.
-      if (video && videoReady.current && video.duration && !media.matches) {
+      if (video && videoReady.current && video.duration > 0 && !media.matches) {
         const start = 0.05;
         const end = Math.max(start + 0.1, video.duration - 0.08);
-        const time = start + p * (end - start);
-        // Only seek when the difference is meaningful (avoids jank on some browsers).
-        if (Math.abs(video.currentTime - time) > 0.04) {
-          try {
-            video.currentTime = time;
-          } catch {
-            // Ignore seek errors during rapid scrubbing.
+        // Quantize to the source's 24fps frame grid. Never queue a second seek
+        // while Chrome is decoding the previous one.
+        const desiredTime = start + p * (end - start);
+        const frameTime = Math.round(desiredTime * 24) / 24;
+        const needsSync = Math.abs(video.currentTime - frameTime) > 1 / 48;
+
+        if (needsSync && !video.seeking) {
+          const now = performance.now();
+          if (now - lastSeekAt.current >= 40) {
+            try {
+              video.currentTime = frameTime;
+              lastSeekAt.current = now;
+            } catch {
+              // Ignore seek errors during rapid scroll changes.
+            }
+          } else {
+            schedule();
           }
         }
       }
-
-      raf.current = requestAnimationFrame(tick);
     };
 
-    raf.current = requestAnimationFrame(tick);
+    const schedule = () => {
+      if (!raf.current) raf.current = requestAnimationFrame(tick);
+    };
+
+    const markReady = () => {
+      if (!video || !video.duration || Number.isNaN(video.duration)) return;
+      videoReady.current = true;
+      video.currentTime = 0.001;
+      lastSeekAt.current = performance.now();
+      schedule();
+    };
+
+    const onPref = () => {
+      const shouldReduce = media.matches;
+      setReduced(shouldReduce);
+      if (video) {
+        video.preload = shouldReduce ? "none" : "auto";
+        if (!shouldReduce && video.readyState === 0) video.load();
+      }
+      schedule();
+    };
+
+    if (video) {
+      video.pause();
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = media.matches ? "none" : "auto";
+      if (video.readyState >= 1) markReady();
+      else video.addEventListener("loadedmetadata", markReady);
+      video.addEventListener("seeked", schedule);
+    }
+
+    onPref();
+    media.addEventListener("change", onPref);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    schedule();
 
     return () => {
       media.removeEventListener("change", onPref);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      video?.removeEventListener("loadedmetadata", markReady);
+      video?.removeEventListener("seeked", schedule);
       cancelAnimationFrame(raf.current);
     };
   }, []);
@@ -117,7 +135,17 @@ export function SpatialJourney() {
     >
       <div ref={stage} className="journey-stage" data-chapter="1">
         <div className="scene-layer" aria-hidden="true">
-          {reduced ? (
+          <video
+            ref={videoRef}
+            className="scene-video scene-video-scrub"
+            src={heroVideo}
+            poster={heroPoster}
+            muted
+            playsInline
+            preload={reduced ? "none" : "auto"}
+            // No autoPlay / loop — time is driven by scroll.
+          />
+          {reduced && (
             <img
               className="scene-fallback"
               src={heroPoster}
@@ -125,17 +153,6 @@ export function SpatialJourney() {
               height={768}
               alt=""
               fetchPriority="high"
-            />
-          ) : (
-            <video
-              ref={videoRef}
-              className="scene-video scene-video-scrub"
-              src={heroVideo}
-              poster={heroPoster}
-              muted
-              playsInline
-              preload="auto"
-              // No autoPlay / loop — time is driven by scroll.
             />
           )}
           <div className="scene-shade" />

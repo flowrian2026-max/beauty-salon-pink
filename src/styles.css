@@ -2626,3 +2626,16 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
     display: none;
   }
 }
+
+
+/* PINKO hero: deterministic scroll sync and warm gold-chrome art direction. */
+.spatial-journey { height: 280svh; }
+.journey-stage { position: sticky; top: 0; height: 100svh; min-height: 0; }
+.spatial-journey:not(.journey-static) .scene-video-scrub {
+  filter: brightness(.97) contrast(1.08) saturate(.96);
+}
+.journey-static .scene-video-scrub { display: none; }
+@media (max-width: 760px) {
+  .spatial-journey { height: 245svh; }
+  .journey-stage { height: 100svh; min-height: 0; }
+}
