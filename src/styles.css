@@ -2639,3 +2639,13 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   .spatial-journey { height: 245svh; }
   .journey-stage { height: 100svh; min-height: 0; }
 }
+
+
+/* Preserve the accessible static layout after the sticky-stage overrides. */
+.spatial-journey.journey-static { height: auto; }
+.journey-static .journey-stage {
+  position: relative;
+  top: auto;
+  height: auto;
+  min-height: 0;
+}
