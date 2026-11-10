@@ -37,6 +37,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/assets/chrome-melt.mp4 src/assets/chrome-melt-poster.jpg
           git commit -m "Optimize gold chrome hero media for scroll scrubbing"
-          git push origin HEAD:fix/pinko-gold-chrome-scroll
+          git pull --rebase origin fix/pinko-gold-chrome-scroll
+git push origin HEAD:fix/pinko-gold-chrome-scroll
 
 # Trigger feature-branch media update.
