@@ -1,0 +1,47 @@
+name: PINKO ARIXEN Interaction POC
+
+on:
+  push:
+    branches: [feat/pinko-arixen-interaction-poc]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install and run checks with captured diagnostics
+        shell: bash
+        run: |
+          set +e
+          npm install --no-audit --no-fund > /tmp/pinko-install.log 2>&1
+          INSTALL_CODE=$?
+          npm run lint > /tmp/pinko-lint.log 2>&1
+          LINT_CODE=$?
+          npm run build > /tmp/pinko-build.log 2>&1
+          BUILD_CODE=$?
+          {
+            echo "npm install exit: $INSTALL_CODE"
+            cat /tmp/pinko-install.log
+            echo
+            echo "npm run lint exit: $LINT_CODE"
+            cat /tmp/pinko-lint.log
+            echo
+            echo "npm run build exit: $BUILD_CODE"
+            cat /tmp/pinko-build.log
+          } > arixen-pinko-ci-report.txt
+          cat arixen-pinko-ci-report.txt
+          if [ "$INSTALL_CODE" -ne 0 ] || [ "$LINT_CODE" -ne 0 ] || [ "$BUILD_CODE" -ne 0 ]; then
+            exit 1
+          fi
+      - name: Upload diagnostic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arixen-pinko-ci-report
+          path: arixen-pinko-ci-report.txt
+          if-no-files-found: warn
