@@ -154,7 +154,7 @@ export class ExperienceConfig {
       if (
         config.physics.enabled &&
         config.physics.mode === 'soft-body-mesh' &&
-        config.renderer !== 'webgl-mesh'
+        !['webgl-mesh', 'pinko-video-mesh'].includes(config.renderer)
       ) {
         warnings.push(
           `Physics mode "soft-body-mesh" is optimized for "webgl-mesh" renderer; "${config.renderer}" will use spring kinematics instead.`
