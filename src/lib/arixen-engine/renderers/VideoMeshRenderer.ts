@@ -57,6 +57,7 @@ export class VideoMeshRenderer implements RendererAdapter {
 
     const canvas = document.createElement('canvas');
     canvas.setAttribute('aria-hidden', 'true');
+    canvas.className = 'pinko-arixen-mesh-canvas';
     canvas.style.cssText =
       'position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none;';
     this.canvas = canvas;
