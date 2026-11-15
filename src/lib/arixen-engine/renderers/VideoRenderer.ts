@@ -88,6 +88,15 @@ export class VideoRenderer implements RendererAdapter {
 
     this.scrubProgress += (targetProgress - this.scrubProgress) * (1 - Math.exp(-dt * 12));
 
+    if (this.videoEl) {
+      const tilt = this.ctx.physics.stepSpringTilt(
+        dt,
+        reducedMotion ? 0 : (pointer.v - 0.5) * 3.2,
+        reducedMotion ? 0 : (pointer.u - 0.5) * 4.2
+      );
+      this.videoEl.style.transform = `scale(1.035) rotateY(${tilt.x.toFixed(2)}deg) rotateX(${tilt.y.toFixed(2)}deg)`;
+    }
+
     if (this.videoEl && this.videoEl.duration && cfg?.scrubMode !== 'playback' && !this.videoEl.seeking) {
       const frameRate = 24;
       const desiredTime = this.scrubProgress * this.videoEl.duration;
