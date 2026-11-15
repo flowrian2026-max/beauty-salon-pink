@@ -11,7 +11,8 @@ This PINKO proof of concept intentionally uses only the engine's video renderer 
 
 - Horizontal pointer movement scrubs the existing `chrome-melt.mp4` portrait sequence.
 - Touch dragging provides the same horizontal control on touch devices.
-- A restrained spring response adds subtle camera-like tilt.
+- A 72×72 WebGL mesh uses ARIXEN's `PhysicsController` soft-body solver; pointer drag deforms the portrait surface with anti-fold physics.
+- A spring response adds restrained camera-like movement.
 - The existing page scroll remains responsible only for editorial chapter progression.
 - Video seeks are quantized to the source's 24fps grid and throttled while decoding.
 - Reduced-motion users receive the static poster instead of an interactive video.
