@@ -349,7 +349,10 @@ export class VideoMeshRenderer implements RendererAdapter {
   }
 
   toSurfaceUv(clientX: number, clientY: number): [number, number] {
-    const rect = (this.canvas ?? this.ctx.container).getBoundingClientRect();
+    const canvasRect = this.canvas?.getBoundingClientRect();
+    const rect = canvasRect && canvasRect.width > 0 && canvasRect.height > 0
+      ? canvasRect
+      : this.ctx.container.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) return [0.5, 0.5];
     return [(clientX - rect.left) / rect.width, (clientY - rect.top) / rect.height];
   }
