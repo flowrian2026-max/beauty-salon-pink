@@ -2678,3 +2678,43 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   .spatial-journey .pinko-arixen-portrait-host > video,
   .spatial-journey .pinko-arixen-portrait-host > canvas { object-position: 65% center !important; }
 }
+
+
+/* Subtle interaction cue: the portrait responds to pointer and touch, not only scroll. */
+.pinko-interaction-cue {
+  position: absolute;
+  z-index: 4;
+  right: 5.6%;
+  bottom: 112px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255,255,255,.78);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.pinko-interaction-cue i {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 50%;
+  font-size: 14px;
+  font-style: normal;
+  letter-spacing: 0;
+}
+.pinko-interaction-cue .cue-mobile { display: none; }
+@media (max-width: 760px) {
+  .pinko-interaction-cue {
+    right: 22px;
+    bottom: 74px;
+    font-size: 8px;
+  }
+  .pinko-interaction-cue .cue-desktop { display: none; }
+  .pinko-interaction-cue .cue-mobile { display: inline; }
+}
