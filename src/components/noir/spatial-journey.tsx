@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
 import heroVideo from "@/assets/chrome-melt.mp4";
 import heroPoster from "@/assets/chrome-melt-poster.jpg";
+import { ArixenPortraitLayer } from "@/components/noir/arixen-portrait-layer";
 
 /**
  * Cinematic scroll-scrubbed hero.
@@ -15,18 +16,12 @@ export function SpatialJourney() {
   const { t } = useT();
   const section = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
   const raf = useRef(0);
-  const videoReady = useRef(false);
-  const lastSeekAt = useRef(0);
 
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const video = videoRef.current;
-
     const measure = () => {
       if (!section.current) return 0;
       const bounds = section.current.getBoundingClientRect();
@@ -54,62 +49,17 @@ export function SpatialJourney() {
         stage.current.style.setProperty("--journey-y", `${p * -2.5}%`);
       }
 
-      if (video && videoReady.current && video.duration > 0 && !media.matches) {
-        const start = 0.05;
-        const end = Math.max(start + 0.1, video.duration - 0.08);
-        // Quantize to the source's 24fps frame grid. Never queue a second seek
-        // while Chrome is decoding the previous one.
-        const desiredTime = start + p * (end - start);
-        const frameTime = Math.round(desiredTime * 24) / 24;
-        const needsSync = Math.abs(video.currentTime - frameTime) > 1 / 48;
-
-        if (needsSync && !video.seeking) {
-          const now = performance.now();
-          if (now - lastSeekAt.current >= 40) {
-            try {
-              video.currentTime = frameTime;
-              lastSeekAt.current = now;
-            } catch {
-              // Ignore seek errors during rapid scroll changes.
-            }
-          } else {
-            schedule();
-          }
-        }
-      }
     };
 
     const schedule = () => {
       if (!raf.current) raf.current = requestAnimationFrame(tick);
     };
 
-    const markReady = () => {
-      if (!video || !video.duration || Number.isNaN(video.duration)) return;
-      videoReady.current = true;
-      video.currentTime = 0.001;
-      lastSeekAt.current = performance.now();
-      schedule();
-    };
-
     const onPref = () => {
       const shouldReduce = media.matches;
       setReduced(shouldReduce);
-      if (video) {
-        video.preload = shouldReduce ? "none" : "auto";
-        if (!shouldReduce && video.readyState === 0) video.load();
-      }
       schedule();
     };
-
-    if (video) {
-      video.pause();
-      video.muted = true;
-      video.playsInline = true;
-      video.preload = media.matches ? "none" : "auto";
-      if (video.readyState >= 1) markReady();
-      else video.addEventListener("loadedmetadata", markReady);
-      video.addEventListener("seeked", schedule);
-    }
 
     onPref();
     media.addEventListener("change", onPref);
@@ -121,8 +71,6 @@ export function SpatialJourney() {
       media.removeEventListener("change", onPref);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
-      video?.removeEventListener("loadedmetadata", markReady);
-      video?.removeEventListener("seeked", schedule);
       cancelAnimationFrame(raf.current);
     };
   }, []);
@@ -135,16 +83,7 @@ export function SpatialJourney() {
     >
       <div ref={stage} className="journey-stage" data-chapter="1">
         <div className="scene-layer" aria-hidden="true">
-          <video
-            ref={videoRef}
-            className="scene-video scene-video-scrub"
-            src={heroVideo}
-            poster={heroPoster}
-            muted
-            playsInline
-            preload={reduced ? "none" : "auto"}
-            // No autoPlay / loop — time is driven by scroll.
-          />
+          {!reduced && <ArixenPortraitLayer videoSrc={heroVideo} posterSrc={heroPoster} active={!reduced} />}
           {reduced && (
             <img
               className="scene-fallback"
