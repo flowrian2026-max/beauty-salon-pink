@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { UniversalInteractionEngine } from "@/lib/arixen-engine/core/UniversalInteractionEngine";
+import { VideoMeshRenderer } from "@/lib/arixen-engine/renderers/VideoMeshRenderer";
 import type { SubjectConfig } from "@/lib/arixen-engine/types/config";
 
 interface ArixenPortraitLayerProps {
@@ -21,7 +22,7 @@ export function ArixenPortraitLayer({ videoSrc, posterSrc, active }: ArixenPortr
     name: "PINKO Liquid Beauty Portrait",
     category: "human",
     description: "Luxury portrait film with pointer-driven reveal and subtle spring response.",
-    renderer: "video",
+    renderer: "pinko-video-mesh",
     assets: {
       video: {
         src: videoSrc,
@@ -36,7 +37,7 @@ export function ArixenPortraitLayer({ videoSrc, posterSrc, active }: ArixenPortr
       touchTracking: true,
       hover: true,
       click: false,
-      drag: false,
+      drag: true,
       scroll: false,
       magnet: false,
       proximity: true,
@@ -53,11 +54,19 @@ export function ArixenPortraitLayer({ videoSrc, posterSrc, active }: ArixenPortr
     },
     physics: {
       enabled: true,
-      mode: "spring-2d",
-      stiffness: 44,
-      damping: 13,
-      inertia: 0.45,
-      interactionStrength: 0.7,
+      mode: "soft-body-mesh",
+      fixedStepHz: 240,
+      gridResolution: 72,
+      overscan: 1.65,
+      wobbleHz: 2.2,
+      dampingRatio: 0.16,
+      dragRadius: 0.2,
+      dragLimit: 0.22,
+      stiffness: 48,
+      damping: 12,
+      inertia: 0.5,
+      interactionStrength: 0.85,
+      preventMeshFold: true,
     },
     performance: {
       maxDpr: 1.5,
@@ -73,6 +82,7 @@ export function ArixenPortraitLayer({ videoSrc, posterSrc, active }: ArixenPortr
     const host = hostRef.current;
     if (!host || !active) return;
 
+    UniversalInteractionEngine.registerRenderer("pinko-video-mesh", () => new VideoMeshRenderer());
     const engine = new UniversalInteractionEngine(config);
     const stopReady = engine.on("ready", () => {
       host.dataset.engineState = "ready";
