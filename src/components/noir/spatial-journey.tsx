@@ -8,9 +8,8 @@ import heroPoster from "@/assets/chrome-melt-poster.jpg";
 import { ArixenPortraitLayer } from "@/components/noir/arixen-portrait-layer";
 
 /**
- * Cinematic scroll-scrubbed hero.
- * The portrait video no longer loops — its currentTime is driven by scroll progress,
- * so the model’s turn and reveal feel locked to the user’s scroll.
+ * Cinematic PINKO hero. Page scroll advances editorial chapters; the ARIXEN
+ * interaction engine independently maps pointer/touch movement to the portrait film.
  */
 export function SpatialJourney() {
   const { t } = useT();
@@ -82,7 +81,7 @@ export function SpatialJourney() {
       aria-label={t("PINKO signature beauty journey", "تجربهٔ زیبایی پینکو")}
     >
       <div ref={stage} className="journey-stage" data-chapter="1">
-        <div className="scene-layer" aria-hidden="true">
+        <div className="scene-layer">
           {!reduced && <ArixenPortraitLayer videoSrc={heroVideo} posterSrc={heroPoster} active={!reduced} />}
           {reduced && (
             <img
