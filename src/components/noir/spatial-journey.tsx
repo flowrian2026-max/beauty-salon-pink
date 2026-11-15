@@ -101,6 +101,11 @@ export function SpatialJourney() {
           <span>{t("PINKO / THE SIGNATURE EXPERIENCE", "پینکو / تجربهٔ امضادار")}</span>
           <span>{t("BEAUTY / FORM / SELF-EXPRESSION", "زیبایی / فرم / بیان خود")}</span>
         </div>
+        <div className="pinko-interaction-cue" aria-hidden="true">
+          <span className="cue-desktop">{t("MOVE TO REVEAL", "حرکت دهید تا آشکار شود")}</span>
+          <span className="cue-mobile">{t("DRAG TO REVEAL", "بکشید تا آشکار شود")}</span>
+          <i>↔</i>
+        </div>
 
         <div className="journey-title">
           <span className="eyebrow">{t("PINKO · BEAUTY STUDIO", "پینکو · استودیو زیبایی")}</span>
