@@ -59,7 +59,7 @@ export class UniversalInteractionEngine {
   private onHead = false;
   private lastPointerDx = 0;
   private lastPointerDy = 0;
-  private lastPointerU = 0.5;
+  private lastPointerU = 0.08;
   private lastPointerV = 0.5;
   private proximityIntensity = 0;
 
