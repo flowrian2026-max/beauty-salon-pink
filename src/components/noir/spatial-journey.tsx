@@ -49,9 +49,6 @@ export function SpatialJourney() {
         if (stage.current.dataset["chapter"] !== nextChapter) {
           stage.current.dataset["chapter"] = nextChapter;
         }
-
-        stage.current.style.setProperty("--journey-scale", String(1 + p * 0.08));
-        stage.current.style.setProperty("--journey-y", `${p * -2.5}%`);
       }
 
       if (video && videoReady.current && video.duration > 0 && !media.matches) {
@@ -190,7 +187,9 @@ export function SpatialJourney() {
         </div>
 
         <div className="journey-chapter journey-chapter-two">
-          <span className="eyebrow">{t("01 — BEAUTY ON YOUR TERMS", "۰۱ — زیبایی به سبک خودتان")}</span>
+          <span className="eyebrow">
+            {t("01 — BEAUTY ON YOUR TERMS", "۰۱ — زیبایی به سبک خودتان")}
+          </span>
           <h2>
             {t("Not a standard.", "نه یک قالب.")}
             <br />
@@ -204,7 +203,9 @@ export function SpatialJourney() {
         </div>
 
         <div className="journey-chapter journey-chapter-three">
-          <span className="eyebrow">{t("02 — EVERY DETAIL, YOURS", "۰۲ — هر جزئیات، مال شما")}</span>
+          <span className="eyebrow">
+            {t("02 — EVERY DETAIL, YOURS", "۰۲ — هر جزئیات، مال شما")}
+          </span>
           <h2>
             {t("Every detail.", "هر جزئیات.")}
             <br />
@@ -219,7 +220,9 @@ export function SpatialJourney() {
 
         {!reduced && (
           <div className="signature-controls" aria-hidden="true">
-            <span className="finish-name">{t("PINKO / BEAUTY STUDY", "پینکو / مطالعهٔ زیبایی")}</span>
+            <span className="finish-name">
+              {t("PINKO / BEAUTY STUDY", "پینکو / مطالعهٔ زیبایی")}
+            </span>
             <span className="control-rule" />
             <span className="finish-name">01 — 03</span>
           </div>
@@ -241,7 +244,9 @@ export function SpatialJourney() {
             <i />
             <span className="track-three">03</span>
           </div>
-          <span className="journey-edition">{t("PINKO / STUDIO EXPERIENCE", "پینکو / تجربهٔ استودیو")}</span>
+          <span className="journey-edition">
+            {t("PINKO / STUDIO EXPERIENCE", "پینکو / تجربهٔ استودیو")}
+          </span>
         </div>
 
         {/* Progress bar — subtle cinematic cue */}

@@ -111,6 +111,7 @@
     font-family: var(--font-body);
     margin: 0;
     letter-spacing: 0;
+    overflow-x: clip;
   }
   h1,
   h2,
@@ -2456,45 +2457,86 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 .info-block p { color: var(--muted-foreground); }
 .info-cta { justify-self: start; display: inline-flex; gap: .5rem; align-items: center; color: var(--primary); font-family: var(--font-display); letter-spacing: .15em; }
 
-/* Full-width hero video */
+/* Full-width hero video — preserve original chrome-melt.mp4 & poster fidelity */
+.spatial-journey {
+  position: relative;
+  z-index: 10;
+  height: 280svh;
+  background: var(--background);
+}
+.spatial-journey .journey-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 0;
+  background: var(--background);
+  color: var(--foreground);
+}
+.spatial-journey .journey-stage::before,
+.spatial-journey .journey-stage::after {
+  content: none;
+  display: none;
+}
+.spatial-journey .scene-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--background);
+}
+.spatial-journey .scene-layer::before,
+.spatial-journey .scene-layer::after {
+  content: none;
+  display: none;
+}
 .scene-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 30%;
+  object-position: 70% center;
+  filter: none;
 }
 .scene-shade {
+  display: none;
+}
+.spatial-journey .scene-fallback {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(100deg, color-mix(in oklab, var(--background) 62%, transparent) 4%, color-mix(in oklab, var(--background) 26%, transparent) 44%, transparent 100%),
-    linear-gradient(0deg, color-mix(in oklab, var(--background) 55%, transparent) 0%, transparent 30%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 70% center;
+  opacity: 1;
+  filter: none;
+  transform: none;
+  animation: none;
 }
-.spatial-journey:not(.journey-static) .scene-layer { inset: 0; }
-.scene-video { filter: brightness(0.88) saturate(1.05); }
-
-/* Hero video clarity — remove the cream veil so the footage shows at full strength */
-.spatial-journey:not(.journey-static) .scene-layer::after { content: none; }
-.spatial-journey:not(.journey-static) .journey-stage::before { mix-blend-mode: normal; background: none; }
-.spatial-journey:not(.journey-static) .scene-video { filter: none; }
-.spatial-journey:not(.journey-static) .scene-shade {
-  background: none;
+.spatial-journey .journey-title,
+.spatial-journey .journey-title h1 > span,
+.spatial-journey .journey-chapter,
+.spatial-journey .journey-intro p,
+.spatial-journey .journey-chapter p,
+.spatial-journey .journey-bottom,
+.spatial-journey .scroll-indicator {
+  color: var(--foreground);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .55);
 }
-.spatial-journey:not(.journey-static) .journey-title,
-.spatial-journey:not(.journey-static) .journey-title h1 > span,
-.spatial-journey:not(.journey-static) .journey-chapter,
-.spatial-journey:not(.journey-static) .journey-intro p,
-.spatial-journey:not(.journey-static) .journey-chapter p,
-.spatial-journey:not(.journey-static) .journey-bottom,
-.spatial-journey:not(.journey-static) .scroll-indicator { color: var(--foreground); text-shadow: 0 2px 18px rgba(0,0,0,.55); }
-.spatial-journey:not(.journey-static) .journey-title h1 { color: var(--primary); text-shadow: 0 4px 30px rgba(0,0,0,.45); }
-.spatial-journey:not(.journey-static) .journey-title > .eyebrow,
-.spatial-journey:not(.journey-static) .journey-coordinates,
-.spatial-journey:not(.journey-static) .journey-chapter h2 em { color: var(--soft-pink); }
-.spatial-journey:not(.journey-static) .journey-secondary-button { color: var(--foreground); border-color: color-mix(in oklab, var(--foreground) 50%, transparent); background: rgba(8,6,9,.35); }
-.spatial-journey:not(.journey-static) .scene-layer::before { content: none; }
+.spatial-journey .journey-title h1 {
+  color: var(--primary);
+  text-shadow: 0 4px 30px rgba(0, 0, 0, .45);
+}
+.spatial-journey .journey-title > .eyebrow,
+.spatial-journey .journey-coordinates,
+.spatial-journey .journey-chapter h2 em {
+  color: var(--soft-pink);
+}
+.spatial-journey .journey-secondary-button {
+  color: var(--foreground);
+  border-color: color-mix(in oklab, var(--foreground) 50%, transparent);
+  background: rgba(8, 6, 9, .35);
+}
 
 /* Hero text: keep off the face, no panels */
 .service-category-nav { display: flex; flex-wrap: wrap; gap: .5rem; padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
@@ -2524,7 +2566,7 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
 }
 
 /* ──────────────────────────────────────────────
-   Scroll-scrubbed cinematic hero upgrades
+   Scroll-scrubbed cinematic hero (unfiltered)
    ────────────────────────────────────────────── */
 
 .scene-video-scrub {
@@ -2533,12 +2575,9 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 78% center;
-  transform: scale(var(--journey-scale, 1)) translate3d(0, var(--journey-y, 0%), 0);
-  transform-origin: 75% 42%;
-  will-change: transform;
-  filter: brightness(0.92) contrast(1.04) saturate(1.05);
-  transition: filter 0.6s ease;
+  object-position: 70% center;
+  transform: none;
+  filter: none;
 }
 
 .scene-vignette {
@@ -2546,18 +2585,8 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background:
-    /* left side dark so white/pink text stays readable */
-    linear-gradient(90deg, rgba(8,6,10,0.88) 0%, rgba(8,6,10,0.55) 28%, rgba(8,6,10,0.12) 52%, transparent 68%),
-    /* bottom fade into page */
-    linear-gradient(0deg, rgba(8,6,10,0.82) 0%, rgba(8,6,10,0.25) 28%, transparent 48%),
-    /* soft edge vignette */
-    radial-gradient(ellipse at 72% 45%, transparent 0%, transparent 38%, rgba(5,4,8,0.35) 100%);
-}
-
-/* Chrome melt hero — slightly cooler grade */
-.spatial-journey:not(.journey-static) .scene-video-scrub {
-  filter: brightness(0.95) contrast(1.06) saturate(0.92);
+  /* Shade only the empty left wall behind hero copy; keep the model's face untouched. */
+  background: linear-gradient(90deg, rgba(8, 6, 10, 0.72) 0%, rgba(8, 6, 10, 0.34) 24%, transparent 44%);
 }
 
 .journey-progress-bar {
@@ -2581,7 +2610,6 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   transition: width 0.05s linear;
 }
 
-/* Tighter chapter crossfades when driven by smooth progress */
 .spatial-journey:not(.journey-static) .journey-title,
 .spatial-journey:not(.journey-static) .journey-intro {
   transition:
@@ -2597,24 +2625,46 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
     visibility 0.65s;
 }
 
-/* Slight parallax feel on coordinates */
 .spatial-journey:not(.journey-static) .journey-coordinates {
   opacity: calc(1 - var(--journey-progress, 0) * 0.7);
   transform: translateY(calc(var(--journey-progress, 0) * -12px));
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Scroll indicator fades as you progress */
 .spatial-journey:not(.journey-static) .scroll-indicator {
   opacity: calc(1 - min(1, var(--journey-progress, 0) * 2.2));
   transition: opacity 0.3s ease;
 }
 
-/* Mobile: keep scrub but reduce motion intensity */
+.journey-static .scene-video-scrub {
+  display: none;
+}
+
+.spatial-journey.journey-static {
+  height: auto;
+}
+.journey-static .journey-stage {
+  position: relative;
+  top: auto;
+  height: auto;
+  min-height: 0;
+}
+
 @media (max-width: 760px) {
-  .scene-video-scrub {
-    object-position: 82% center;
-    transform: scale(calc(1 + var(--journey-progress, 0) * 0.05)) translate3d(0, calc(var(--journey-progress, 0) * -1.5%), 0);
+  .spatial-journey {
+    height: 245svh;
+  }
+  .spatial-journey .journey-stage {
+    height: 100svh;
+    min-height: 0;
+  }
+  .scene-video-scrub,
+  .spatial-journey .scene-fallback {
+    object-position: 68% 28%;
+    transform: none;
+  }
+  .scene-vignette {
+    background: linear-gradient(0deg, rgba(8, 6, 10, 0.76) 0%, rgba(8, 6, 10, 0.32) 22%, transparent 42%);
   }
 }
 
@@ -2627,71 +2677,36 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   }
 }
 
-
-/* PINKO hero: deterministic scroll sync and warm gold-chrome art direction. */
-.spatial-journey { height: 280svh; }
-.journey-stage { position: sticky; top: 0; height: 100svh; min-height: 0; }
-.spatial-journey:not(.journey-static) .scene-video-scrub {
-  filter: brightness(.97) contrast(1.08) saturate(.96);
-}
-.journey-static .scene-video-scrub { display: none; }
-@media (max-width: 760px) {
-  .spatial-journey { height: 245svh; }
-  .journey-stage { height: 100svh; min-height: 0; }
-}
-
-
-/* Preserve the accessible static layout after the sticky-stage overrides. */
-.spatial-journey.journey-static { height: auto; }
-.journey-static .journey-stage {
-  position: relative;
-  top: auto;
-  height: auto;
-  min-height: 0;
-}
-
-
-/* PINKO signature rose-gold liquid: a separate scroll-scrubbed page layer. */
+/* PINKO signature rose-gold liquid: separate alpha-extracted scroll ribbon layer. */
 .pinko-scroll-liquid {
   position: fixed;
-  z-index: 18;
-  top: -10vh;
-  right: -8vw;
-  width: min(58vw, 760px);
-  height: 120vh;
-  object-fit: contain;
-  object-position: center;
+  z-index: 5;
+  top: 6vh;
+  inset-inline-end: -2vw;
+  width: clamp(220px, 25vw, 380px);
+  height: auto;
+  aspect-ratio: 768 / 1376;
+  max-height: 108vh;
   opacity: 0;
   pointer-events: none;
   user-select: none;
-  /* The JPEG's dark studio backdrop becomes a luminance mask, leaving the
-     rose-gold material as a clean overlay on both dark and light sections. */
-  mix-blend-mode: normal;
-  mask-image: url("https://raw.githubusercontent.com/flowrian2026-max/beauty-salon-pink/main/1794912712424.jpg");
-  mask-mode: luminance;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: contain;
-  -webkit-mask-image: url("https://raw.githubusercontent.com/flowrian2026-max/beauty-salon-pink/main/1794912712424.jpg");
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: contain;
-  -webkit-mask-source-type: luminance;
-  filter: drop-shadow(0 18px 42px rgba(190, 110, 135, .18));
-  transform: translate3d(var(--liquid-x, 15vw), var(--liquid-y, -28vh), 0)
-    scale(var(--liquid-scale, .78)) rotate(var(--liquid-rotation, -9deg));
+  filter: drop-shadow(0 16px 36px rgba(244, 183, 209, 0.18));
+  transform: translate3d(var(--liquid-x, 0vw), var(--liquid-y, 16vh), 0)
+    scale(var(--liquid-scale, 0.88)) rotate(var(--liquid-rotation, -5deg));
   transform-origin: 50% 50%;
   will-change: transform, opacity;
 }
 @media (max-width: 760px) {
   .pinko-scroll-liquid {
-    top: -8vh;
-    right: -22vw;
-    width: 105vw;
-    height: 116vh;
-    filter: drop-shadow(0 12px 30px rgba(190, 110, 135, .14));
+    top: 10vh;
+    inset-inline-end: -6vw;
+    width: clamp(140px, 40vw, 205px);
+    max-height: 92vh;
+    filter: drop-shadow(0 10px 24px rgba(244, 183, 209, 0.14));
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .pinko-scroll-liquid { display: none; }
+  .pinko-scroll-liquid {
+    display: none;
+  }
 }
