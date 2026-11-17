@@ -2649,3 +2649,37 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   height: auto;
   min-height: 0;
 }
+
+
+/* PINKO signature rose-gold liquid: a separate scroll-scrubbed page layer. */
+.pinko-scroll-liquid {
+  position: fixed;
+  z-index: 18;
+  top: -10vh;
+  right: -8vw;
+  width: min(58vw, 760px);
+  height: 120vh;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 18px 42px rgba(190, 110, 135, .18));
+  transform: translate3d(var(--liquid-x, 15vw), var(--liquid-y, -28vh), 0)
+    scale(var(--liquid-scale, .78)) rotate(var(--liquid-rotation, -9deg));
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+@media (max-width: 760px) {
+  .pinko-scroll-liquid {
+    top: -8vh;
+    right: -22vw;
+    width: 105vw;
+    height: 116vh;
+    filter: drop-shadow(0 12px 30px rgba(190, 110, 135, .14));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pinko-scroll-liquid { display: none; }
+}
