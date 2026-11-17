@@ -2664,7 +2664,19 @@ input[type="email"], input[type="tel"], input[type="date"], input[type="time"] {
   opacity: 0;
   pointer-events: none;
   user-select: none;
-  mix-blend-mode: screen;
+  /* The JPEG's dark studio backdrop becomes a luminance mask, leaving the
+     rose-gold material as a clean overlay on both dark and light sections. */
+  mix-blend-mode: normal;
+  mask-image: url("https://raw.githubusercontent.com/flowrian2026-max/beauty-salon-pink/main/1794912712424.jpg");
+  mask-mode: luminance;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: url("https://raw.githubusercontent.com/flowrian2026-max/beauty-salon-pink/main/1794912712424.jpg");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-source-type: luminance;
   filter: drop-shadow(0 18px 42px rgba(190, 110, 135, .18));
   transform: translate3d(var(--liquid-x, 15vw), var(--liquid-y, -28vh), 0)
     scale(var(--liquid-scale, .78)) rotate(var(--liquid-rotation, -9deg));
