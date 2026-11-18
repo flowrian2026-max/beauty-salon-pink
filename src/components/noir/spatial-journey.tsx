@@ -52,7 +52,7 @@ export function SpatialJourney() {
 
       if (video && videoReady.current && video.duration > 0 && !media.matches) {
         const start = 0.05;
-        const end = Math.max(start + 0.1, video.duration - 0.08);
+        const end = Math.max(start + 0.1, Math.min(8.95, video.duration - 0.15));
         // Quantize to the source's 24fps frame grid. Never queue a second seek
         // while Chrome is decoding the previous one.
         const desiredTime = start + p * (end - start);
@@ -119,7 +119,10 @@ export function SpatialJourney() {
       window.removeEventListener("resize", schedule);
       video?.removeEventListener("loadedmetadata", markReady);
       video?.removeEventListener("seeked", schedule);
-      cancelAnimationFrame(raf.current);
+      if (raf.current) {
+        cancelAnimationFrame(raf.current);
+        raf.current = 0;
+      }
     };
   }, []);
 
