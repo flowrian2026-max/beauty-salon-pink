@@ -3,8 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
-import heroVideo from "@/assets/chrome-melt.mp4";
-import heroPoster from "@/assets/chrome-melt-poster.jpg";
+import heroVideo from "../../../063c54b0-e062-11f1-a6e4-e9426f34f88d.mp4";
 
 /**
  * Cinematic scroll-scrubbed hero.
@@ -136,23 +135,12 @@ export function SpatialJourney() {
             ref={videoRef}
             className="scene-video scene-video-scrub"
             src={heroVideo}
-            poster={heroPoster}
             muted
             playsInline
             preload={reduced ? "none" : "auto"}
             // No autoPlay / loop — time is driven by scroll.
           />
-          {reduced && (
-            <img
-              className="scene-fallback"
-              src={heroPoster}
-              width={1344}
-              height={768}
-              alt=""
-              fetchPriority="high"
-            />
-          )}
-          <div className="scene-shade" />
+<div className="scene-shade" />
           <div className="scene-vignette" />
         </div>
 
