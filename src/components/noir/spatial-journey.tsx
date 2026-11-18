@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
-import heroVideo from "../../../063c54b0-e062-11f1-a6e4-e9426f34f88d.mp4";
+import heroVideo from "@/assets/hero-portrait.mp4";
 
 /**
  * Cinematic scroll-scrubbed hero.
