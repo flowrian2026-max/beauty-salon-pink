@@ -131,7 +131,7 @@ export const defaults = {
     instagram: "",
     tiktok: "",
   },
-  accent: "#D694AE",
+  accent: "#B87963",
   before: makeupBefore,
   after: makeupAfter,
   story:
