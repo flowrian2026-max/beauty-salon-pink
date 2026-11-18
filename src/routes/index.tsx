@@ -8,7 +8,6 @@ import { Comparison } from "@/components/noir/comparison";
 import { NextChapter } from "@/components/noir/site-shell";
 import { SpatialJourney } from "@/components/noir/spatial-journey";
 import { ScrollReveals } from "@/components/noir/scroll-reveals";
-import { ScrollLiquid } from "@/components/noir/scroll-liquid";
 
 export const Route = createFileRoute("/")({
   head: () =>
@@ -25,7 +24,6 @@ function Index() {
   return (
     <>
       <ScrollReveals />
-      <ScrollLiquid />
       <SpatialJourney />
 
       <div className="ticker" aria-hidden="true">
