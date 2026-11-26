@@ -66,3 +66,21 @@ The existing roadmap records a prior pass with lint (0 errors, 9 fast-refresh wa
 - Do not rewrite published Git history; this repository is connected to Lovable.
 - Do not delete `pinko` or donor assets until consolidation and verification are complete.
 - Never report a feature, test, deployment or visual check as complete without direct evidence.
+
+## Exact source comparison (2026-11-26)
+
+A recursive Git tree comparison of both `main` branches found:
+
+- Canonical `beauty-salon-pink`: 148 tracked files.
+- Donor `pinko`: 129 tracked files.
+- 126 paths exist in both repositories.
+- 110 of those shared paths have exactly the same Git blob SHA.
+- 16 shared paths differ and require deliberate selection/merge; they include README/AGENTS/package/lockfile, hero route/hero component, styles, server/start config, data and makeup imagery.
+- Canonical-only paths: 22, including the liquid shader, chrome-melt footage/poster, current portrait footage and existing app integrations.
+- Donor-only paths: 3 (`bunfig.toml`, `public/favicon.ico`, and the Lovable migration ledger).
+
+Conclusion: use the canonical repository as the source of truth. Do not wholesale-copy the donor over it: that would risk losing the liquid shader, chrome-melt assets and newer canonical implementation. Review the 16 differing paths and 3 donor-only files individually. The donor remains untouched as a safety archive.
+
+## CI status at this audit
+
+The current main head is `39838d09e2b23fede79dd2bc19ad96b15fb275d0`. GitHub Actions has no run for this new head yet. The latest listed workflow run is from 2026-11-10 and failed on an older head (`d8e19a08104c5fdf26d0e18084dfe55abbce0d69`); it is not evidence that the current changes fail. No build/test result has been claimed for the new commits.
